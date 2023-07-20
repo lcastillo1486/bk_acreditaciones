@@ -12,4 +12,5 @@ urlpatterns = [
     path('acredPersonal/<int:id_reg>',views.acreditarPersonal, name="acred_personal"),
     path('buscarPersonal/',views.buscarPersona, name="buscar_personal"),
     path('registraUsuario/<int:cod_event>',views.registraUsuario, name="registra_usuario"),
+    path('templateMobil/',views.vistaMovil, name="vista_movil"),
 ]

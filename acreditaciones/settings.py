@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'personal',
     'eventos',
     'crispy_forms',
+    'user_agents',
 
 ]
 

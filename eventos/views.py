@@ -479,5 +479,8 @@ def registraUsuario(request, cod_event):
             name = name_evento.nombre_evento
             messages.error(request,f'Su usuario ya se ha registrado como acreditador el evento {name}')
             return redirect('evento')
+
+def vistaMovil(request):
+    return render(request,'movil.html')
             
         

@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
+from user_agents import parse
 
 def registro(request):
 
@@ -35,9 +36,19 @@ def logear(request):
             nombre_usuario = form.cleaned_data.get("username")
             contra = form.cleaned_data.get("password")
             usuario = authenticate(username=nombre_usuario, password=contra)
+            user_agent_string = request.META['HTTP_USER_AGENT']
+            user_agent = parse(user_agent_string)
+
+            is_mobile = user_agent.is_mobile
+            is_tablet = user_agent.is_tablet
+
             if usuario is not None:
                 login(request, usuario)
-                return redirect('eventos/')
+
+                if is_mobile or is_tablet:
+                    return redirect('templateMobil/')
+                else:
+                    return redirect('eventos/')
             else:
                 for msg in form.error_messages:
                     messages.error(request,form.error_messages[msg])
