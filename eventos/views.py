@@ -481,6 +481,6 @@ def registraUsuario(request, cod_event):
             return redirect('evento')
 
 def vistaMovil(request):
-    return render(request,'movil.html')
+    return render(request,'evento.html')
             
         
