@@ -153,8 +153,8 @@ color:#00003d;
     {% endif %}
     {% endfor %}
     {% endif %}
-
-    <table class="table responsive py-2">
+    <div class="table responsive py-2">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>
@@ -162,12 +162,6 @@ color:#00003d;
                 </th>
                 <th>
                     Lugar:
-                </th>
-                <th>
-                    Fecha:
-                </th>
-                <th>
-                    N° Actualizaciones:
                 </th>
                 <th>
                     Estado Acreditación:
@@ -186,12 +180,6 @@ color:#00003d;
                 </td>
                 <td>
                     {{c.lugar_evento}}
-                </td>
-                <td>
-                    {{c.fecha_evento}}
-                </td>
-                <td>
-                    {{c.num_cargas}}
                 </td>
                 <td>
                     {% if c.acreditacion_activa == 1 %}
@@ -240,6 +228,7 @@ color:#00003d;
             {% endfor %}
         </tbody>
     </table>
+</div>
     <img src="{% static 'logo.png' %}" width="150" height="150">
     <h1>Sistema de Gestión de Acreditaciones </h1>
     
