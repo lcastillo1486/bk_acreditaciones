@@ -702,6 +702,6 @@ def buscarPersonaMovil(request):
                 messages.error(request, '¡Los datos suministrados no coinciden con ningún registro!')
                 return render(request, 'acredpersonal.html')
 
-    return render(request, 'acredpersonal.html')
+    return render(request, 'acredpersonalmovil.html')
             
         
