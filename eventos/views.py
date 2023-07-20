@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.auth.models import User
 from datetime import date
+from user_agents import parse
 # Create your views here.
 
 @login_required
@@ -460,29 +461,247 @@ def buscarPersona(request):
     return render(request, 'acredpersonal.html')
 
 def registraUsuario(request, cod_event):
+
+    user_agent_string = request.META['HTTP_USER_AGENT']
+    user_agent = parse(user_agent_string)
+
+    is_mobile = user_agent.is_mobile
+    is_tablet = user_agent.is_tablet
     
     usuario = request.user
 
     if not acreditadorEvento.objects.filter(usuario = usuario, cerrado = 0).exists():
         acreditadorEvento.objects.create(usuario = usuario, evento = cod_event, cerrado = 0)
         evento_buscar = acreditadorEvento.objects.get(usuario = usuario, evento = cod_event, cerrado = 0)
-        return redirect('buscar_personal')
+        if is_mobile or is_tablet:
+            return redirect('buscar_personal_movil')
+        else:
+            return redirect('buscar_personal')
         
     else:
         evento_buscar = acreditadorEvento.objects.get(usuario = usuario, cerrado = 0)
         event_cod = evento_buscar.evento
         if int(event_cod) == int(cod_event):
-            return redirect('buscar_personal')
+            if is_mobile or is_tablet:
+                return redirect('buscar_personal_movil')
+            else:
+                return redirect('buscar_personal')
             
         else:
             name_evento = bkt_eventos.objects.get(id = event_cod)
             name = name_evento.nombre_evento
             messages.error(request,f'Su usuario ya se ha registrado como acreditador el evento {name}')
-            return redirect('evento')
+            if is_mobile or is_tablet:
+                return redirect('vista_movil')
+            else:
+                return redirect('evento')
 
 def vistaMovil(request):
     form_evento = formEvento()
     eventos_activos = bkt_eventos.objects.filter(evento_activo=1)
     return render(request, 'movil.html', {'form_evento': form_evento, 'listado_eventos': eventos_activos})
+
+@login_required
+def buscarPersonaMovil(request):
+
+    usuario = request.user
+    evento_buscar = acreditadorEvento.objects.get(usuario = usuario, cerrado = 0)
+    cod_event = evento_buscar.evento
+
+
+        
+    if not bkt_eventos.objects.filter(acreditacion_activa = 1).exists():
+        messages.error(request, '¡No se ha iniciado el proceso de acreditación!')
+        return redirect('evento')
+    else:
+        if bkt_eventos.objects.filter(acreditacion_activa = 1).count() > 1:
+            event_act = bkt_eventos.objects.filter(acreditacion_activa = 1).count()
+            cod = bkt_eventos.objects.filter(acreditacion_activa = 1)
+            valores = cod.values_list('id', 'nombre_evento')
+     
+    if request.method == 'POST':
+        #buscar por documento
+        documento = request.POST.get('documento')
+        nombre = request.POST.get('nombre')
+        apellido = request.POST.get('apellido')
+
+        #evalua el len del documento
+
+        if len(documento) >0 and  len(documento) < 7:
+            messages.error(request, '¡El número de documento es demasiado corto!')
+            return render(request, 'acredpersonal.html')
+
+        #evaluar si los tres estan vacios
+        if len(documento) == 0 and len(nombre) == 0 and len(apellido)==0:
+            messages.error(request, '¡Debe ingresar al menos un dato para la búsqueda!')
+            return render(request, 'acredpersonal.html')
+        
+        #evaluar si se ha introducido solo un nombre
+        if len(documento) == 0 and len(nombre) > 0 and len(apellido) == 0:
+            messages.error(request, '¡Para una búsqueda más precisa, introduzca támbien un apellido!')
+            return render(request, 'acredpersonal.html')
+        
+        #evaluar si se ha introducido solo el apellido
+        if len(documento) == 0 and len(nombre) == 0 and len(apellido) > 0:
+            messages.error(request, '¡Para una búsqueda más precisa, introduzca támbien un nombre!')
+            return render(request, 'acredpersonal.html')
+        
+        #busca por nombre y apellido
+        if len(documento) == 0 and len(nombre) > 0 and len(apellido) > 0:
+            if acreditados_def.objects.filter(Q(nombre_persona__icontains=nombre) & Q(apellido_persona__icontains=apellido, id_evento_id = cod_event)).exists():
+                try:
+                    persona = acreditados_def.objects.get(Q(nombre_persona__icontains=nombre) & Q(apellido_persona__icontains=apellido, id_evento_id = cod_event))
+                    if persona.acreditado == 1:
+                        messages.error(request, '¡Esta persona ya fue acreditada anteriormente!')
+                        nombre = persona.nombre_persona
+                        apellido = persona.apellido_persona
+                        documento = persona.numero_doc
+                        empresa = persona.empresa
+                        area = persona.zona_acceso
+                        id_reg = persona.id
+                        id_even = persona.id_evento_id
+
+                        #busca nombre evento
+                        nombre_event = bkt_eventos.objects.get(id = id_even)
+                        event_name = nombre_event.nombre_evento
+
+                        #busca estadisticas
+                        total_acreditado = acreditados_def.objects.filter(id_evento_id = id_even, acreditado = 1).count()
+                        total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
+                        porcentaje = round((total_acreditado /total_registros)*100,4)
+
+                        return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
+                                                                    'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+                    else:
+                        nombre = persona.nombre_persona
+                        apellido = persona.apellido_persona
+                        documento = persona.numero_doc
+                        empresa = persona.empresa
+                        area = persona.zona_acceso
+                        id_reg = persona.id
+                        id_even = persona.id_evento_id
+
+                        #busca nombre evento
+                        nombre_event = bkt_eventos.objects.get(id = id_even)
+                        event_name = nombre_event.nombre_evento
+
+                        #busca estadisticas
+                        total_acreditado = acreditados_def.objects.filter(id_evento_id = id_even, acreditado = 1).count()
+                        total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
+                        porcentaje = round((total_acreditado /total_registros)*100,4)
+
+                        return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
+                                                                    'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+
+                except:
+                    messages.error(request,'¡Múltiples registros coinciden con los parámetros indicados, por favor realice una búsqueda número de documento o agregue un segundo apellido!')
+                    return redirect('buscar_personal')
+            else:
+                messages.error(request, '¡No hay concidencias en las busqueda!')
+                return redirect('buscar_personal')
+        
+        #busca por apellido
+        # if len(documento) == 0 and len(nombre) == 0 and len(apellido) > 0:
+        #     if acreditados_def.objects.filter(Q(apellido_persona__icontains=apellido)).exists():
+        #         persona = acreditados_def.objects.get(Q(apellido_persona__icontains=apellido),asistencia = 1, evento_cerrado = 0)
+        #         if persona.acreditado == 1:
+        #             messages.error(request, '¡Esta persona ya fue acreditada anteriormente!')
+        #             nombre = persona.nombre_persona
+        #             apellido = persona.apellido_persona
+        #             documento = persona.numero_doc
+        #             empresa = persona.empresa
+        #             area = persona.zona_acceso
+        #             id_reg = persona.id
+        #             id_even = persona.id_evento_id
+
+        #             #busca nombre evento
+        #             nombre_event = bkt_eventos.objects.get(id = id_even)
+        #             event_name = nombre_event.nombre_evento
+
+        #             #busca estadisticas
+        #             total_acreditado = acreditados_def.objects.filter(id_evento_id = id_even, acreditado = 1).count()
+        #             total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
+        #             porcentaje = round((total_acreditado /total_registros)*100,4)
+
+        #             return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
+        #                                                          'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+        #         else:
+        #             nombre = persona.nombre_persona
+        #             apellido = persona.apellido_persona
+        #             documento = persona.numero_doc
+        #             empresa = persona.empresa
+        #             area = persona.zona_acceso
+        #             id_reg = persona.id
+        #             id_even = persona.id_evento_id
+
+        #             #busca nombre evento
+        #             nombre_event = bkt_eventos.objects.get(id = id_even)
+        #             event_name = nombre_event.nombre_evento
+
+        #             #busca estadisticas
+        #             total_acreditado = acreditados_def.objects.filter(id_evento_id = id_even, acreditado = 1).count()
+        #             total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
+        #             porcentaje = round((total_acreditado /total_registros)*100,4)
+
+        #             return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
+        #                                                          'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+
+        if len(documento) > 0:
+            doc = str(documento)[-7:]
+            
+        # valida si ya se acredito
+            if acreditados_def.objects.filter(numero_doc__endswith = doc, acreditado = 1, asistencia = 1, id_evento_id = cod_event).exists():
+                persona = acreditados_def.objects.get(numero_doc__endswith = doc, acreditado = 1, id_evento_id = cod_event)
+                nombre = persona.nombre_persona
+                apellido = persona.apellido_persona
+                documento = persona.numero_doc
+                empresa = persona.empresa
+                area = persona.zona_acceso
+                id_reg = persona.id
+                id_even = persona.id_evento_id
+                
+                #busca nombre evento
+                nombre_event = bkt_eventos.objects.get(id = id_even)
+                event_name = nombre_event.nombre_evento
+                messages.error(request, '¡Esta persona ya fue acreditada anteriormente!')
+
+                #busca estadisticas
+                total_acreditado = acreditados_def.objects.filter(id_evento_id = id_even, acreditado = 1).count()
+                total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
+                porcentaje = round((total_acreditado /total_registros)*100,4)
+
+                return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
+                                                              'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+                
+            
+            if acreditados_def.objects.filter(numero_doc__endswith = doc, acreditado = 0, asistencia = 0, id_evento_id = cod_event).exists():
+                persona = acreditados_def.objects.get(numero_doc__endswith = doc, acreditado = 0, asistencia = 0, id_evento_id = cod_event)
+                nombre = persona.nombre_persona
+                apellido = persona.apellido_persona
+                documento = persona.numero_doc
+                empresa = persona.empresa
+                area = persona.zona_acceso
+                id_reg = persona.id
+                id_even = persona.id_evento_id
+
+
+                #busca nombre evento
+                nombre_event = bkt_eventos.objects.get(id = id_even)
+                event_name = nombre_event.nombre_evento
+
+                #busca estadisticas
+                total_acreditado = acreditados_def.objects.filter(id_evento_id = id_even, acreditado = 1).count()
+                total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
+                porcentaje = round((total_acreditado /total_registros)*100,4)
+
+
+                return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
+                                                             'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+            else:
+                
+                messages.error(request, '¡Los datos suministrados no coinciden con ningún registro!')
+                return render(request, 'acredpersonal.html')
+
+    return render(request, 'acredpersonal.html')
             
         
