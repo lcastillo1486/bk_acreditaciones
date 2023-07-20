@@ -481,6 +481,8 @@ def registraUsuario(request, cod_event):
             return redirect('evento')
 
 def vistaMovil(request):
-    return render(request,'movil.html')
+    form_evento = formEvento()
+    eventos_activos = bkt_eventos.objects.filter(evento_activo=1)
+    return render(request, 'movil.html', {'form_evento': form_evento, 'listado_eventos': eventos_activos})
             
         
