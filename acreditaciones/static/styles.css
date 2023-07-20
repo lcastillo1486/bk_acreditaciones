@@ -1,0 +1,263 @@
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            font-family: "Helvetica";
+            color: black;
+        }
+
+        .header {
+            background-color: #003399;
+            width: 100%;
+            height: 57px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            border-bottom: 4px solid #ccc;
+        }
+
+        .content {
+            margin: 100px 3cm 0;
+        }
+
+        .sidebar-left {
+            background-color: #cccccc;
+            width: 4cm;
+            height: 100vh;
+            position: fixed;
+            top: 57px;
+            left: 0;
+            border-right: 4px solid #555555;
+        }
+
+        .sidebar-right {
+            background-color: #cccccc;
+            width: 4cm;
+            height: 100vh;
+            position: fixed;
+            top: 57px;
+            right: 0;
+            border-left: 4px solid #555555;
+            text-align: center;
+        }
+
+        .main {
+            margin: 100px 3cm;
+            padding: 20px;
+            flex-direction: 1;
+            margin-top: 10px;
+            color: black;
+        }
+
+        .footer {
+            background-color: black;
+            height: 50px;
+            margin-top: auto;
+            text-align: center;
+            font-size: 12px;
+            border-top: 4px solid #555555;
+            color: white;
+        }
+
+        .nav-link:hover {
+            background-color: #84aacf;
+            transition: background-color 0.6s ease;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            color: aqua;
+        }
+
+        h1 {
+            color:white;
+            font-weight: bold;
+            font-style: italic;
+            text-align: center;
+            background: linear-gradient(to right, #0000ff, #00ff40);
+            text-transform: uppercase;
+            border-radius: 10px;
+        }
+
+        h2 {
+            color: #003399;
+            font-weight: bold;
+            font-style: italic;
+
+        }
+
+        h3 {
+            color: #003399;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        h4 {
+            color: #003399;
+            font-weight: bold;
+            font-style: italic;
+        }
+        h5 {
+            color: #003399;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        input {
+            caret-color: red;
+        }
+
+        .inputs {
+            text-align: left;
+            margin-top: 30px;
+        }
+
+        label,
+        input,
+        button,
+        textarea {
+            float: left;
+            margin: 10px;
+        }
+
+        label {
+            margin-bottom: 4px;
+        }
+
+        label:nth-of-type(2) {
+            margin-top: 12px;
+        }
+
+        input::placeholder {
+            color: gray;
+        }
+
+        input {
+            background: #ecf0f3;
+            padding: 10px;
+            padding-left: 10px;
+            margin-left: 20px;
+            height: 40px;
+            font-size: 14px;
+            border-radius: 10px;
+            box-shadow: inset 6px 6px 6px #cbced1, inset -6px -6px 6px white;
+            width: 500px;
+        }
+
+
+        button {
+            color: white;
+            margin-top: 20px;
+            background: #0047ab;
+            height: 40px;
+            border-radius: 1px;
+            cursor: pointer;
+            font-weight: 900;
+            box-shadow: 6px 6px 6px #cbced1, -6px -6px 6px #7ed957;
+            transition: 0.5s;
+        }
+
+        .campo-label {
+            color: #0047ab;
+            /* Cambia el color al que desees, por ejemplo, azul eléctrico */
+            font-weight: bold;
+            margin-left: 40px;
+        }
+
+        .form-group input[type="date"] {
+            width: 200px;
+        }
+
+        .form-group input[type="checkbox"] {
+            width: 50px;
+            margin-top: 10px;
+            margin-left: 0px;
+            transform: scale(0.6);
+        }
+
+        .container {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 10px;
+            width: 150%;
+        }
+
+        .form-row {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #cccccc;
+            margin-top: 2px;
+        }
+        .centrar {
+        justify-content: center;
+        text-align: center;
+        border: #003399;
+        }
+        .form-group select {
+            margin-top: 10px;
+            margin-left: 20px;
+            font-size: 15px;
+        }
+        .input-smaller {
+            background: #ecf0f3;
+            padding: 10px;
+            padding-left: 10px;
+            margin-left: 20px;
+            height: 40px;
+            font-size: 14px;
+            border-radius: 10px;
+            box-shadow: inset 6px 6px 6px #cbced1, inset -6px -6px 6px white;
+            width: 200px;
+        }
+        .input-medium {
+            background: #ecf0f3;
+            padding: 10px;
+            padding-left: 10px;
+            margin-left: 20px;
+            height: 40px;
+            font-size: 14px;
+            border-radius: 10px;
+            box-shadow: inset 6px 6px 6px #cbced1, inset -6px -6px 6px white;
+            width: 400px;
+        }
+        .precio-smaller {
+            background: #ecf0f3;
+            padding: 10px;
+            padding-left: 10px;
+            margin-left: 20px;
+            height: 40px;
+            font-size: 14px;
+            border-radius: 10px;
+            box-shadow: inset 6px 6px 6px #cbced1, inset -6px -6px 6px white;
+            width: 150px;
+        }
+        .cantidad-smaller {
+            background: #ecf0f3;
+            padding: 10px;
+            padding-left: 10px;
+            margin-left: 0px;
+            height: 40px;
+            font-size: 14px;
+            border-radius: 10px;
+            box-shadow: inset 6px 6px 6px #cbced1, inset -6px -6px 6px white;
+            width: 80px;
+        }
+        .error-message {
+    background-color: #ffcccc;
+    color: #ff0000;
+    padding: 10px;
+    border: 1px solid #ff0000;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+        @media screen and (max-width: 768px) {
+      .sidebar-left {
+        display: none;
+        }
+        .sidebar-right {
+        display: none;
+        }
+        input {
+            width: 200px;
+        }
+        }
