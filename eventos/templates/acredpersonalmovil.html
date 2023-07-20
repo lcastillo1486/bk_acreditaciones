@@ -177,72 +177,7 @@
         </b></h4>
     </div>
 
-    <div class="row">
-        <div style="text-align: center;border: 1px solid black " class="col-sm-12 col-md-6 col-lg-2 col-xl-12">
-            <div style="margin-left: 10px;">
-                <h3><b>Ingrese DNI o C.E</b></h3>
-            </div>
-            <div class="teclado">
-
-            </div>
-
-            <div id="num-pad" class="teclado">
-
-                <button onclick="addNumber(1)">1</button>
-                <button onclick="addNumber(2)">2</button>
-                <button onclick="addNumber(3)">3</button>
-                <button onclick="addNumber(4)">4</button>
-                <button onclick="addNumber(5)">5</button>
-                <button onclick="addNumber(6)">6</button>
-
-                <button onclick="addNumber(7)">7</button>
-                <button onclick="addNumber(8)">8</button>
-                <button onclick="addNumber(9)">9</button>
-                <button class="empty"></button>
-                <button onclick="addNumber(0)">0</button>
-                <button class="empty"></button>
-            </div>
-
-
-            <div class="teclado">
-                <form action='/buscarPersonal/' method="POST">
-                    {% csrf_token %}
-                    <input type="text" id="number-input" name="documento">
-                    <br><br>
-                    <h2>Nombres:</h2>
-                    <input type="text" id="nombre-input" class="input-nombre" name="nombre">
-                    <h2>Apellidos:</h2>
-                    <input type="text" id="apellido-input" class="input-nombre" name="apellido">
-            </div>
-            <div class="teclado">
-                <button type="submit" id="boton-buscar" style="margin-bottom: 10px;"
-                    class="btn btn-success">BUSCAR</button>
-                <!-- <a href='##' class="btn btn-success" id="boton-buscar">ACEPTAR</a> -->
-            </div>
-        </div>
-        </form>
-    </div>
-
-    </div>
-
-
-    <div class="row" style="margin: 0%;">
-
-        <div style="text-align: center;border: 2px solid black; background-color: #7ce472; "
-            class="col-sm-12 col-md-6 col-lg-2 col-xl-4">
-            <h3>Total Registros: {{total_registros}}</h3>
-        </div>
-        <div style="text-align: center;border: 2px solid black; background-color: #7ce472; "
-            class="col-sm-12 col-md-6 col-lg-2 col-xl-4">
-            <h3>Acreditados: {{total_acreditado}}</h3>
-        </div>
-        <div style="text-align: center;border: 2px solid black; background-color: #7ce472; "
-            class="col-sm-12 col-md-6 col-lg-2 col-xl-4">
-            <h3>Ratio: {{porcentaje}} %</h3>
-        </div>
-    </div>
-
-    </div>
+   
 
     <script>
         function addNumber(number) {
