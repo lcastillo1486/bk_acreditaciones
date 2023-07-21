@@ -51,6 +51,8 @@ def guardarEvento(request):
 @login_required
 def importarExcel(request, id_evento):
 
+    cod_evento = id_evento
+
     if not request.user.is_superuser:
         messages.error(request,'¡No tiene permisos para importar listados!')
         return redirect('evento')
@@ -116,7 +118,7 @@ def importarExcel(request, id_evento):
                 cargo=row['CARGO'],
                 zona_acceso=row['AREA_DE_TRABAJO'],
                 empresa=row['EMPRESA'],
-                id_evento_id = id_evento
+                id_evento_id = cod_evento
             )
             registros.append(registro)
 
