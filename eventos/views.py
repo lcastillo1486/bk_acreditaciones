@@ -529,22 +529,22 @@ def buscarPersonaMovil(request):
 
         if len(documento) >0 and  len(documento) < 7:
             messages.error(request, '¡El número de documento es demasiado corto!')
-            return render(request, 'acredpersonal.html')
+            return render(request, 'acredpersonalmovil.html')
 
         #evaluar si los tres estan vacios
         if len(documento) == 0 and len(nombre) == 0 and len(apellido)==0:
             messages.error(request, '¡Debe ingresar al menos un dato para la búsqueda!')
-            return render(request, 'acredpersonal.html')
+            return render(request, 'acredpersonalmovil.html')
         
         #evaluar si se ha introducido solo un nombre
         if len(documento) == 0 and len(nombre) > 0 and len(apellido) == 0:
             messages.error(request, '¡Para una búsqueda más precisa, introduzca támbien un apellido!')
-            return render(request, 'acredpersonal.html')
+            return render(request, 'acredpersonalmovil.html')
         
         #evaluar si se ha introducido solo el apellido
         if len(documento) == 0 and len(nombre) == 0 and len(apellido) > 0:
             messages.error(request, '¡Para una búsqueda más precisa, introduzca támbien un nombre!')
-            return render(request, 'acredpersonal.html')
+            return render(request, 'acredpersonalmovil.html')
         
         #busca por nombre y apellido
         if len(documento) == 0 and len(nombre) > 0 and len(apellido) > 0:
@@ -570,7 +570,7 @@ def buscarPersonaMovil(request):
                         total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
                         porcentaje = round((total_acreditado /total_registros)*100,4)
 
-                        return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
+                        return render(request, 'acredpersonalmovil.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
                                                                     'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
                     else:
                         nombre = persona.nombre_persona
@@ -590,15 +590,15 @@ def buscarPersonaMovil(request):
                         total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
                         porcentaje = round((total_acreditado /total_registros)*100,4)
 
-                        return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
+                        return render(request, 'acredpersonalmovil.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
                                                                     'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
 
                 except:
                     messages.error(request,'¡Múltiples registros coinciden con los parámetros indicados, por favor realice una búsqueda número de documento o agregue un segundo apellido!')
-                    return redirect('buscar_personal')
+                    return redirect('buscar_personal_movil')
             else:
                 messages.error(request, '¡No hay concidencias en las busqueda!')
-                return redirect('buscar_personal')
+                return redirect('buscar_personal_movil')
         
         #busca por apellido
         # if len(documento) == 0 and len(nombre) == 0 and len(apellido) > 0:
@@ -670,7 +670,7 @@ def buscarPersonaMovil(request):
                 total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
                 porcentaje = round((total_acreditado /total_registros)*100,4)
 
-                return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
+                return render(request, 'acredpersonalmovil.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
                                                               'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
                 
             
@@ -695,12 +695,12 @@ def buscarPersonaMovil(request):
                 porcentaje = round((total_acreditado /total_registros)*100,4)
 
 
-                return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
+                return render(request, 'acredpersonalmovil.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
                                                              'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
             else:
                 
                 messages.error(request, '¡Los datos suministrados no coinciden con ningún registro!')
-                return render(request, 'acredpersonal.html')
+                return render(request, 'acredpersonalmovil.html')
 
     return render(request, 'acredpersonalmovil.html')
             

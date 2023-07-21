@@ -155,11 +155,24 @@
         <img src="{% static 'logo.png' %}" width="50" height="50" style="margin-top: 10px;">
 
         <h2>Sistema de Gestión de Acreditaciones</h2>
+        {% if messages %}
+      {% for message in messages %}
+      {% if message.tags == 'success' %}
+      <div class=" alert alert-success">
+        {{ message }}
+      </div>
+      {% else %}
+      <div class=" alert alert-error">
+        {{ message }}
+      </div>
+      {% endif %}
+      {% endfor %}
+      {% endif %}
         <br>
         <h3> Número de Documento: </h3>
         <br>
 
-        <form action='/buscarPersonal/' class="form" method="POST">
+        <form action='/buscarPersonaMovil/' class="form" method="POST">
             {% csrf_token %}
             <input type="text" id="number-input" name="documento">
             <br><br>
