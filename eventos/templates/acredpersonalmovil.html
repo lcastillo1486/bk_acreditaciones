@@ -162,6 +162,28 @@
       font-size: 30px;
       text-align: center;
     }
+    .parpadeo {
+      animation: blink 1s infinite;
+      display: inline-block;
+    }
+
+    .fijo {
+      animation: none;
+      opacity: 1;
+      transition: opacity 1s;
+    }
+    .alert-success {
+      background-color: #4bdb9d;
+      color: #080cee;
+      font-weight: bold;
+
+    }
+
+    .alert-error {
+      background-color: #a51f1f;
+      color: #f5ecec;
+      font-weight: bold;
+    }
 </style>
 
 <body>
@@ -217,6 +239,19 @@
           </h14>
           {% endif %}
           <br>
+          {% if messages %}
+      {% for message in messages %}
+      {% if 'error' in message.tags %}
+      <!-- Contenido si hay mensajes de error -->
+      {% endif %}
+      {% endfor %}
+      {% else %}
+      {% if id > 0 %}
+      <a href='/acredPersonal/{{id}}' class="f" id="acreditar">ACREDITAR</a>
+      {% else %}
+      <!-- Contenido si hay mensajes de error -->
+      {% endif %}
+      {% endif %}
         <a href='/logout/' id="salir" class="btn btn-danger w-100" style="margin-top: 5px;">Salir</a>
     </div>
 

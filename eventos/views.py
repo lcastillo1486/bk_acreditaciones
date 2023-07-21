@@ -224,12 +224,21 @@ def verMonitor(request):
 @login_required
 def acreditarPersonal(request, id_reg):
 
+    user_agent_string = request.META['HTTP_USER_AGENT']
+    user_agent = parse(user_agent_string)
+
+    is_mobile = user_agent.is_mobile
+    is_tablet = user_agent.is_tablet
+
     if not bkt_eventos.objects.filter(acreditacion_activa = 1).exists():
         messages.error(request, '¡No se ha iniciado el proceso de acreditación!')
         return redirect('buscar_personal') 
 
     if id_reg == "":
-        return redirect('buscar_personal')
+        if is_mobile or is_tablet:
+            return redirect('buscar_personal_movil')
+        else:
+            return redirect('buscar_personal')
 
     if acreditados_def.objects.filter(id = id_reg, acreditado = 1).exists():
         #busca estadisticas
@@ -240,7 +249,10 @@ def acreditarPersonal(request, id_reg):
         porcentaje = round((total_acreditado /total_registros)*100,4)
 
         messages.error(request, '¡Esta persona ya fue acreditada anteriormente!')
-        return render(request,'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+        if is_mobile or is_tablet:
+            return redirect('buscar_personal_movil')
+        else:
+            return render(request,'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
         
     acreditado = acreditados_def.objects.get(id = id_reg, acreditado = 0)
     acreditado.acreditado = 1
@@ -256,7 +268,10 @@ def acreditarPersonal(request, id_reg):
     porcentaje = round((total_acreditado /total_registros)*100,4)
 
     messages.success(request, '¡Acreditado Correctamente!')
-    return render(request,'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+    if is_mobile or is_tablet:
+        return redirect('buscar_personal_movil')
+    else:
+        return render(request,'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
 @login_required
 def buscarPersona(request):
 
