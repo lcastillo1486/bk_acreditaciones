@@ -211,7 +211,7 @@
 
     <div>
 
-        <img src="{% static 'logo.png' %}" width="100" height="100" style="margin-top: 57px;">
+        <img src="{% static 'logo.png' %}" width="100" height="100" style="margin-top: 62px;">
 
         <h2>Sistema de Gestión de Acreditaciones</h2>
     {% if messages %}
@@ -268,7 +268,7 @@
       {% endfor %}
       {% else %}
       {% if id > 0 %}
-      <a href='/acredPersonal/{{id}}' class="f" id="acreditar">ACREDITAR</a>
+      <a href='/acredPersonal/{{id}}' id="acreditar" class="btn btn-info w-100" style="margin-top: 5px;">ACREDITAR</a>
       {% else %}
       <!-- Contenido si hay mensajes de error -->
       {% endif %}
