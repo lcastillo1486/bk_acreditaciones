@@ -116,14 +116,14 @@ def importarExcel(request, id_evento):
                 cargo=row['CARGO'],
                 zona_acceso=row['AREA_DE_TRABAJO'],
                 empresa=row['EMPRESA'],
-                # id_evento_id=id_evento
+                id_evento = id_evento
             )
             registros.append(registro)
 
         ### Borrar la tabla si tiene registros ###
 
-        if acreditados_tmp.objects.filter(id_evento_id=id_evento).exists():
-            acreditados_tmp.objects.filter(id_evento_id=id_evento).delete()
+        if acreditados_tmp.objects.filter(id_evento = id_evento).exists():
+            acreditados_tmp.objects.filter(id_evento = id_evento).delete()
 
         acreditados_tmp.objects.bulk_create(registros)
         actualiza_cargas = bkt_eventos.objects.get(id=id_evento)
