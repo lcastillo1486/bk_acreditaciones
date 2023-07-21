@@ -93,12 +93,13 @@
     }
 
     input {
-        background: #ecf0f3;
+        background: #00003d;
         padding: 10px;
         padding-left: 20px;
         height: 50px;
         font-size: 14px;
         border-radius: 50px;
+        color: white;
         box-shadow: inset 6px 6px 6px #cbced1, inset -6px -6px 6px white;
     }
 
@@ -175,7 +176,7 @@
         <form action='/buscarPersonalMobil/' class="form" method="POST">
             {% csrf_token %}
             <input type="text" id="number-input" name="documento">
-            <br><br>
+            <br>
             <h2>Nombres:</h2>
             <input type="text" id="nombre-input" name="nombre">
             <h2>Apellidos:</h2>
@@ -184,9 +185,8 @@
 
             <button type="submit" id="boton-buscar" style="margin-bottom: 10px;" class="btn btn-success">BUSCAR</button>
             <!-- <a href='##' class="btn btn-success" id="boton-buscar">ACEPTAR</a> -->
-
-
         </form>
+        <a href='/logout/' id="salir" class="btn btn-danger">Salir</a>
     </div>
 
 
