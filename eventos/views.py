@@ -248,7 +248,7 @@ def acreditarPersonal(request, id_reg):
         total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
         porcentaje = round((total_acreditado /total_registros)*100,4)
 
-        messages.error(request, '¡Esta persona ya fue acreditada anteriormente!')
+        messages.error(request, '¡Ya fue acreditado anteriormente!')
         if is_mobile or is_tablet:
             return redirect('buscar_personal_movil')
         else:
@@ -323,7 +323,7 @@ def buscarPersona(request):
                 try:
                     persona = acreditados_def.objects.get(Q(nombre_persona__icontains=nombre) & Q(apellido_persona__icontains=apellido, id_evento_id = cod_event))
                     if persona.acreditado == 1:
-                        messages.error(request, '¡Esta persona ya fue acreditada anteriormente!')
+                        messages.error(request, '¡Ya fue acreditado anteriormente!')
                         nombre = persona.nombre_persona
                         apellido = persona.apellido_persona
                         documento = persona.numero_doc
@@ -434,7 +434,7 @@ def buscarPersona(request):
                 #busca nombre evento
                 nombre_event = bkt_eventos.objects.get(id = id_even)
                 event_name = nombre_event.nombre_evento
-                messages.error(request, '¡Esta persona ya fue acreditada anteriormente!')
+                messages.error(request, '¡Ya fue acreditado anteriormente!')
 
                 #busca estadisticas
                 total_acreditado = acreditados_def.objects.filter(id_evento_id = id_even, acreditado = 1).count()
@@ -567,7 +567,7 @@ def buscarPersonaMovil(request):
                 try:
                     persona = acreditados_def.objects.get(Q(nombre_persona__icontains=nombre) & Q(apellido_persona__icontains=apellido, id_evento_id = cod_event))
                     if persona.acreditado == 1:
-                        messages.error(request, '¡Esta persona ya fue acreditada anteriormente!')
+                        messages.error(request, '¡Ya fue acreditado anteriormente!')
                         nombre = persona.nombre_persona
                         apellido = persona.apellido_persona
                         documento = persona.numero_doc
@@ -678,7 +678,7 @@ def buscarPersonaMovil(request):
                 #busca nombre evento
                 nombre_event = bkt_eventos.objects.get(id = id_even)
                 event_name = nombre_event.nombre_evento
-                messages.error(request, '¡Esta persona ya fue acreditada anteriormente!')
+                messages.error(request, '¡Ya fue acreditado anteriormente!')
 
                 #busca estadisticas
                 total_acreditado = acreditados_def.objects.filter(id_evento_id = id_even, acreditado = 1).count()
