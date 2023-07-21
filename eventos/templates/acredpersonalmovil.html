@@ -31,9 +31,10 @@
         text-align: center;
         justify-content: center;
         place-items: center;
-        overflow: hidden;
+        /* overflow: auto; */
         font-family: poppins;margin-top: 10px;
         min-height: 100vh;
+        overflow-y: auto;
     }
 
     .container {
@@ -201,9 +202,7 @@
         <h2>
             <font style="color: #081fee;">{{evento}}</font>
             <br>
-            <font style="color: #081fee;">{{nombre}}</font>
-            <br>
-            <font style="color: #081fee;"> {{apellido}} </font>
+            <font style="color: #081fee;">{{nombre}} {{apellido}}</font>
             <br>
             <font style="color: #081fee;">{{documento}}</font>
             <br>
