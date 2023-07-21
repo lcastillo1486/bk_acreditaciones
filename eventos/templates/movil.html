@@ -253,7 +253,39 @@
 
 
     </div>
+    <script>
+        setTimeout(function () {
+            var messages = document.getElementsByClassName('alert');
+            for (var i = 0; i < messages.length; i++) {
+                messages[i].style.display = 'none';
+            }
+        }, 7000);  // 5000 milisegundos = 5 segundos
 
+        document.getElementById('inicial').addEventListener('click', function (event) {
+            event.preventDefault(); // Evita que se siga el enlace automáticamente
+            var confirmacion = confirm('!ATENCIóN¡ \n\ Si continúa, el sistema hará uso del último listado importado como definitivo. \n\ ¿Está seguro de ejecutar esta acción?');
+            if (confirmacion) {
+                // Si el usuario confirma, redirige a la URL o ejecuta la acción deseada
+                window.location.href = event.target.href; // Redirige a la URL del enlace
+            } else {
+                // Si el usuario cancela, no se realiza ninguna acción
+                return;
+            }
+        });
+
+        document.getElementById('detienee').addEventListener('click', function (event) {
+            event.preventDefault(); // Evita que se siga el enlace automáticamente
+            var confirmacion = confirm('!ATENCIóN¡ \n\ Si continúa, se dará por finalizado el proceso de acreditación. \n\ ¿Está seguro de ejecutar esta acción?');
+            if (confirmacion) {
+                // Si el usuario confirma, redirige a la URL o ejecuta la acción deseada
+                window.location.href = event.target.href; // Redirige a la URL del enlace
+            } else {
+                // Si el usuario cancela, no se realiza ninguna acción
+                return;
+            }
+        });
+
+    </script>
 
 
 </body>
