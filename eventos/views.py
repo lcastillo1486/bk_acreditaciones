@@ -108,7 +108,6 @@ def importarExcel(request, id_evento):
         registros = []
 
         for  _, row in df.iterrows():
-            cod_evento = id_evento
             registro = acreditados_tmp(
                 nombre_persona=row['NOMBRES'],
                 apellido_persona=row['APELLIDOS'],
@@ -117,7 +116,7 @@ def importarExcel(request, id_evento):
                 cargo=row['CARGO'],
                 zona_acceso=row['AREA_DE_TRABAJO'],
                 empresa=row['EMPRESA'],
-                id_evento_id = cod_evento
+                id_evento_id = '1'
             )
             registros.append(registro)
 
@@ -127,6 +126,7 @@ def importarExcel(request, id_evento):
             acreditados_tmp.objects.filter(id_evento = id_evento).delete()
 
         acreditados_tmp.objects.bulk_create(registros)
+
         actualiza_cargas = bkt_eventos.objects.get(id=id_evento)
         actualiza_cargas.num_cargas = actualiza_cargas.num_cargas + 1
         actualiza_cargas.save()
