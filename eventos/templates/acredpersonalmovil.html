@@ -136,11 +136,28 @@
         left: 0;
         color: #00003d;
     }
+    h3 {
+        color: white;
+        font-weight: bold;
+        font-style: italic;
+        text-align: left;
+        background: linear-gradient(to right, #0000ff, #00ff40);
+        text-transform: uppercase;
+        border-radius: 10px;
+        padding-left: 10px;
+    }
 </style>
 
 <body>
 
     <div>
+
+        <img src="{% static 'logo.png' %}" width="50" height="50" style="margin-top: 10px;">
+
+        <h2>Sistema de Gestión de Acreditaciones</h2>
+        <br>
+        <h3> Número de Documento: </h3>
+        <br>
 
         <form action='/buscarPersonal/' class="form" method="POST">
             {% csrf_token %}
