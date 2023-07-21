@@ -110,13 +110,13 @@ def importarExcel(request, id_evento):
         for _, row in df.iterrows():
             registro = acreditados_tmp(
                 nombre_persona=row['NOMBRES'],
-                apellido_persona=row['APELLIDOS'],
-                tipo_doc=row['TIPO_DOCUMENTO'],
-                numero_doc=row['NUMERO_DOCUMENTO'],
-                cargo=row['CARGO'],
-                zona_acceso=row['AREA_DE_TRABAJO'],
-                empresa=row['EMPRESA'],
-                id_evento_id=id_evento
+                # apellido_persona=row['APELLIDOS'],
+                # tipo_doc=row['TIPO_DOCUMENTO'],
+                # numero_doc=row['NUMERO_DOCUMENTO'],
+                # cargo=row['CARGO'],
+                # zona_acceso=row['AREA_DE_TRABAJO'],
+                # empresa=row['EMPRESA'],
+                # id_evento_id=id_evento
             )
             registros.append(registro)
 
