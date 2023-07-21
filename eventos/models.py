@@ -13,7 +13,7 @@ class bkt_eventos(models.Model):
     acreditacion_activa = models.BooleanField(default=False) 
 
 class acreditados_tmp(models.Model):
-    id_evento = models.ForeignKey(bkt_eventos, on_delete = models.DO_NOTHING)
+    id_evento_id = models.CharField(max_length=50, blank=True, null=True)
     nombre_persona = models.CharField(max_length=200, blank=False, null=False)
     apellido_persona = models.CharField(max_length=200, blank=False, null=False)
     tipo_doc = models.CharField(max_length=5, blank=False, null=False)
