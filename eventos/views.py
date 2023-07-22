@@ -369,7 +369,7 @@ def buscarPersona(request):
                     messages.error(request,'¡Múltiples registros coinciden con los parámetros indicados, por favor realice una búsqueda número de documento o agregue un segundo apellido!')
                     return redirect('buscar_personal')
             else:
-                messages.error(request, '¡No hay concidencias en las busqueda!')
+                messages.error(request, '¡No hay concidencias en la busqueda!')
                 return redirect('buscar_personal')
         
         #busca por apellido
@@ -617,7 +617,7 @@ def buscarPersonaMovil(request):
                     messages.error(request,'¡Múltiples registros coinciden con los parámetros indicados, por favor realice una búsqueda número de documento o agregue un segundo apellido!')
                     return redirect('buscar_personal_movil')
             else:
-                messages.error(request, '¡No hay concidencias en las busqueda!')
+                messages.error(request, '¡No hay concidencias en la busqueda!')
                 return redirect('buscar_personal_movil')
         
         #busca por apellido
