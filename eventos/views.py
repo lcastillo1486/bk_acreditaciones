@@ -472,10 +472,9 @@ def buscarPersona(request):
             else:
                 
                 #busca estadisticas
-                total_acreditado = acreditados_def.objects.filter(id_evento_id = id_even, acreditado = 1).count()
-                total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
+                total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
+                total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
                 porcentaje = round((total_acreditado /total_registros)*100,4)
-                messages.error(request, '¡Los datos suministrados no coinciden con ningún registro!')
                 return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
 
     #busca estadisticas
