@@ -305,7 +305,7 @@ def buscarPersona(request):
 
         #evaluar si los tres estan vacios
         if len(documento) == 0 and len(nombre) == 0 and len(apellido)==0:
-            messages.error(request, '¡Debe ingresar al menos un dato para la búsqueda!')
+            messages.error(request, '¡Debe ingresar datos para la búsqueda!')
             return render(request, 'acredpersonal.html')
         
         #evaluar si se ha introducido solo un nombre
@@ -474,7 +474,11 @@ def buscarPersona(request):
                 messages.error(request, '¡Los datos suministrados no coinciden con ningún registro!')
                 return render(request, 'acredpersonal.html')
 
-    return render(request, 'acredpersonal.html')
+    #busca estadisticas
+    total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
+    total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
+    porcentaje = round((total_acreditado /total_registros)*100,4)
+    return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
 
 def registraUsuario(request, cod_event):
 
@@ -549,7 +553,7 @@ def buscarPersonaMovil(request):
 
         #evaluar si los tres estan vacios
         if len(documento) == 0 and len(nombre) == 0 and len(apellido)==0:
-            messages.error(request, '¡Debe ingresar al menos un dato para la búsqueda!')
+            messages.error(request, '¡Debe ingresar datos para la búsqueda!')
             return render(request, 'acredpersonalmovil.html')
         
         #evaluar si se ha introducido solo un nombre
