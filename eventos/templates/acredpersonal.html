@@ -181,9 +181,9 @@
 </div>
 
 
-  <div class="mi-div" style="text-align: center; height: 200px;">    
+  <div class="mi-div" style="text-align: center; height: 150px;">    
     <b>
-      <img src="{% static 'logo.png' %}" width="130" height="130" style="margin-top: 5px; align-items: center;">
+      <img src="{% static 'logo.png' %}" width="110" height="110" style="margin-top: 5px; align-items: center;">
       <h4>Acreditación del Personal
         
     </b></h4>
@@ -320,7 +320,7 @@
     document.getElementById("number-input").focus();
 
     document.addEventListener("keydown", function (event) {
-      if (event.key === "Enter") {
+      if (event.key === "Enter" || event.which === 13) {
         var botonBuscar = document.getElementById("boton-buscar");
         if (botonBuscar) {
           botonBuscar.click();
