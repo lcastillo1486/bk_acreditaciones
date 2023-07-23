@@ -296,7 +296,7 @@ def buscarPersona(request):
         documento = request.POST.get('documento')
         nombre = request.POST.get('nombre')
         apellido = request.POST.get('apellido')
-        empresa = request.POST.get('empresa')
+        nombre_empresa = request.POST.get('empresa')
 
         #evalua el len del documento
 
@@ -320,9 +320,9 @@ def buscarPersona(request):
             return render(request, 'acredpersonal.html')
         
         #si busca empresa solamente
-        if len(documento) == 0 and len(nombre) == 0 and len(apellido)==0 and len(empresa) > 0:
-            if acreditados_def.objects.filter(empresa__icontains=empresa, id_evento_id = cod_event).exists():   
-                personal_empresa = acreditados_def.objects.filter(empresa__icontains=empresa, id_evento_id = cod_event)
+        if len(documento) == 0 and len(nombre) == 0 and len(apellido) == 0 and len(nombre_empresa) > 0:
+            if acreditados_def.objects.filter(empresa__icontains = nombre_empresa, id_evento_id = cod_event).exists():   
+                personal_empresa = acreditados_def.objects.filter(empresa__icontains = nombre_empresa, id_evento_id = cod_event)
                 return render(request,'personalempresa.html',{'personal':personal_empresa})
             else:
                 messages.error('¡La empresa indicada no existe en los registros de este evento!')
