@@ -305,7 +305,7 @@ def buscarPersona(request):
             return render(request, 'acredpersonal.html')
 
         #evaluar si los tres estan vacios
-        if len(documento) == 0 and len(nombre) == 0 and len(apellido)==0:
+        if len(documento) == 0 and len(nombre) == 0 and len(apellido)==0 and len(empresa) ==0:
             messages.error(request, '¡Debe ingresar datos para la búsqueda!')
             return render(request, 'acredpersonal.html')
         
