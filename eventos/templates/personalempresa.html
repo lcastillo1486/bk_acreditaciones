@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backtrack - Acreditación</title>
+</head>
+<body>
+    <div style="text-align: center;">
+        <h1><b>
+            <img src="{% static 'logo.png' %}" width="100" height="100" style="margin-top: 70px;">
+            <h2>Sistema de Gestión de Acreditaciones</h2>
+      </div>
+
+      <div class="row">
+        <div class="table-responsive py-2">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+
+                        </th>
+                        <th>
+                            Nombres y apellidos:
+                        </th>
+                        <th>
+                            Tipo Documento:
+                        </th>
+                        <th>
+                            Número de Documento:
+                        </th>
+                        <th>
+                            Zona:
+                        </th>
+                        <th>
+                            Empresa:
+                        </th>
+                        <th colspan="1"></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                        {% for c in personal %}
+                        <tr>
+                        <td>
+                            {{c.nombre_persona}} {{c.apellido_persona}}
+                        </td>
+                        <td>
+                            c.tipo_doc
+                        </td>
+                        <td>
+                            {{c.numero_doc}}
+                        </td>
+                        <td>
+                            {{c.zona_acceso}}
+                        </td>
+                        <td>
+                            {{c.empresa}}
+
+                        <td>
+                            {% if c.acreditado %}
+                            ACREDITADO
+                            {% else %}
+                            <a href='/acredPersonal/{{c.id}}' class="btn btn-secondary" id="acreditar">ACREDITAR</a>
+                            {% endif %}
+                        </td>                            
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    
+</body>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</html>

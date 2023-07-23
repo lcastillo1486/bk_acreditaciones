@@ -296,6 +296,7 @@ def buscarPersona(request):
         documento = request.POST.get('documento')
         nombre = request.POST.get('nombre')
         apellido = request.POST.get('apellido')
+        empresa = request.POST.get('empresa')
 
         #evalua el len del documento
 
@@ -317,6 +318,18 @@ def buscarPersona(request):
         if len(documento) == 0 and len(nombre) == 0 and len(apellido) > 0:
             messages.error(request, '¡Para una búsqueda más precisa, introduzca támbien un nombre!')
             return render(request, 'acredpersonal.html')
+        
+        #si busca empresa solamente
+        if len(documento) == 0 and len(nombre) == 0 and len(apellido)==0 and len(empresa) > 0:
+            if acreditados_def.objects.filter(Q(empresa__iconstains=empresa, id_evento_id = cod_event)).exists():   
+                personal_empresa = acreditados_def.objects.filter(Q(empresa__iconstains=empresa, id_evento_id = cod_event))
+                return render(request,'personalempresa.html',{'personal':personal_empresa})
+            else:
+                messages.error('¡La empresa indicada no existe en los registros de este evento!')
+                total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
+                total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
+                porcentaje = round((total_acreditado /total_registros)*100,4)
+                return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
         
         #busca por nombre y apellido
         if len(documento) == 0 and len(nombre) > 0 and len(apellido) > 0:
