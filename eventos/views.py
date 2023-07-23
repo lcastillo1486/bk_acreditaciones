@@ -321,8 +321,8 @@ def buscarPersona(request):
         
         #si busca empresa solamente
         if len(documento) == 0 and len(nombre) == 0 and len(apellido)==0 and len(empresa) > 0:
-            if acreditados_def.objects.filter(Q(empresa__iconstains=empresa, id_evento_id = cod_event)).exists():   
-                personal_empresa = acreditados_def.objects.filter(Q(empresa__iconstains=empresa, id_evento_id = cod_event))
+            if acreditados_def.objects.filter(Q(empresa__icontains=empresa, id_evento_id = cod_event)).exists():   
+                personal_empresa = acreditados_def.objects.filter(Q(empresa__icontains=empresa, id_evento_id = cod_event))
                 return render(request,'personalempresa.html',{'personal':personal_empresa})
             else:
                 messages.error('¡La empresa indicada no existe en los registros de este evento!')
