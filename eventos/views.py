@@ -325,7 +325,7 @@ def buscarPersona(request):
                 personal_empresa = acreditados_def.objects.filter(empresa__icontains = nombre_empresa, id_evento_id = cod_event)
                 return render(request,'personalempresa.html',{'personal':personal_empresa})
             else:
-                messages.error('¡La empresa indicada no existe en los registros de este evento!')
+                messages.error( request,'¡La empresa indicada no existe en los registros de este evento!')
                 total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
                 total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
                 porcentaje = round((total_acreditado /total_registros)*100,4)
