@@ -305,7 +305,7 @@ def buscarPersona(request):
             return render(request, 'acredpersonal.html')
 
         #evaluar si los tres estan vacios
-        if len(documento) == 0 and len(nombre) == 0 and len(apellido)==0 and len(empresa) ==0:
+        if len(documento) == 0 and len(nombre) == 0 and len(apellido)==0 and len(nombre_empresa) ==0:
             messages.error(request, '¡Debe ingresar datos para la búsqueda!')
             return render(request, 'acredpersonal.html')
         
@@ -321,8 +321,8 @@ def buscarPersona(request):
         
         #si busca empresa solamente
         if len(documento) == 0 and len(nombre) == 0 and len(apellido) == 0 and len(nombre_empresa) > 0:
-            if acreditados_def.objects.filter(empresa__icontains = nombre_empresa, id_evento_id = cod_event).exists():   
-                personal_empresa = acreditados_def.objects.filter(empresa__icontains = nombre_empresa, id_evento_id = cod_event)
+            if acreditados_def.objects.filter(empresa = nombre_empresa, id_evento_id = cod_event).exists():   
+                personal_empresa = acreditados_def.objects.filter(empresa = nombre_empresa, id_evento_id = cod_event)
                 return render(request,'personalempresa.html',{'personal':personal_empresa})
             else:
                 messages.error( request,'¡La empresa indicada no existe en los registros de este evento!')
