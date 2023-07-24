@@ -323,7 +323,7 @@ def buscarPersona(request):
         if len(documento) == 0 and len(nombre) == 0 and len(apellido) == 0 and len(nombre_empresa) > 0:
             if acreditados_def.objects.filter(empresa__icontains = nombre_empresa, id_evento_id = cod_event).exists():    
                 personal_empresa = acreditados_def.objects.filter(empresa__icontains = nombre_empresa, id_evento_id = cod_event)
-                return render(request,'personalempresa.html')
+                return render(request,'personalempresa.html', {'personal':personal_empresa})
             else:
                 messages.error( request,'¡La empresa indicada no existe en los registros de este evento!')
                 total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
