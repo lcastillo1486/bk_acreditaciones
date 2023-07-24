@@ -34,7 +34,7 @@
 
     <form action="/guardarEvento/" id="form_evento" method="POST">
         {% csrf_token %}
-        <div class="form-row">
+        <div class="form-row flex-wrap">
             <div class="form-group col-md-5 col-lg-5 col-xl-5">
                 <label class="campo-label">{{ form_evento.nombre_evento.label_tag }}</label>
                 {{ form_evento.nombre_evento }}
