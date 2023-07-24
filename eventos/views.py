@@ -276,6 +276,17 @@ def acreditarPersonal(request, id_reg):
 @login_required
 def buscarPersona(request):
 
+    user_agent_string = request.META['HTTP_USER_AGENT']
+    user_agent = parse(user_agent_string)
+
+    is_mobile = user_agent.is_mobile
+    is_tablet = user_agent.is_tablet
+
+    if is_mobile or is_tablet:
+        return redirect('buscar_personal_movil')
+
+
+
     usuario = request.user
     evento_buscar = acreditadorEvento.objects.get(usuario = usuario, cerrado = 0)
     cod_event = evento_buscar.evento
