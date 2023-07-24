@@ -2,22 +2,54 @@
 <html lang="es">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-<head>
     {% load static %}
+    <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Backtrack - Acreditación</title>
 </head>
+<style>
+    tr {
+            padding: 1px;
+            text-align: center;
+            border: 3px solid #7ed957;
+            /* Agregar bordes a las celdas */
+        }
+
+        .centrar {
+            text-align: center;
+        }
+
+        th {
+            color: #0047ab;
+            padding: 1px;
+            text-align: center;
+            border: 3px solid #7ed957;
+            /* Agregar bordes a las celdas */
+            background-color: rgb(216, 201, 201);
+        }
+</style>
 <body>
-    <div style="text-align: center;">
+    <div class="header">
+        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: black;">
+            <div class="navbar-nav" style="margin-left: 20px;">
+                <img src="{% static 'logo.png' %}" width="30" height="30">
+                <a class="nav-item nav-link text-white" href='/eventos/' style="margin-left: 20px;">Eventos</a>
+                <a class="nav-item nav-link text-white" href='/logout/' style="margin-left: 20px;">Cerrar Sesión</a>
+            </div>
+        </nav>
+    </div>
+    <div style="text-align: center; background: linear-gradient(to right, #0000ff, #00ff40);">
         <h1><b>
             <img src="{% static 'logo.png' %}" width="100" height="100" style="margin-top: 70px;">
             <h2>Sistema de Gestión de Acreditaciones</h2>
       </div>
 
       <div class="row">
-        <div class="table-responsive py-2">
-            <table class="table table-striped">
+        <form method="post" action="/acreditacionMultiple/">
+            {% csrf_token %}
+        <div class="table-responsive">
+            <table class="table table-striped" style="margin: 0 auto; ">
                 <thead>
                     <tr>
                         <th>
@@ -36,7 +68,7 @@
                             Empresa:
                         </th>
                         <th>
-                            
+                            <button type="submit" id="boton-areditarmulti" style="margin-bottom: 10px;" class="btn btn-success">ACREDITAR</button>
                         </th>
                         
                     </tr>
@@ -59,18 +91,18 @@
                         </td>
                         <td>
                             {{c.empresa}}
-
                         <td>
                             {% if c.acreditado %}
                             ACREDITADO
                             {% else %}
-                            <a href='/acredPersonal/{{c.id}}' class="btn btn-secondary" id="acreditar">ACREDITAR</a>
+                            <input type="checkbox" name="regitrosAcreditar", value="{{c.id}}">
                             {% endif %}
                         </td>                            
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+        </form>
         </div>
     </div>
 

@@ -739,5 +739,34 @@ def buscarPersonaMovil(request):
                 return render(request, 'acredpersonalmovil.html')
 
     return render(request, 'acredpersonalmovil.html')
+
+def acreditacionMultiple(request):
+
+    usuario = request.user
+    evento_buscar = acreditadorEvento.objects.get(usuario = usuario, cerrado = 0)
+    cod_event = evento_buscar.evento
+
+    if request.method == 'POST':
+        registros_seleccionados = request.POST.getlist('regitrosAcreditar')
+
+        for registros_id in registros_seleccionados:
+            registro = acreditados_def.objects.get(id = registros_id)
+            registro.acreditado = 1
+            registro.acreditado_por = request.user.username
+            registro.asistencia = 1
+            registro.save()
+
+        
+        total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
+        total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
+        porcentaje = round((total_acreditado /total_registros)*100,4)
+        messages.success(request, '¡Acreditados Correctamente!')
+        return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+    
+    total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
+    total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
+    porcentaje = round((total_acreditado /total_registros)*100,4)
+    return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+
             
         

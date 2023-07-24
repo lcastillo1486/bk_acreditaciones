@@ -14,4 +14,5 @@ urlpatterns = [
     path('registraUsuario/<int:cod_event>',views.registraUsuario, name="registra_usuario"),
     path('templateMobil/',views.vistaMovil, name="vista_movil"),
     path('buscarPersonalMobil/',views.buscarPersonaMovil, name="buscar_personal_movil"),
+    path('acreditacionMultiple/',views.acreditacionMultiple, name="acreditacion_multiple"),
 ]
