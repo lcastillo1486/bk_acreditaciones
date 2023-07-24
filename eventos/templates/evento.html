@@ -35,17 +35,19 @@
     <form action="/guardarEvento/" id="form_evento" method="POST">
         {% csrf_token %}
         <div class="form-row">
-            <div class="form-group col-md-4 col-lg-5 col-xl-4">
+            <div class="form-group col-md-5 col-lg-5 col-xl-6">
                 <label class="campo-label">{{ form_evento.nombre_evento.label_tag }}</label>
                 {{ form_evento.nombre_evento }}
             </div>
-            <div class="form-group col-md-4 col-lg-5 col-xl-4">
+            <div class="form-group col-md-5 col-lg-5 col-xl-6">
                 <label class="campo-label">{{ form_evento.lugar_evento.label_tag }}</label>
                 {{ form_evento.lugar_evento }}
             </div>
-            <div class="form-group col-md-4 col-lg-2 col-xl-4">
+            <div class="form-row"></div>
+            <div class="form-group col-md-2 col-lg-2 col-xl-4">
                 <label class="campo-label">{{ form_evento.fecha_evento.label_tag }}</label>
                 {{ form_evento.fecha_evento }}
+            </div>
             </div>
 
             <div>
