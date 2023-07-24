@@ -560,6 +560,7 @@ def buscarPersonaMovil(request):
         documento = request.POST.get('documento').strip()
         nombre = request.POST.get('nombre')
         apellido = request.POST.get('apellido')
+        nombre_empresa = request.POST.get('empresa')
 
         #evalua el len del documento
 
@@ -568,7 +569,7 @@ def buscarPersonaMovil(request):
             return render(request, 'acredpersonalmovil.html')
 
         #evaluar si los tres estan vacios
-        if len(documento) == 0 and len(nombre) == 0 and len(apellido)==0:
+        if len(documento) == 0 and len(nombre) == 0 and len(apellido)==0 and len(nombre_empresa) ==0:
             messages.error(request, '¡Debe ingresar datos para la búsqueda!')
             return render(request, 'acredpersonalmovil.html')
         
@@ -581,6 +582,18 @@ def buscarPersonaMovil(request):
         if len(documento) == 0 and len(nombre) == 0 and len(apellido) > 0:
             messages.error(request, '¡Para una búsqueda más precisa, introduzca támbien un nombre!')
             return render(request, 'acredpersonalmovil.html')
+        
+        #si busca empresa solamente
+        if len(documento) == 0 and len(nombre) == 0 and len(apellido) == 0 and len(nombre_empresa) > 0:
+            if acreditados_def.objects.filter(empresa__icontains = nombre_empresa, id_evento_id = cod_event).exists():    
+                personal_empresa = acreditados_def.objects.filter(empresa__icontains = nombre_empresa, id_evento_id = cod_event)
+                return render(request,'personalempresa.html', {'personal':personal_empresa})
+            else:
+                messages.error( request,'¡La empresa indicada no existe en los registros de este evento!')
+                total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
+                total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
+                porcentaje = round((total_acreditado /total_registros)*100,4)
+                return render(request, 'acredpersonalmovil.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
         
         #busca por nombre y apellido
         if len(documento) == 0 and len(nombre) > 0 and len(apellido) > 0:
