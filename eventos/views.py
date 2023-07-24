@@ -755,6 +755,12 @@ def buscarPersonaMovil(request):
 
 def acreditacionMultiple(request):
 
+    user_agent_string = request.META['HTTP_USER_AGENT']
+    user_agent = parse(user_agent_string)
+
+    is_mobile = user_agent.is_mobile
+    is_tablet = user_agent.is_tablet
+
     usuario = request.user
     evento_buscar = acreditadorEvento.objects.get(usuario = usuario, cerrado = 0)
     cod_event = evento_buscar.evento
@@ -774,12 +780,18 @@ def acreditacionMultiple(request):
         total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
         porcentaje = round((total_acreditado /total_registros)*100,4)
         messages.success(request, '¡Acreditados Correctamente!')
-        return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+        if is_mobile or is_tablet:
+            return redirect('buscar_personal_movil')
+        else:
+            return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
     
-    total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
-    total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
-    porcentaje = round((total_acreditado /total_registros)*100,4)
-    return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+    if is_mobile or is_tablet:
+        return redirect('buscar_personal_movil')
+    else:
+        total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
+        total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
+        porcentaje = round((total_acreditado /total_registros)*100,4)
+        return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
 
             
         
