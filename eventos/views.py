@@ -321,7 +321,7 @@ def buscarPersona(request):
         
         #si busca empresa solamente
         if len(documento) == 0 and len(nombre) == 0 and len(apellido) == 0 and len(nombre_empresa) > 0:
-            if acreditados_def.objects.filter(empresa__icontains = nombre_empresa, id_evento_id = cod_event).exists():   
+            if acreditados_def.objects.filter(empresa__icontains = nombre_empresa, id_evento_id = cod_event).exists():    
                 # personal_empresa = acreditados_def.objects.filter(empresa = nombre_empresa, id_evento_id = cod_event)
                 return render(request,'personalempresa.html')
             else:
