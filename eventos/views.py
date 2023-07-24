@@ -293,7 +293,7 @@ def buscarPersona(request):
      
     if request.method == 'POST':
         #buscar por documento
-        documento = request.POST.get('documento')
+        documento = request.POST.get('documento').strip()
         nombre = request.POST.get('nombre')
         apellido = request.POST.get('apellido')
         nombre_empresa = request.POST.get('empresa')
@@ -557,7 +557,7 @@ def buscarPersonaMovil(request):
      
     if request.method == 'POST':
         #buscar por documento
-        documento = request.POST.get('documento')
+        documento = request.POST.get('documento').strip()
         nombre = request.POST.get('nombre')
         apellido = request.POST.get('apellido')
 
