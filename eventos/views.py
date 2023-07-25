@@ -780,7 +780,14 @@ def acreditacionMultiple(request):
         registros_seleccionados = request.POST.getlist('regitrosAcreditar')
 
         if not registros_seleccionados:
-            return redirect('buscar_personal_movil')
+            if is_mobile or is_tablet:
+                return redirect('buscar_personal_movil')
+            else:
+                total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
+                total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
+                porcentaje = round((total_acreditado /total_registros)*100,4)
+                return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+
 
         for registros_id in registros_seleccionados:
             registro = acreditados_def.objects.get(id = registros_id)
