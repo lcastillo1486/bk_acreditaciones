@@ -779,6 +779,9 @@ def acreditacionMultiple(request):
     if request.method == 'POST':
         registros_seleccionados = request.POST.getlist('regitrosAcreditar')
 
+        if not registros_seleccionados:
+            return redirect('buscar_personal_movil')
+
         for registros_id in registros_seleccionados:
             registro = acreditados_def.objects.get(id = registros_id)
             registro.acreditado = 1
