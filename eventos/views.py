@@ -447,8 +447,8 @@ def buscarPersona(request):
             cuenta_reg = acreditados_def.objects.filter(numero_doc__endswith = doc, id_evento_id = cod_event).count()
             if cuenta_reg > 1:               
                 #busca estadisticas
-                total_acreditado = acreditados_def.objects.filter(id_evento_id = id_even, acreditado = 1).count()
-                total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
+                total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
+                total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
                 porcentaje = round((total_acreditado /total_registros)*100,4)
                 messages.error(request,'¡Extrañamente hay más de un registro en este evento, que coincide con el número de documento!\n \
                                Seguramente sea un error de tipeo en el archivo. Se recomienda realizar una busqueda por nombre y apellido o por empresa')
@@ -719,16 +719,14 @@ def buscarPersonaMovil(request):
             doc = str(documento)[-7:]
 
             cuenta_reg = acreditados_def.objects.filter(numero_doc__endswith = doc, id_evento_id = cod_event).count()
-            if cuenta_reg > 1:
+            if cuenta_reg > 1:               
+                #busca estadisticas
+                total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
+                total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
+                porcentaje = round((total_acreditado /total_registros)*100,4)
                 messages.error(request,'¡Extrañamente hay más de un registro en este evento, que coincide con el número de documento!\n \
                                Seguramente sea un error de tipeo en el archivo. Se recomienda realizar una busqueda por nombre y apellido o por empresa')
-                
-                #busca estadisticas
-                total_acreditado = acreditados_def.objects.filter(id_evento_id = id_even, acreditado = 1).count()
-                total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
-                porcentaje = round((total_acreditado /total_registros)*100,4)
-
-                return render(request, 'acredpersonalmovil.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+                return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
             
         # valida si ya se acredito
             if acreditados_def.objects.filter(numero_doc__endswith = doc, acreditado = 1, asistencia = 1, id_evento_id = cod_event).exists():
