@@ -720,7 +720,7 @@ def buscarPersonaMovil(request):
         if len(documento) > 0:
             doc = str(documento)[-7:]
 
-            cuenta_reg = acreditados_def.objects.filter(numero_doc__endswith = doc, acreditado = 1, id_evento_id = cod_event).count()
+            cuenta_reg = acreditados_def.objects.filter(numero_doc__endswith = doc, id_evento_id = cod_event).count()
             if cuenta_reg > 1:
                 messages.error(request,'¡Extrañamente hay más de un registro en este evento, que coincide con el número de documento!\n \
                                Seguramente sea un error de tipeo en el archivo. Se recomienda realizar una busqueda por nombre y apellido o por empresa')
