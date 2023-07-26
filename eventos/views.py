@@ -272,6 +272,7 @@ def acreditarPersonal(request, id_reg):
     acreditado.acreditado = 1
     acreditado.acreditado_por = request.user.username
     acreditado.asistencia = 1
+    acreditado.hora = formato_hora_peru
     acreditado.save()
 
     #busca estadisticas
@@ -798,6 +799,17 @@ def buscarPersonaMovil(request):
 
 def acreditacionMultiple(request):
 
+    hora_actual_utc = timezone.now()
+
+    # Definir la diferencia horaria entre Oregon y Lima (Perú)
+    diferencia_horaria = timedelta(hours=-2)  # UTC-8 (Oregon) - UTC-5 (Lima) = -3 horas
+
+    # Calcular la hora actual en Lima (Perú)
+    hora_actual_peru = hora_actual_utc + diferencia_horaria
+
+    # Puedes formatear la hora según tus necesidades
+    formato_hora_peru = hora_actual_peru.strftime('%H:%M')
+
     user_agent_string = request.META['HTTP_USER_AGENT']
     user_agent = parse(user_agent_string)
 
@@ -826,6 +838,7 @@ def acreditacionMultiple(request):
             registro.acreditado = 1
             registro.acreditado_por = request.user.username
             registro.asistencia = 1
+            registro.hora = formato_hora_peru
             registro.save()
 
         
