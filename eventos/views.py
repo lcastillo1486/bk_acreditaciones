@@ -14,6 +14,7 @@ from datetime import date
 from user_agents import parse
 from django.utils import timezone
 from datetime import timedelta
+from datetime import datetime
 # Create your views here.
 
 @login_required
@@ -227,7 +228,7 @@ def verMonitor(request):
 @login_required
 def acreditarPersonal(request, id_reg):
 
-    hora_actual_utc = timezone.now()
+    hora_actual_utc = datetime.now()
 
     # Definir la diferencia horaria entre Oregon y Lima (Perú)
     diferencia_horaria = timedelta(hours=-2)  # UTC-8 (Oregon) - UTC-5 (Lima) = -3 horas
@@ -799,7 +800,7 @@ def buscarPersonaMovil(request):
 
 def acreditacionMultiple(request):
 
-    hora_actual_utc = timezone.now()
+    hora_actual_utc = datetime.now()
 
     # Definir la diferencia horaria entre Oregon y Lima (Perú)
     diferencia_horaria = timedelta(hours=-2)  # UTC-8 (Oregon) - UTC-5 (Lima) = -3 horas
