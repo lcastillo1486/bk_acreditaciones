@@ -228,16 +228,16 @@ def verMonitor(request):
 @login_required
 def acreditarPersonal(request, id_reg):
 
-    hora_actual_utc = datetime.now()
+    hora_actual = datetime.now()
 
     # Definir la diferencia horaria entre Oregon y Lima (Perú)
-    diferencia_horaria = timedelta(hours=-2)  # UTC-8 (Oregon) - UTC-5 (Lima) = -3 horas
+    diferencia_horaria = timedelta(hours=+2)  # UTC-8 (Oregon) - UTC-5 (Lima) = -3 horas
 
     # Calcular la hora actual en Lima (Perú)
-    hora_actual_peru = hora_actual_utc + diferencia_horaria
+    # hora_actual_peru = hora_actual_utc + diferencia_horaria
 
     # Puedes formatear la hora según tus necesidades
-    formato_hora_peru = hora_actual_peru.strftime('%H:%M')
+    formato_hora_peru = hora_actual.strftime('%H:%M')
 
     user_agent_string = request.META['HTTP_USER_AGENT']
     user_agent = parse(user_agent_string)
