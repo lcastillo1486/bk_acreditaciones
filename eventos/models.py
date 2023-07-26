@@ -35,6 +35,7 @@ class acreditados_def(models.Model):
     acreditado_por = models.CharField(max_length=50, blank=True, null=True)
     asistencia = models.BooleanField(default=False)
     evento_cerrado = models.BooleanField(default=False)
+    hora = models.CharField(max_length=6, blank=True, null=True)
 
 class acreditadorEvento(models.Model):
     usuario = models.CharField(max_length=50, blank=True, null=True)

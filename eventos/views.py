@@ -12,6 +12,8 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from datetime import date
 from user_agents import parse
+from django.utils import timezone
+from datetime import timedelta
 # Create your views here.
 
 @login_required
@@ -224,6 +226,17 @@ def verMonitor(request):
     return render(request, 'monitor.html')
 @login_required
 def acreditarPersonal(request, id_reg):
+
+    hora_actual_utc = timezone.now()
+
+    # Definir la diferencia horaria entre Oregon y Lima (Perú)
+    diferencia_horaria = timedelta(hours=-2)  # UTC-8 (Oregon) - UTC-5 (Lima) = -3 horas
+
+    # Calcular la hora actual en Lima (Perú)
+    hora_actual_peru = hora_actual_utc + diferencia_horaria
+
+    # Puedes formatear la hora según tus necesidades
+    formato_hora_peru = hora_actual_peru.strftime('%H:%M')
 
     user_agent_string = request.META['HTTP_USER_AGENT']
     user_agent = parse(user_agent_string)
