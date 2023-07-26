@@ -726,7 +726,7 @@ def buscarPersonaMovil(request):
                 porcentaje = round((total_acreditado /total_registros)*100,4)
                 messages.error(request,'¡Extrañamente hay más de un registro en este evento, que coincide con el número de documento!\n \
                                Seguramente sea un error de tipeo en el archivo. Se recomienda realizar una busqueda por nombre y apellido o por empresa')
-                return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+                return render(request, 'acredpersonalmovil.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
             
         # valida si ya se acredito
             if acreditados_def.objects.filter(numero_doc__endswith = doc, acreditado = 1, asistencia = 1, id_evento_id = cod_event).exists():
