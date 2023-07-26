@@ -637,7 +637,7 @@ def buscarPersonaMovil(request):
                 try:
                     persona = acreditados_def.objects.get(Q(nombre_persona__icontains=nombre) & Q(apellido_persona__icontains=apellido, id_evento_id = cod_event))
                     if persona.acreditado == 1:
-                        messages.error(request, '¡Ya fue acreditado anteriormente!')
+                        
                         nombre = persona.nombre_persona
                         apellido = persona.apellido_persona
                         documento = persona.numero_doc
@@ -645,6 +645,7 @@ def buscarPersonaMovil(request):
                         area = persona.zona_acceso
                         id_reg = persona.id
                         id_even = persona.id_evento_id
+                        hora = persona.hora
 
                         #busca nombre evento
                         nombre_event = bkt_eventos.objects.get(id = id_even)
@@ -655,6 +656,7 @@ def buscarPersonaMovil(request):
                         total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
                         porcentaje = round((total_acreditado /total_registros)*100,4)
 
+                        messages.error(request, f'¡Ya fue acreditado anteriormente a las: {hora}!')
                         return render(request, 'acredpersonalmovil.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
                                                                     'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
                     else:
@@ -754,11 +756,12 @@ def buscarPersonaMovil(request):
                 area = persona.zona_acceso
                 id_reg = persona.id
                 id_even = persona.id_evento_id
+                hora = persona.hora
                 
                 #busca nombre evento
                 nombre_event = bkt_eventos.objects.get(id = id_even)
                 event_name = nombre_event.nombre_evento
-                messages.error(request, '¡Ya fue acreditado anteriormente!')
+                messages.error(request, f'¡Ya fue acreditado anteriormente a las {hora}!')
 
                 #busca estadisticas
                 total_acreditado = acreditados_def.objects.filter(id_evento_id = id_even, acreditado = 1).count()
