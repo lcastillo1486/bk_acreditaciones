@@ -348,7 +348,7 @@ def buscarPersona(request):
         #si busca empresa solamente
         if len(documento) == 0 and len(nombre) == 0 and len(apellido) == 0 and len(nombre_empresa) > 0:
             if acreditados_def.objects.filter(empresa__icontains = nombre_empresa, id_evento_id = cod_event).exists():    
-                personal_empresa = acreditados_def.objects.filter(empresa__icontains = nombre_empresa, id_evento_id = cod_event)
+                personal_empresa = acreditados_def.objects.filter(empresa__icontains = nombre_empresa, id_evento_id = cod_event).order_by('apellido_persona')
                 return render(request,'personalempresa.html', {'personal':personal_empresa})
             else:
                 messages.error( request,'¡La empresa indicada no existe en los registros de este evento!')
@@ -532,7 +532,7 @@ def buscarPersona(request):
     total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
     porcentaje = round((total_acreditado /total_registros)*100,4)
     return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
-
+@login_required
 def registraUsuario(request, cod_event):
 
     user_agent_string = request.META['HTTP_USER_AGENT']
@@ -568,12 +568,11 @@ def registraUsuario(request, cod_event):
                 return redirect('vista_movil')
             else:
                 return redirect('evento')
-
+@login_required
 def vistaMovil(request):
     form_evento = formEvento()
     eventos_activos = bkt_eventos.objects.filter(evento_activo=1)
     return render(request, 'movil.html', {'form_evento': form_evento, 'listado_eventos': eventos_activos})
-
 @login_required
 def buscarPersonaMovil(request):
 
@@ -802,7 +801,7 @@ def buscarPersonaMovil(request):
                 return render(request, 'acredpersonalmovil.html')
 
     return render(request, 'acredpersonalmovil.html')
-
+@login_required
 def acreditacionMultiple(request):
 
     hora_actual = datetime.now()
