@@ -45,6 +45,9 @@ def logear(request):
             if usuario is not None:
                 login(request, usuario)
 
+                if nombre_usuario == 'Sensei':
+                    return redirect('vistaSensei/')
+
                 if is_mobile or is_tablet:
                     return redirect('templateMobil/')
                 else:

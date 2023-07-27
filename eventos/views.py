@@ -864,5 +864,7 @@ def acreditacionMultiple(request):
         porcentaje = round((total_acreditado /total_registros)*100,4)
         return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
 
+def vistaSensei(request):
+    return render(request, 'PanelDeLuis.html')
             
         
