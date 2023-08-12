@@ -242,11 +242,12 @@
             <h2 style="text-align: left;">Empresa:</h2>
             <input type="text" id="empresa-input" name="empresa">
 
-            <button id="start-scan">ESCANEAR</button>
+            
             <button type="submit" id="boton-buscar" style="margin-bottom: 10px;" class="btn btn-success">BUSCAR</button>
 
             <!-- <a href='##' class="btn btn-success" id="boton-buscar">ACEPTAR</a> -->
         </form>
+        <button id="start-scan">ESCANEAR</button>
         <h2>
             <font style="color: #081fee;">--- {{evento}} ---</font>
             <br>
@@ -323,6 +324,45 @@
         });
 
     </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+        <script>
+            document.getElementById('start-scan').addEventListener('click', function () {
+                Quagga.init({
+                    inputStream: {
+                        name: "Live",
+                        type: "LiveStream",
+                        target: document.querySelector('#scanner-container'),
+                    },
+                    decoder: {
+                        readers: ["ean_reader"]
+                    }
+                }, function (err) {
+                    if (err) {
+                        console.error("Error initializing Quagga: ", err);
+                        return;
+                    }
+                    Quagga.start();
+                });
+    
+                Quagga.onDetected(function (result) {
+                    var code = result.codeResult.code;
+                    // Envía el código al servidor Django para procesarlo
+                    fetch('/scan/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: 'barcode=' + code,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data.message);
+                        Quagga.stop();  // Detiene el escaneo después de procesar un código
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+            });
+        </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
