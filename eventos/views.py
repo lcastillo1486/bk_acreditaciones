@@ -866,5 +866,7 @@ def acreditacionMultiple(request):
 
 def vistaSensei(request):
     return render(request, 'PanelDeLuis.html')
+
+
             
         

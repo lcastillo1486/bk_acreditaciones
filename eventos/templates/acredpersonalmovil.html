@@ -326,46 +326,46 @@
 
     </script>
                     <script>
-                        document.getElementById('start-scan').addEventListener('click', function () {
-                            Quagga.init({
-                                inputStream: {
-                                    name: "Live",
-                                    type: "LiveStream",
-                                    target: document.querySelector('#scanner-container'),
-                                    constraints: {
-                                        facingMode: "environment"  // Intenta acceder a la cámara trasera
-                                    }
-                                },
-                                decoder: {
-                                    readers: ["ean_reader"]
-                                }
-                            }, function (err) {
-                                if (err) {
-                                    console.error("Error initializing Quagga: ", err);
-                                    return;
-                                }
-                                Quagga.start();
-                            });
-                
-                            Quagga.onDetected(function (result) {
-                                var code = result.codeResult.code;
-                                // Envía el código al servidor Django para procesarlo
-                                fetch('/scan/', {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                                    body: 'barcode=' + code,
-                                })
-                                .then(response => response.json())
-                                .then(data => {
-                                    console.log(data.message);
-                                    Quagga.stop();  // Detiene el escaneo después de procesar un código
-                                })
-                                .catch(error => {
-                                    console.error('Error:', error);
-                                });
-                            });
-                        });
-                    </script>
+        document.getElementById('start-scan').addEventListener('click', function () {
+            Quagga.init({
+                inputStream: {
+                    name: "Live",
+                    type: "LiveStream",
+                    target: document.querySelector('#scanner-container'),
+                    constraints: {
+                        facingMode: "environment"  // Intenta acceder a la cámara trasera
+                    }
+                },
+                decoder: {
+                    readers: ["ean_reader"]
+                }
+            }, function (err) {
+                if (err) {
+                    console.error("Error initializing Quagga: ", err);
+                    return;
+                }
+                Quagga.start();
+            });
+
+            Quagga.onDetected(function (result) {
+                var code = result.codeResult.code;
+                // Envía el código al servidor Django para procesarlo
+                fetch('/scan/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'barcode=' + code,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.message);
+                    Quagga.stop();  // Detiene el escaneo después de procesar un código
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        });
+    </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
