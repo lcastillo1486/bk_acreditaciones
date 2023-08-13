@@ -324,48 +324,44 @@
         });
 
     </script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
-            <script>
-                document.getElementById('start-scan').addEventListener('click', function () {
-                    Quagga.init({
-                        inputStream: {
-                            name: "Live",
-                            type: "LiveStream",
-                            target: document.querySelector('#scanner-container'),
-                            constraints: {
-                                facingMode: 'environment' // Para usar la cámara trasera (si está disponible)
+                <script>
+                    const startScanButton = document.getElementById('start-scan');
+                    const scannerContainer = document.getElementById('scanner-container');
+            
+                    startScanButton.addEventListener('click', async () => {
+                        try {
+                            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                            scannerContainer.innerHTML = '';
+                            const video = document.createElement('video');
+                            video.srcObject = stream;
+                            video.play();
+                            scannerContainer.appendChild(video);
+            
+                            const barcodeDetector = new BarcodeDetector({ formats: ['ean_13'] });
+                            const barcodes = await barcodeDetector.detect(video);
+            
+                            if (barcodes && barcodes.length > 0) {
+                                const code = barcodes[0].rawValue;
+                                // Envía el código al servidor Django para procesarlo
+                                fetch('/scan/', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                    body: 'barcode=' + code,
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log(data.message);
+                                    stream.getTracks().forEach(track => track.stop()); // Detiene la cámara
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                });
                             }
-                        },
-                        decoder: {
-                            readers: ["ean_reader"]
+                        } catch (error) {
+                            console.error('Error accessing camera:', error);
                         }
-                    }, function (err) {
-                        if (err) {
-                            console.error("Error initializing Quagga: ", err);
-                            return;
-                        }
-                        Quagga.start();
                     });
-        
-                    Quagga.onDetected(function (result) {
-                        var code = result.codeResult.code;
-                        // Envía el código al servidor Django para procesarlo
-                        fetch('/scan/', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                            body: 'barcode=' + code,
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data.message);
-                            Quagga.stop();  // Detiene el escaneo después de procesar un código
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                        });
-                    });
-                });
-            </script>
+                </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
