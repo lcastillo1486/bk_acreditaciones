@@ -325,44 +325,36 @@
         });
 
     </script>
-    <script>
-        document.getElementById('start-scan').addEventListener('click', function () {
-            Quagga.init({
-                inputStream: {
-                    name: "Live",
-                    type: "LiveStream",
-                    target: document.querySelector('#scanner-container'),
-                },
-                decoder: {
-                    readers: ["ean_reader"]
-                }
-            }, function (err) {
-                if (err) {
-                    console.error("Error initializing Quagga: ", err);
-                    return;
-                }
-                Quagga.start();
-            });
-
-            Quagga.onDetected(function (result) {
-                var code = result.codeResult.code;
-                // Envía el código al servidor Django para procesarlo
-                fetch('/scan/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: 'barcode=' + code,
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data.message);
-                    Quagga.stop();  // Detiene el escaneo después de procesar un código
-                })
-                .catch(error => {
-                    console.error('Error:', error);
+        <script>
+            const startScanButton = document.getElementById('start-scan');
+            const scanner = new Instascan.Scanner({ video: document.getElementById('scanner') });
+    
+            startScanButton.addEventListener('click', () => {
+                Instascan.Camera.getCameras().then(cameras => {
+                    if (cameras.length > 0) {
+                        scanner.start(cameras[0]);
+                        scanner.addListener('scan', content => {
+                            // Envía el código al servidor Django para procesarlo
+                            fetch('/scan/', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                body: 'barcode=' + content,
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data.message);
+                                scanner.stop(); // Detiene el escaneo después de procesar un código
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
+                        });
+                    } else {
+                        console.error('No cameras found.');
+                    }
                 });
             });
-        });
-    </script>
+        </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
