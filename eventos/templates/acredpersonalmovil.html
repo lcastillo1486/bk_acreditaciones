@@ -325,16 +325,13 @@
         });
 
     </script>
-                    <script>
+    <script>
         document.getElementById('start-scan').addEventListener('click', function () {
             Quagga.init({
                 inputStream: {
                     name: "Live",
                     type: "LiveStream",
                     target: document.querySelector('#scanner-container'),
-                    constraints: {
-                        facingMode: "environment"  // Intenta acceder a la cámara trasera
-                    }
                 },
                 decoder: {
                     readers: ["ean_reader"]
