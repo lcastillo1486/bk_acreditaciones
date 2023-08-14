@@ -205,6 +205,25 @@
       /* Centrar horizontalmente */
       font-weight: bold;
     }
+  
+        #modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        #modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+        }
+   
 </style>
 
 <body>
@@ -325,48 +344,68 @@
         });
 
     </script>
-                   <script src="https://cdn.jsdelivr.net/npm/jsqr@2.0.3/dist/jsQR.min.js"></script>
+                   
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@2.0.3/dist/jsQR.min.js"></script>
 
-                   <script>
-                       const startScanButton = document.getElementById('start-scan');
-                       const scanner = document.getElementById('scanner');
-               
-                       startScanButton.addEventListener('click', async () => {
-                           try {
-                               const stream = await navigator.mediaDevices.getUserMedia({
-                                   video: { facingMode: 'environment' } // Intentar acceder a la cámara trasera
-                               });
-               
-                               scanner.style.display = 'block';
-                               scanner.srcObject = stream;
-                               scanner.play();
-               
-                               const canvas = document.createElement('canvas');
-                               const context = canvas.getContext('2d');
-               
-                               const scan = async () => {
-                                   if (scanner.readyState === scanner.HAVE_ENOUGH_DATA) {
-                                       canvas.width = scanner.videoWidth;
-                                       canvas.height = scanner.videoHeight;
-                                       context.drawImage(scanner, 0, 0, canvas.width, canvas.height);
-               
-                                       const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-                                       const code = jsQR(imageData.data, imageData.width, imageData.height);
-               
-                                       if (code && code.data) {
-                                           console.log("QR Code detected:", code.data);
-                                       }
-               
-                                       requestAnimationFrame(scan);
-                                   }
-                               };
-               
-                               scan();
-                           } catch (error) {
-                               console.error('Error accessing camera:', error);
-                           }
-                       });
-                   </script>
+    <script>
+        const startScanButton = document.getElementById('start-scan');
+        const scanner = document.getElementById('scanner');
+        const modal = document.getElementById('modal');
+        const modalContent = document.getElementById('modal-content');
+
+        startScanButton.addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' }
+                });
+
+                scanner.style.display = 'block';
+                scanner.srcObject = stream;
+                scanner.play();
+
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+
+                const scan = async () => {
+                    if (scanner.readyState === scanner.HAVE_ENOUGH_DATA) {
+                        canvas.width = scanner.videoWidth;
+                        canvas.height = scanner.videoHeight;
+                        context.drawImage(scanner, 0, 0, canvas.width, canvas.height);
+
+                        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                        const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+                        if (code && code.data) {
+                            showModal(code.data);
+                        }
+
+                        requestAnimationFrame(scan);
+                    }
+                };
+
+                scan();
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+            }
+        });
+
+        function showModal(qrData) {
+            modal.style.display = 'flex';
+            modalContent.textContent = qrData;
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+    </script>
+
+    <!-- Contenido del mensaje emergente -->
+    <div id="modal">
+        <div id="modal-content">
+            <p id="modal-text"></p>
+            <button onclick="closeModal()">Cerrar</button>
+        </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
