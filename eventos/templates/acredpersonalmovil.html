@@ -333,7 +333,12 @@
         
                 startScanButton.addEventListener('click', async () => {
                     try {
-                        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                        const stream = await navigator.mediaDevices.getUserMedia({
+                            video: {
+                                facingMode: 'environment' // Intentar acceder a la cámara trasera
+                            }
+                        });
+        
                         scanner.style.display = 'block';
                         scanner.srcObject = stream;
                         scanner.play();
@@ -351,21 +356,8 @@
                                 const code = jsQR(imageData.data, imageData.width, imageData.height);
         
                                 if (code) {
-                                    const barcode = code.data;
-                                    // Envía el código al servidor Django para procesarlo
-                                    fetch('/scan/', {
-                                        method: 'POST',
-                                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                                        body: 'barcode=' + barcode,
-                                    })
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        console.log(data.message);
-                                        stream.getTracks().forEach(track => track.stop());
-                                    })
-                                    .catch(error => {
-                                        console.error('Error:', error);
-                                    });
+                                    const qrData = code.data;
+                                    console.log("QR Code detected:", qrData);
                                 }
         
                                 requestAnimationFrame(scan);
