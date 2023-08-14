@@ -248,7 +248,7 @@
             <!-- <a href='##' class="btn btn-success" id="boton-buscar">ACEPTAR</a> -->
         </form>
         <button id="start-scan">ESCANEAR</button>
-        <div id="scanner-container"></div>
+        <video id="scanner" style="display: none;"></video>
         <h2>
             <font style="color: #081fee;">--- {{evento}} ---</font>
             <br>
@@ -325,46 +325,59 @@
         });
 
     </script>
-               <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.4/dist/quagga.min.js"></script>
+               <script src="https://cdn.jsdelivr.net/npm/jsqr@2.0.3/dist/jsQR.min.js"></script>
 
                <script>
-                   document.getElementById('start-scan').addEventListener('click', function () {
-                       Quagga.init({
-                           inputStream: {
-                               name: "Live",
-                               type: "LiveStream",
-                               target: document.querySelector('#scanner-container'),
-                           },
-                           decoder: {
-                               readers: ["ean_reader"]
-                           }
-                       }, function (err) {
-                           if (err) {
-                               console.error("Error initializing Quagga: ", err);
-                               return;
-                           }
-                           Quagga.start();
-                       });
-           
-                       Quagga.onDetected(function (result) {
-                           var code = result.codeResult.code;
-                           // Envía el código al servidor Django para procesarlo
-                           fetch('/scan/', {
-                               method: 'POST',
-                               headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                               body: 'barcode=' + code,
-                           })
-                           .then(response => response.json())
-                           .then(data => {
-                               console.log(data.message);
-                               Quagga.stop();  // Detiene el escaneo después de procesar un código
-                           })
-                           .catch(error => {
-                               console.error('Error:', error);
-                           });
-                       });
-                   });
-               </script>
+                const startScanButton = document.getElementById('start-scan');
+                const scanner = document.getElementById('scanner');
+        
+                startScanButton.addEventListener('click', async () => {
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                        scanner.style.display = 'block';
+                        scanner.srcObject = stream;
+                        scanner.play();
+        
+                        const canvas = document.createElement('canvas');
+                        const context = canvas.getContext('2d');
+        
+                        const scan = async () => {
+                            if (scanner.readyState === scanner.HAVE_ENOUGH_DATA) {
+                                canvas.width = scanner.videoWidth;
+                                canvas.height = scanner.videoHeight;
+                                context.drawImage(scanner, 0, 0, canvas.width, canvas.height);
+        
+                                const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                                const code = jsQR(imageData.data, imageData.width, imageData.height);
+        
+                                if (code) {
+                                    const barcode = code.data;
+                                    // Envía el código al servidor Django para procesarlo
+                                    fetch('/scan/', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                        body: 'barcode=' + barcode,
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        console.log(data.message);
+                                        stream.getTracks().forEach(track => track.stop());
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                    });
+                                }
+        
+                                requestAnimationFrame(scan);
+                            }
+                        };
+        
+                        scan();
+                    } catch (error) {
+                        console.error('Error accessing camera:', error);
+                    }
+                });
+            </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
