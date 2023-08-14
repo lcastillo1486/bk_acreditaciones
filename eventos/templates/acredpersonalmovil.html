@@ -248,7 +248,7 @@
             <!-- <a href='##' class="btn btn-success" id="boton-buscar">ACEPTAR</a> -->
         </form>
         <button id="start-scan">ESCANEAR</button>
-        <div id="interactive" class="viewport"></div>
+        <div id="scanner-container"></div>
         <h2>
             <font style="color: #081fee;">--- {{evento}} ---</font>
             <br>
@@ -325,49 +325,46 @@
         });
 
     </script>
-                   <script>
-                    const startScanButton = document.getElementById('start-scan');
-                    const interactive = document.getElementById('interactive');
-            
-                    startScanButton.addEventListener('click', function() {
-                        startScanButton.disabled = true; // Desactiva el botón mientras se escanea
-            
-                        const config = {
-                            inputStream: {
-                                type: "LiveStream",
-                                constraints: {
-                                    width: 640,
-                                    height: 480,
-                                    facingMode: "environment" // Para usar la cámara trasera si está disponible
-                                }
-                            },
-                            locator: {
-                                patchSize: "medium",
-                                halfSample: true
-                            },
-                            numOfWorkers: 2,
-                            decoder: {
-                                readers: ["ean_reader"]
-                            },
-                            locate: true
-                        };
-            
-                        Quagga.init(config, function(err) {
-                            if (err) {
-                                console.error("Error initializing Quagga:", err);
-                                startScanButton.disabled = false; // Reactiva el botón en caso de error
-                                return;
-                            }
-                            Quagga.start();
-                        });
-            
-                        Quagga.onDetected(function(result) {
-                            console.log("Barcode detected:", result.codeResult.code);
-                            Quagga.stop();
-                            startScanButton.disabled = false; // Reactiva el botón después de detener el escaneo
-                        });
-                    });
-                </script>
+               <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.4/dist/quagga.min.js"></script>
+
+               <script>
+                   document.getElementById('start-scan').addEventListener('click', function () {
+                       Quagga.init({
+                           inputStream: {
+                               name: "Live",
+                               type: "LiveStream",
+                               target: document.querySelector('#scanner-container'),
+                           },
+                           decoder: {
+                               readers: ["ean_reader"]
+                           }
+                       }, function (err) {
+                           if (err) {
+                               console.error("Error initializing Quagga: ", err);
+                               return;
+                           }
+                           Quagga.start();
+                       });
+           
+                       Quagga.onDetected(function (result) {
+                           var code = result.codeResult.code;
+                           // Envía el código al servidor Django para procesarlo
+                           fetch('/scan/', {
+                               method: 'POST',
+                               headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                               body: 'barcode=' + code,
+                           })
+                           .then(response => response.json())
+                           .then(data => {
+                               console.log(data.message);
+                               Quagga.stop();  // Detiene el escaneo después de procesar un código
+                           })
+                           .catch(error => {
+                               console.error('Error:', error);
+                           });
+                       });
+                   });
+               </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
