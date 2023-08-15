@@ -879,7 +879,7 @@ def exportarExcel(request):
     ws.title = "Datos"
 
     # Encabezados de las columnas
-    ws.append(['Campo1', 'Campo2', 'Campo3'])  # Cambia a los nombres de tus campos
+    ws.append(['nombre_persona', 'apellido_persona', 'tipo_doc'])  # Cambia a los nombres de tus campos
 
    
     queryset = acreditados_def.objects.all()  
