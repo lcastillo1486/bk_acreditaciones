@@ -90,7 +90,7 @@ def importarExcel(request, id_evento):
 
         # Verificar las columnas requeridas
         columnas_requeridas = ['NOMBRES', 'APELLIDOS', 'TIPO_DOCUMENTO',
-                               'NUMERO_DOCUMENTO', 'CARGO', 'AREA_DE_TRABAJO']
+                               'NUMERO_DOCUMENTO', 'CARGO Y O FUNCIÓN', 'AREA_DE_TRABAJO']
         columnas_excel = df.columns.tolist()
         if not set(columnas_requeridas).issubset(columnas_excel):
             # Manejar el error si alguna(s) columna(s) requerida(s) no está presente
@@ -116,7 +116,7 @@ def importarExcel(request, id_evento):
                 apellido_persona=row['APELLIDOS'],
                 tipo_doc=row['TIPO_DOCUMENTO'],
                 numero_doc=row['NUMERO_DOCUMENTO'],
-                cargo=row['CARGO'],
+                cargo=row['CARGO Y O FUNCIÓN'],
                 zona_acceso=row['AREA_DE_TRABAJO'],
                 empresa=row['EMPRESA'],
                 id_evento_id = id_evento
