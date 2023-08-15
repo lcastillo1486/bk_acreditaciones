@@ -871,7 +871,7 @@ def vistaSensei(request):
 def exportarExcel(request):
     #recibir aqui el id del evento 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=data.xlsx'
+    response['Content-Disposition'] = 'attachment; filename=ultimate_data.xlsx'
 
     # Crear un libro de Excel
     wb = Workbook()
