@@ -882,7 +882,7 @@ def exportarExcel(request):
     ws.append(['nombre_persona', 'apellido_persona', 'tipo_doc','numero_doc','cargo', 'zona_acceso','acreditado'])  # Cambia a los nombres de tus campos
 
    
-    queryset = acreditados_def.objects.all()  
+    queryset = acreditados_def.objects.filter(evento_cerrado=0)  
     for item in queryset:
         ws.append([item.nombre_persona, item.apellido_persona, item.tipo_doc, item.numero_doc, item.cargo, item.zona_acceso, item.acreditado])  # Cambia a los campos relevantes
 
