@@ -879,13 +879,11 @@ def exportarExcel(request):
     ws.title = "Datos"
 
     # Encabezados de las columnas
-    ws.append(['nombre_persona', 'apellido_persona', 'tipo_doc','numero_doc','cargo', 'zona_acceso','acreditado'])  # Cambia a los nombres de tus campos
-
-   
+    ws.append(['nombre_persona', 'apellido_persona', 'tipo_doc','numero_doc','cargo', 'zona_acceso','acreditado'])  
+    
     queryset = acreditados_def.objects.filter(evento_cerrado=0)  
     for item in queryset:
-        ws.append([item.nombre_persona, item.apellido_persona, item.tipo_doc, item.numero_doc, item.cargo, item.zona_acceso, item.acreditado])  # Cambia a los campos relevantes
-
+        ws.append([item.nombre_persona, item.apellido_persona, item.tipo_doc, item.numero_doc, item.cargo, item.zona_acceso, item.acreditado])  
     # Guardar el libro de Excel en la respuesta HTTP
     wb.save(response)
 
