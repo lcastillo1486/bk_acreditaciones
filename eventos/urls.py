@@ -16,6 +16,7 @@ urlpatterns = [
     path('buscarPersonalMobil/',views.buscarPersonaMovil, name="buscar_personal_movil"),
     path('acreditacionMultiple/',views.acreditacionMultiple, name="acreditacion_multiple"),
     path('vistaSensei/',views.vistaSensei, name="vista_sensei"),
-     path('scan/',views.vistaSensei, name="vista_sensei"),
+    path('scan/',views.vistaSensei, name="vista_sensei"),
+    path('exportarExcel/',views.exportarExcel, name="exportar_excel"),
 
 ]

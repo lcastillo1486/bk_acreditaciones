@@ -15,6 +15,7 @@ from user_agents import parse
 from django.utils import timezone
 from datetime import timedelta
 from datetime import datetime
+from openpyxl import Workbook
 # Create your views here.
 
 @login_required
@@ -866,6 +867,29 @@ def acreditacionMultiple(request):
 
 def vistaSensei(request):
     return render(request, 'PanelDeLuis.html')
+
+def exportarExcel(request):
+    #recibir aqui el id del evento 
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=data.xlsx'
+
+    # Crear un libro de Excel
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Datos"
+
+    # Encabezados de las columnas
+    ws.append(['Campo1', 'Campo2', 'Campo3'])  # Cambia a los nombres de tus campos
+
+   
+    queryset = acreditados_def.objects.all()  
+    for item in queryset:
+        ws.append([item.campo1, item.campo2, item.campo3])  # Cambia a los campos relevantes
+
+    # Guardar el libro de Excel en la respuesta HTTP
+    wb.save(response)
+
+    return response
 
 
             
