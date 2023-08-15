@@ -884,7 +884,7 @@ def exportarExcel(request):
    
     queryset = acreditados_def.objects.all()  
     for item in queryset:
-        ws.append([item.campo1, item.campo2, item.campo3])  # Cambia a los campos relevantes
+        ws.append([item.nombre_persona, item.apellido_persona, item.tipo_doc])  # Cambia a los campos relevantes
 
     # Guardar el libro de Excel en la respuesta HTTP
     wb.save(response)
