@@ -16,6 +16,7 @@ from django.utils import timezone
 from datetime import timedelta
 from datetime import datetime
 from openpyxl import Workbook
+from collections import defaultdict
 # Create your views here.
 
 @login_required
@@ -890,6 +891,7 @@ def exportarExcel(request, id):
         ws.append([item.nombre_persona, item.apellido_persona, item.tipo_doc, item.numero_doc, item.cargo, item.zona_acceso, item.acreditado])  
     
     #empresa
+    empleados_por_empresa_zona = defaultdict(list)
     queryset_empresa = acreditados_def.objects.filter(evento_cerrado=1, id_evento_id=id).order_by('apellido_persona')
 
     empleados_por_empresa = {}
@@ -897,6 +899,8 @@ def exportarExcel(request, id):
     # Iterar a través de cada elemento en la queryset y agrupar por empresa
     for item1 in queryset_empresa:
         nombre_empresa = item1.empresa
+        zona = item.zona_acceso
+        empleados_por_empresa_zona[(nombre_empresa, zona)].append(item)
 
         if nombre_empresa not in empleados_por_empresa:
             empleados_por_empresa[nombre_empresa] = []
@@ -920,6 +924,11 @@ def exportarExcel(request, id):
     hoja_totales = wb.create_sheet(title="Totales")
 
     queryset_total = acreditados_def.objects.filter(evento_cerrado=1, id_evento_id=id).order_by('apellido_persona')
+    
+    for (nombre_empresa, zona), empleados in empleados_por_empresa_zona.items():
+        total_acreditados = sum(1 for empleado in empleados if empleado.status == 'Acreditado')
+        total_no_acreditados = sum(1 for empleado in empleados if empleado.status != 'Acreditado')
+
 
     hoja_totales.append(['Empresa', 'Zona', 'Total Acreditados', 'Total No Acreditados'])
     
