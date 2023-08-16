@@ -897,7 +897,7 @@ def exportarExcel(request, id):
 # Iterar a través de cada elemento en la queryset y agrupar por empresa y zona
     for item in queryset_empresa:
         nombre_empresa = item.empresa.empresa
-        zona = item.zona
+        zona = item.zona_empresa
 
         if (nombre_empresa, zona) not in empleados_por_empresa_zona:
             empleados_por_empresa_zona[(nombre_empresa, zona)] = []
@@ -927,7 +927,7 @@ def exportarExcel(request, id):
 
     # Guardar el libro de trabajo en un archivo
     nombre_archivo = "mi_archivo.xlsx"
-    wb.save(nombre_archivo)
+    wb.save(response)
 
     # empleados_por_empresa = {}
     # # Iterar a través de cada elemento en la queryset y agrupar por empresa
