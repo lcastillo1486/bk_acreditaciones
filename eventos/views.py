@@ -890,20 +890,22 @@ def exportarExcel(request, id):
 
     empleados_por_empresa = {}
     # Iterar a través de cada elemento en la queryset y agrupar por empresa
-    for item1 in queryset_empresa:
-        nombre_empresa = item1.empresa
+    # Iterar a través de cada elemento en la queryset y agrupar por empresa
+    for item in queryset_empresa:
+        nombre_empresa = item.empresa.empresa
 
-    if nombre_empresa not in empleados_por_empresa:
-        empleados_por_empresa[nombre_empresa] = []
+        if nombre_empresa not in empleados_por_empresa:
+            empleados_por_empresa[nombre_empresa] = []
 
-    empleados_por_empresa[nombre_empresa].append(item1)
+        empleados_por_empresa[nombre_empresa].append(item)
 
+    # Crear hojas para cada empresa y listar empleados
     for nombre_empresa, empleados in empleados_por_empresa.items():
         nueva_hoja = wb.create_sheet(title=nombre_empresa)
         nueva_hoja.append(['nombre_persona', 'apellido_persona', 'numero_doc', 'cargo', 'zona_acceso'])
 
-    for empleado in empleados:
-        nueva_hoja.append([empleado.nombre_persona, empleado.apellido_persona, empleado.numero_doc, empleado.cargo, empleado.zona_acceso])
+        for empleado in empleados:
+            nueva_hoja.append([empleado.nombre_persona, empleado.apellido_persona, empleado.numero_doc, empleado.cargo, empleado.zona_acceso])
 
     # Guardar el libro de Excel en la respuesta HTTP que lo mande el navegador
     wb.save(response)
