@@ -871,7 +871,7 @@ def vistaSensei(request):
 def exportarExcel(request, id):
     #recibir aqui el id del evento. Necesito un litsado de eventos
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=ultimate_data.xlsx'
+    response['Content-Disposition'] = 'attachment; filename=Detalle_Acreditados.xlsx'
 
     # Crear un libro de Excel
     wb = Workbook()
@@ -881,7 +881,7 @@ def exportarExcel(request, id):
     # este es el Encabezados de las columnas
     ws.append(['nombre_persona', 'apellido_persona', 'tipo_doc','numero_doc','cargo', 'zona_acceso','acreditado'])  
 
-    queryset = acreditados_def.objects.filter(evento_cerrado=1, id_evento_id = id)  
+    queryset = acreditados_def.objects.filter(evento_cerrado=1, id_evento_id = id).order_by('apellido_persona') 
     for item in queryset:
         ws.append([item.nombre_persona, item.apellido_persona, item.tipo_doc, item.numero_doc, item.cargo, item.zona_acceso, item.acreditado])  
     # Guardar el libro de Excel en la respuesta HTTP que lo mande el navegador
