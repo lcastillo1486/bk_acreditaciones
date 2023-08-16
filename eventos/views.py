@@ -891,13 +891,13 @@ def exportarExcel(request, id):
     empleados_por_empresa = {}
     # Iterar a través de cada elemento en la queryset y agrupar por empresa
     # Iterar a través de cada elemento en la queryset y agrupar por empresa
-    for item in queryset_empresa:
-        nombre_empresa = item.empresa.empresa
+    for item1 in queryset_empresa:
+        nombre_empresa = item1.empresa.empresa
 
         if nombre_empresa not in empleados_por_empresa:
             empleados_por_empresa[nombre_empresa] = []
 
-        empleados_por_empresa[nombre_empresa].append(item)
+        empleados_por_empresa[nombre_empresa].append(item1)
 
     # Crear hojas para cada empresa y listar empleados
     for nombre_empresa, empleados in empleados_por_empresa.items():
