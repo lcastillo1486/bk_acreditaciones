@@ -886,8 +886,8 @@ def exportarExcel(request, id):
         ws.append([item.nombre_persona, item.apellido_persona, item.tipo_doc, item.numero_doc, item.cargo, item.zona_acceso, item.acreditado])  
     # Guardar el libro de Excel en la respuesta HTTP que lo mande el navegador
 
-    ws1 = wb.active
-    ws1.title = "Datos1"
+    nueva_hoja = wb.create_sheet(title="Otra Hoja")
+
 
     wb.save(response)
     
