@@ -884,11 +884,18 @@ def exportarExcel(request, id):
     queryset = acreditados_def.objects.filter(evento_cerrado=1, id_evento_id = id).order_by('apellido_persona') 
     for item in queryset:
         ws.append([item.nombre_persona, item.apellido_persona, item.tipo_doc, item.numero_doc, item.cargo, item.zona_acceso, item.acreditado])  
+    
+    #empresa
+    queryset_empresa = acreditados_def.objects.filter(evento_cerrado=1, id_evento_id = id).order_by('empresa')
+
+    for empresa in queryset_empresa:
+        nombre_empresa = queryset_empresa.empresa
+        nueva_hoja = wb.create_sheet(title=f'{nombre_empresa}')
+        nueva_hoja.append(['nombre_persona', 'apellido_persona', 'numero_doc','cargo', 'zona_acceso'])
+        nueva_hoja.append([item.nombre_persona, item.apellido_persona, item.tipo_doc, item.numero_doc, item.cargo, item.zona_acceso]) 
+
+
     # Guardar el libro de Excel en la respuesta HTTP que lo mande el navegador
-
-    nueva_hoja = wb.create_sheet(title="Otra Hoja")
-
-
     wb.save(response)
     
     return response
