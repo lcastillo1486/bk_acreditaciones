@@ -899,8 +899,7 @@ def exportarExcel(request, id):
     # Iterar a través de cada elemento en la queryset y agrupar por empresa
     for item1 in queryset_empresa:
         nombre_empresa = item1.empresa
-        zona = item.zona_acceso
-        empleados_por_empresa_zona[(nombre_empresa, zona)].append(item)
+
 
         if nombre_empresa not in empleados_por_empresa:
             empleados_por_empresa[nombre_empresa] = []
@@ -917,24 +916,7 @@ def exportarExcel(request, id):
                 empleado.acreditado = 'Si'
             else:
                 empleado.acreditado = 'No'
-            nueva_hoja.append([empleado.nombre_persona, empleado.apellido_persona, empleado.numero_doc, empleado.cargo, empleado.zona_acceso, empleado.acreditado])
-        
-        
-        
-    hoja_totales = wb.create_sheet(title="Totales")
-
-    queryset_total = acreditados_def.objects.filter(evento_cerrado=1, id_evento_id=id).order_by('apellido_persona')
-    hoja_totales.append(['Empresa', 'Zona', 'Total Acreditados', 'Total No Acreditados'])
-    
-    for (nombre_empresa, zona), empleados in empleados_por_empresa_zona.items():
-        total_acreditados = sum(1 for empleado in empleados if empleado.status == 'Acreditado')
-        total_no_acreditados = sum(1 for empleado in empleados if empleado.status != 'Acreditado')
-
-        hoja_totales.append([nombre_empresa, zona, total_acreditados, total_no_acreditados])
-
-
-    
-    
+            nueva_hoja.append([empleado.nombre_persona, empleado.apellido_persona, empleado.numero_doc, empleado.cargo, empleado.zona_acceso, empleado.acreditado]) 
 
     # Guardar el libro de Excel en la respuesta HTTP que lo mande el navegador
     wb.save(response)
