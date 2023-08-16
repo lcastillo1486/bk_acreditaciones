@@ -885,8 +885,12 @@ def exportarExcel(request, id):
     for item in queryset:
         ws.append([item.nombre_persona, item.apellido_persona, item.tipo_doc, item.numero_doc, item.cargo, item.zona_acceso, item.acreditado])  
     # Guardar el libro de Excel en la respuesta HTTP que lo mande el navegador
-    wb.save(response)
 
+    ws = wb.active
+    ws.title = "Datos1"
+
+    wb.save(response)
+    
     return response
 
 def listadoEventos(request):
