@@ -915,13 +915,14 @@ def exportarExcel(request, id):
                 empleado.acreditado = 'No'
             nueva_hoja.append([empleado.nombre_persona, empleado.apellido_persona, empleado.numero_doc, empleado.cargo, empleado.zona_acceso, empleado.acreditado])
         
-        nueva_hoja.append([])  # Agregar una fila vacía como separador
-        nueva_hoja.append(["Texto al final de la lista"])
+        
         
     hoja_totales = wb.create_sheet(title="Totales")
 
+    queryset_total = acreditados_def.objects.filter(evento_cerrado=1, id_evento_id=id).order_by('apellido_persona')
+
     hoja_totales.append(['Empresa', 'Zona', 'Total Acreditados', 'Total No Acreditados'])
-    for (nombre_empresa, zona), empleados in empleados_por_empresa.items():
+    for (nombre_empresa, zona), empleados in queryset_total.items():
         total_acreditados = sum(1 for empleado in empleados if empleado.status == 'Acreditado')
         total_no_acreditados = sum(1 for empleado in empleados if empleado.status != 'Acreditado')
 
