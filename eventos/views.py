@@ -902,10 +902,10 @@ def exportarExcel(request, id):
     # Crear hojas para cada empresa y listar empleados
     for nombre_empresa, empleados in empleados_por_empresa.items():
         nueva_hoja = wb.create_sheet(title=nombre_empresa)
-        nueva_hoja.append(['nombre_persona', 'apellido_persona', 'numero_doc', 'cargo', 'zona_acceso'])
+        nueva_hoja.append(['nombre_persona', 'apellido_persona', 'numero_doc', 'cargo', 'zona_acceso', 'acreditado'])
 
         for empleado in empleados:
-            nueva_hoja.append([empleado.nombre_persona, empleado.apellido_persona, empleado.numero_doc, empleado.cargo, empleado.zona_acceso])
+            nueva_hoja.append([empleado.nombre_persona, empleado.apellido_persona, empleado.numero_doc, empleado.cargo, empleado.zona_acceso, empleado.acreditado])
 
     # Guardar el libro de Excel en la respuesta HTTP que lo mande el navegador
     wb.save(response)
