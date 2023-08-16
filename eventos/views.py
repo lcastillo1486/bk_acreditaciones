@@ -892,8 +892,8 @@ def exportarExcel(request, id):
     # Iterar a través de cada elemento en la queryset y agrupar por empresa
     # Iterar a través de cada elemento en la queryset y agrupar por empresa
     for item1 in queryset_empresa:
-        nombre_empresa = item1.empresa.empresa
-
+        nombre_empresa = item1.empresa
+        
         if nombre_empresa not in empleados_por_empresa:
             empleados_por_empresa[nombre_empresa] = []
 
