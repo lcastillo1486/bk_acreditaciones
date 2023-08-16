@@ -905,6 +905,10 @@ def exportarExcel(request, id):
         nueva_hoja.append(['nombre_persona', 'apellido_persona', 'numero_doc', 'cargo', 'zona_acceso', 'acreditado'])
 
         for empleado in empleados:
+            if empleado.acreditado == 1:
+                empleado.acreditado = 'Si'
+            else:
+                empleado.acreditado = 'No'
             nueva_hoja.append([empleado.nombre_persona, empleado.apellido_persona, empleado.numero_doc, empleado.cargo, empleado.zona_acceso, empleado.acreditado])
 
     # Guardar el libro de Excel en la respuesta HTTP que lo mande el navegador
