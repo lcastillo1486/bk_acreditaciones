@@ -876,7 +876,7 @@ def exportarExcel(request, id):
     # Crear un libro de Excel
     wb = Workbook()
     ws = wb.active
-    ws.title = "Datos"
+    ws.title = "Listado_General"
 
     # este es el Encabezados de las columnas
     ws.append(['nombre_persona', 'apellido_persona', 'tipo_doc','numero_doc','cargo', 'zona_acceso','acreditado'])  
@@ -893,7 +893,7 @@ def exportarExcel(request, id):
     # Iterar a través de cada elemento en la queryset y agrupar por empresa
     for item1 in queryset_empresa:
         nombre_empresa = item1.empresa
-        
+
         if nombre_empresa not in empleados_por_empresa:
             empleados_por_empresa[nombre_empresa] = []
 
