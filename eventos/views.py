@@ -892,72 +892,35 @@ def exportarExcel(request, id):
     #empresa
     queryset_empresa = acreditados_def.objects.filter(evento_cerrado=1, id_evento_id=id).order_by('apellido_persona')
 
-    empleados_por_empresa_zona = {}
+    empleados_por_empresa = {}
+    # Iterar a través de cada elemento en la queryset y agrupar por empresa
+    # Iterar a través de cada elemento en la queryset y agrupar por empresa
+    for item1 in queryset_empresa:
+        nombre_empresa = item1.empresa
 
-# Iterar a través de cada elemento en la queryset y agrupar por empresa y zona
-    for item in queryset_empresa:
-        nombre_empresa = item.empresa.empresa
-        zona = item.zona_empresa
+        if nombre_empresa not in empleados_por_empresa:
+            empleados_por_empresa[nombre_empresa] = []
 
-        if (nombre_empresa, zona) not in empleados_por_empresa_zona:
-            empleados_por_empresa_zona[(nombre_empresa, zona)] = []
+        empleados_por_empresa[nombre_empresa].append(item1)
 
-        empleados_por_empresa_zona[(nombre_empresa, zona)].append(item)
-
-    # Crear hojas para cada empresa y zona y listar empleados
-    for (nombre_empresa, zona), empleados in empleados_por_empresa_zona.items():
-        nueva_hoja = wb.create_sheet(title=f"{nombre_empresa} - Zona {zona}")
-        nueva_hoja.append(['nombre_persona', 'apellido_persona', 'numero_doc', 'cargo', 'zona_acceso', 'status'])
-
-        acreditados = 0
-        no_acreditados = 0
+    # Crear hojas para cada empresa y listar empleados
+    for nombre_empresa, empleados in empleados_por_empresa.items():
+        nueva_hoja = wb.create_sheet(title=nombre_empresa)
+        nueva_hoja.append(['Nombres', 'Apellidos', 'Documento', 'Cargo', 'Zona', '¿Acreditado?'])
 
         for empleado in empleados:
-            nueva_hoja.append([empleado.nombre_persona, empleado.apellido_persona, empleado.numero_doc, empleado.cargo, empleado.zona_acceso, empleado.status])
-
-            if empleado.status == 'Acreditado':
-                acreditados += 1
+            if empleado.acreditado == 1:
+                empleado.acreditado = 'Si'
             else:
-                no_acreditados += 1
+                empleado.acreditado = 'No'
+            nueva_hoja.append([empleado.nombre_persona, empleado.apellido_persona, empleado.numero_doc, empleado.cargo, empleado.zona_acceso, empleado.acreditado])
+        
+        nueva_hoja.append([])  # Agregar una fila vacía como separador
+        nueva_hoja.append(["Texto al final de la lista"])
+        
 
-        # Agregar texto al final de la hoja
-        nueva_hoja.append([])
-        nueva_hoja.append(["Total Acreditados (Zona {0}):".format(zona), acreditados])
-        nueva_hoja.append(["Total No Acreditados (Zona {0}):".format(zona), no_acreditados])
-
-    # Guardar el libro de trabajo en un archivo
-    nombre_archivo = "mi_archivo.xlsx"
+    # Guardar el libro de Excel en la respuesta HTTP que lo mande el navegador
     wb.save(response)
-
-    # empleados_por_empresa = {}
-    # # Iterar a través de cada elemento en la queryset y agrupar por empresa
-    # # Iterar a través de cada elemento en la queryset y agrupar por empresa
-    # for item1 in queryset_empresa:
-    #     nombre_empresa = item1.empresa
-
-    #     if nombre_empresa not in empleados_por_empresa:
-    #         empleados_por_empresa[nombre_empresa] = []
-
-    #     empleados_por_empresa[nombre_empresa].append(item1)
-
-    # # Crear hojas para cada empresa y listar empleados
-    # for nombre_empresa, empleados in empleados_por_empresa.items():
-    #     nueva_hoja = wb.create_sheet(title=nombre_empresa)
-    #     nueva_hoja.append(['Nombres', 'Apellidos', 'Documento', 'Cargo', 'Zona', '¿Acreditado?'])
-
-    #     for empleado in empleados:
-    #         if empleado.acreditado == 1:
-    #             empleado.acreditado = 'Si'
-    #         else:
-    #             empleado.acreditado = 'No'
-    #         nueva_hoja.append([empleado.nombre_persona, empleado.apellido_persona, empleado.numero_doc, empleado.cargo, empleado.zona_acceso, empleado.acreditado])
-        
-    #     nueva_hoja.append([])  # Agregar una fila vacía como separador
-    #     nueva_hoja.append(["Texto al final de la lista"])
-        
-
-    # # Guardar el libro de Excel en la respuesta HTTP que lo mande el navegador
-    # wb.save(response)
     
     return response
 
