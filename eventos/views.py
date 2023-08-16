@@ -927,7 +927,7 @@ def exportarExcel(request, id):
     # Iterar a través de cada elemento en la queryset y agrupar por empresa y zona
     for item in queryset_totales:
         nombre_empresa = item.empresa.empresa
-        zona = item.zona
+        zona = item.zona_acceso
         empleados_por_empresa_zona[(nombre_empresa, zona)].append(item)
 
     # Crear una nueva hoja para los totales generales
