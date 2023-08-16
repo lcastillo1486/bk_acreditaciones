@@ -896,7 +896,7 @@ def exportarExcel(request, id):
     if nombre_empresa not in empleados_por_empresa:
         empleados_por_empresa[nombre_empresa] = []
 
-    empleados_por_empresa[nombre_empresa].append(item)
+    empleados_por_empresa[nombre_empresa].append(item1)
 
     for nombre_empresa, empleados in empleados_por_empresa.items():
         nueva_hoja = wb.create_sheet(title=nombre_empresa)
