@@ -869,7 +869,7 @@ def vistaSensei(request):
     return render(request, 'PanelDeLuis.html')
 
 def exportarExcel(request):
-    #recibir aqui el id del evento 
+    #recibir aqui el id del evento. Necesito un litsado de eventos
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename=ultimate_data.xlsx'
 
@@ -878,17 +878,20 @@ def exportarExcel(request):
     ws = wb.active
     ws.title = "Datos"
 
-    # Encabezados de las columnas
+    # este es el Encabezados de las columnas
     ws.append(['nombre_persona', 'apellido_persona', 'tipo_doc','numero_doc','cargo', 'zona_acceso','acreditado'])  
-    
-    queryset = acreditados_def.objects.filter(evento_cerrado=0)  
+
+    queryset = acreditados_def.objects.filter(evento_cerrado=1)  
     for item in queryset:
         ws.append([item.nombre_persona, item.apellido_persona, item.tipo_doc, item.numero_doc, item.cargo, item.zona_acceso, item.acreditado])  
-    # Guardar el libro de Excel en la respuesta HTTP
+    # Guardar el libro de Excel en la respuesta HTTP que lo mande el navegador
     wb.save(response)
 
     return response
 
+def listadoEventos(request):
+    eventos_cerrados = bkt_eventos.objects.filter(evento_activo=0, acreditacion_activa = 0)
+    return render(request,'listadoEventos.html',{'eventosCerrados':eventos_cerrados})
 
             
         

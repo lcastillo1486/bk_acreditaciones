@@ -18,5 +18,6 @@ urlpatterns = [
     path('vistaSensei/',views.vistaSensei, name="vista_sensei"),
     path('scan/',views.vistaSensei, name="vista_sensei"),
     path('exportarExcel/',views.exportarExcel, name="exportar_excel"),
+    path('listadoEventos/',views.listadoEventos, name="listado_eventos"),
 
 ]
