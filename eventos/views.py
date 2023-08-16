@@ -879,10 +879,14 @@ def exportarExcel(request, id):
     ws.title = "Listado_General"
 
     # este es el Encabezados de las columnas
-    ws.append(['nombre_persona', 'apellido_persona', 'tipo_doc','numero_doc','cargo', 'zona_acceso','acreditado'])  
+    ws.append(['Nombres', 'Apellidos', 'Tipo Documento','Numero Documento','Cargo', 'Zona','¿Acreditado?'])  
 
     queryset = acreditados_def.objects.filter(evento_cerrado=1, id_evento_id = id).order_by('apellido_persona') 
     for item in queryset:
+        if item.acreditado == 1:
+            item.acreditado = 'Si'
+        else:
+            item.acreditado = 'No'
         ws.append([item.nombre_persona, item.apellido_persona, item.tipo_doc, item.numero_doc, item.cargo, item.zona_acceso, item.acreditado])  
     
     #empresa
@@ -902,7 +906,7 @@ def exportarExcel(request, id):
     # Crear hojas para cada empresa y listar empleados
     for nombre_empresa, empleados in empleados_por_empresa.items():
         nueva_hoja = wb.create_sheet(title=nombre_empresa)
-        nueva_hoja.append(['nombre_persona', 'apellido_persona', 'numero_doc', 'cargo', 'zona_acceso', 'acreditado'])
+        nueva_hoja.append(['Nombres', 'Apellidos', 'Documento', 'Cargo', 'Zona', '¿Acreditado?'])
 
         for empleado in empleados:
             if empleado.acreditado == 1:
