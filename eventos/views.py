@@ -915,6 +915,8 @@ def exportarExcel(request, id):
                 empleado.acreditado = 'No'
             nueva_hoja.append([empleado.nombre_persona, empleado.apellido_persona, empleado.numero_doc, empleado.cargo, empleado.zona_acceso, empleado.acreditado])
         
+        nueva_hoja.append([])  # Agregar una fila vacía como separador
+        nueva_hoja.append(["Texto al final de la lista"])
         
 
     # Guardar el libro de Excel en la respuesta HTTP que lo mande el navegador
