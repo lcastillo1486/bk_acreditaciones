@@ -919,14 +919,14 @@ def exportarExcel(request, id):
 
     ###TOTALES#####
 
-    queryset_totales = acreditados_def.objects.filter(evento_cerrado=1, id_evento_id=id).order_by('empresa__empresa', 'zona', 'apellido_persona')
+    queryset_totales = acreditados_def.objects.filter(evento_cerrado=1, id_evento_id=id).order_by('apellido_persona')
 
 # Crear un diccionario para agrupar acreditados por empresa y zona
     empleados_por_empresa_zona = defaultdict(list)
 
     # Iterar a través de cada elemento en la queryset y agrupar por empresa y zona
     for item in queryset_totales:
-        nombre_empresa = item.empresa.empresa
+        nombre_empresa = item.empresa
         zona = item.zona_acceso
         empleados_por_empresa_zona[(nombre_empresa, zona)].append(item)
 
@@ -937,8 +937,8 @@ def exportarExcel(request, id):
 
     # Calcular los totales generales por empresa y zona
     for (nombre_empresa, zona), empleados in empleados_por_empresa_zona.items():
-        total_acreditados = sum(1 for empleado in empleados if empleado.status == 'Acreditado')
-        total_no_acreditados = sum(1 for empleado in empleados if empleado.status != 'Acreditado')
+        total_acreditados = sum(1 for empleado in empleados if empleado.acreditado == 1)
+        total_no_acreditados = sum(1 for empleado in empleados if empleado.acreditado != 1)
 
         hoja_totales.append([nombre_empresa, zona, total_acreditados, total_no_acreditados]) 
 
