@@ -891,7 +891,6 @@ def exportarExcel(request, id):
         ws.append([item.nombre_persona, item.apellido_persona, item.tipo_doc, item.numero_doc, item.cargo, item.zona_acceso, item.acreditado])  
     
     #empresa
-    empleados_por_empresa_zona = defaultdict(list)
     queryset_empresa = acreditados_def.objects.filter(evento_cerrado=1, id_evento_id=id).order_by('apellido_persona')
 
     empleados_por_empresa = {}
@@ -916,7 +915,32 @@ def exportarExcel(request, id):
                 empleado.acreditado = 'Si'
             else:
                 empleado.acreditado = 'No'
-            nueva_hoja.append([empleado.nombre_persona, empleado.apellido_persona, empleado.numero_doc, empleado.cargo, empleado.zona_acceso, empleado.acreditado]) 
+            nueva_hoja.append([empleado.nombre_persona, empleado.apellido_persona, empleado.numero_doc, empleado.cargo, empleado.zona_acceso, empleado.acreditado])
+
+    ###TOTALES#####
+
+    queryset_totales = acreditados_def.objects.filter(evento_cerrado=1, id_evento_id=id).order_by('empresa__empresa', 'zona', 'apellido_persona')
+
+# Crear un diccionario para agrupar acreditados por empresa y zona
+    empleados_por_empresa_zona = defaultdict(list)
+
+    # Iterar a través de cada elemento en la queryset y agrupar por empresa y zona
+    for item in queryset_totales:
+        nombre_empresa = item.empresa.empresa
+        zona = item.zona
+        empleados_por_empresa_zona[(nombre_empresa, zona)].append(item)
+
+    # Crear una nueva hoja para los totales generales
+    hoja_totales = wb.create_sheet(title="Totales")
+
+    hoja_totales.append(['Empresa', 'Zona', 'Total Acreditados', 'Total No Acreditados'])
+
+    # Calcular los totales generales por empresa y zona
+    for (nombre_empresa, zona), empleados in empleados_por_empresa_zona.items():
+        total_acreditados = sum(1 for empleado in empleados if empleado.status == 'Acreditado')
+        total_no_acreditados = sum(1 for empleado in empleados if empleado.status != 'Acreditado')
+
+        hoja_totales.append([nombre_empresa, zona, total_acreditados, total_no_acreditados]) 
 
     # Guardar el libro de Excel en la respuesta HTTP que lo mande el navegador
     wb.save(response)
