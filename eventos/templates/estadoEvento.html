@@ -91,7 +91,10 @@
                     {{c.cantidad_brazalete}}
                 </td>
                 <td>
-                    {{c.cantidad_brazalete}} - {{c.cantidad_entregada}}
+                    {{c.cantidad_entregada}}
+                </td>
+                <td>
+                    {{ c.cantidad_brazalete|sub:c.cantidad_entregada }}
                 </td>
             </tr>
 
