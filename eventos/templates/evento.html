@@ -117,7 +117,7 @@
                     
                     <form action='/importarExcel/{{c.id}}' method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        Importar Listado Acreditables:
+                        Importar Listado Acreditables:<br>
                         <input type="file" name="archivo_excel" id="archivo_excel" class="file-input">
                         <button type="submit" id="btn-importar" class="btn btn-primary"
                             name="btn-importar">Importar</button>
@@ -125,8 +125,8 @@
 <br>
                     
                     <form action='/importarBrazaletes/{{c.id}}' method="post" enctype="multipart/form-data">
-                        Brazaletes:
                         {% csrf_token %}
+                        Brazaletes: <br>
                         <input type="file" name="archivo_excel_braza" id="archivo_excel_braza" class="file-input">
                         <button type="submit" id="btn-importar_braza" class="btn btn-primary"
                             name="btn-importar">Importar</button>
