@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
+<script>
+    function recargarPagina() {
+        location.reload();
+    }
+    setTimeout(recargarPagina, 20000);
+</script>
 
 {% extends 'config.html' %}
 {% block content %}
@@ -133,13 +139,6 @@
                 return;
             }
         });
-
-
-    function recargarPagina() {
-        location.reload();
-    }
-    setTimeout(recargarPagina, 20000);
-
 
     </script>
 </body>
