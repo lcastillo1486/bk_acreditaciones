@@ -862,6 +862,13 @@ def acreditacionMultiple(request):
             registro.hora = formato_hora_peru
             registro.save()
 
+            # actualizar inventario brazaletes 
+            zona = registro.zona_acceso
+            cod_evento = registro.id_evento_id
+            actu_brazalete = inventarioBrazalete.objects.get(id_evento = cod_evento, nombre_brazalete__icontains = zona)
+            actu_brazalete.cantidad_entregada = actu_brazalete.cantidad_entregada +1
+            actu_brazalete.save()
+
         
         total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
         total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
