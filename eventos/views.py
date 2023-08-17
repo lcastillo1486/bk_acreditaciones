@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import formEvento
-from .models import bkt_eventos, acreditados_tmp, acreditados_def, acreditadorEvento, inventarioBrazalete
+from .models import bkt_eventos, acreditados_tmp, acreditados_def, acreditadorEvento, inventarioBrazalete, vistaEstadoBrazaletes
 from django.contrib import messages
 import pandas as pd
 from django.http import FileResponse
@@ -1047,7 +1047,7 @@ def verEstado(request, id_evento):
     evento_id = id_evento
 
     eventos_proceso = bkt_eventos.objects.filter(id = evento_id, evento_activo=1, acreditacion_activa = 1).order_by('fecha_evento')
-    estado_brazalete = inventarioBrazalete.objects.filter(id_evento = evento_id)
+    estado_brazalete = vistaEstadoBrazaletes.objects.filter(id_evento = evento_id)
 
     return render(request,'estadoEvento.html',{'eventoProceso':eventos_proceso, 'estado_brazalete':estado_brazalete})
 
