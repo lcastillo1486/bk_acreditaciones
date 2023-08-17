@@ -971,7 +971,7 @@ def exportarExcel(request, id):
     hoja_brazaletes = wb.create_sheet(title="Inventario_Brazaletes")
 
     queryset_brazaletes = inventarioBrazalete.objects.filter(id_evento=id, evento_cerrado = 1)
-    hoja_totales.append(['Tipo Brazalete', 'Cantidad Inicial', 'Cantidad Entregada', 'Inventario Final'])
+    hoja_brazaletes.append(['Tipo Brazalete', 'Cantidad Inicial', 'Cantidad Entregada', 'Inventario Final'])
     
     for item in queryset_brazaletes:
         hoja_brazaletes.append([item.nombre_brazalete, item.cantidad_brazalete, item.cantidad_entregada, item.cantidad_resta])
