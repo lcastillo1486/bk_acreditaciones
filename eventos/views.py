@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import formEvento
-from .models import bkt_eventos, acreditados_tmp, acreditados_def, acreditadorEvento
+from .models import bkt_eventos, acreditados_tmp, acreditados_def, acreditadorEvento, inventarioBrazalete
 from django.contrib import messages
 import pandas as pd
 from django.http import FileResponse
@@ -147,6 +147,12 @@ def iniciaAcreditacion(request, id_evento):
         messages.error(request,'¡No tiene permisos para iniciar el proceso de acrecitación!')
         return redirect('evento')
     
+    # verifica si se subio listado de brazaletes
+
+    if not inventarioBrazalete.objects.filter(id_evento = id_evento, evento_cerrado = 0).exists():
+        messages.error(request, '¡Debe importar el inventario de brazaletes para poder iniciar el proceso de acreditación!')
+        return redirect('evento')
+    
     # verifica si ya esta activada 
 
     if bkt_eventos.objects.filter(id = id_evento, acreditacion_activa = 1).exists():
@@ -198,6 +204,7 @@ def detieneAcreditacion(request, id_evento):
         # desestima el listado definitivo
         acreditados_def.objects.filter(id_evento_id = id_evento).update(evento_cerrado=1)
         acreditadorEvento.objects.filter(evento = id_evento).update(cerrado = 1)
+        inventarioBrazalete.objects.filter(id_evento = id_evento).update(evento_cerrado = 1)
 
 
         return redirect('evento')
@@ -276,7 +283,14 @@ def acreditarPersonal(request, id_reg):
     acreditado.acreditado_por = request.user.username
     acreditado.asistencia = 1
     acreditado.hora = formato_hora_peru
+    cod_evento = acreditado.id_evento_id
     acreditado.save()
+
+    # actualizar inventario brazaletes 
+    zona = acreditado.zona_acceso
+    actu_brazalete = inventarioBrazalete.objects.get(id_evento = cod_evento, nombre_brazalete__contains = zona)
+    actu_brazalete.cantidad_entregada = actu_brazalete.cantidad_entregada +1
+    actu_brazalete.save()
 
     #busca estadisticas
     busca_stad = acreditados_def.objects.get(id = id_reg, acreditado = 1)
@@ -950,6 +964,69 @@ def exportarExcel(request, id):
 def listadoEventos(request):
     eventos_cerrados = bkt_eventos.objects.filter(evento_activo=0, acreditacion_activa = 0)
     return render(request,'listadoEventos.html',{'eventosCerrados':eventos_cerrados})
+
+def importarBrazaletes(request, id_evento):
+
+    if not request.user.is_superuser:
+        messages.error(request,'¡No tiene permisos para importar listados!')
+        return redirect('evento')
+
+    if request.method == 'POST' and 'archivo_excel_braza' in request.FILES:
+        archivo = request.FILES['archivo_excel_braza']
+
+        # Leer el archivo Excel utilizando pandas
+        try:
+            df = pd.read_excel(archivo, dtype={'CANTIDAD': str})
+        except:
+            # Manejar el error si el archivo no se puede leer correctamente
+            messages.error(request, '¡El archivo no es válido!')
+            return redirect('evento')
+
+        # verifica que este iniciado el proceso de actualización
+
+        iniciado_act = bkt_eventos.objects.get(id = id_evento)
+        if iniciado_act.acreditacion_activa == 1:
+            messages.error(request, '¡Ya se ha iniciado el proceso de acreditación!')
+            return redirect('evento')      
+
+        # Verificar las columnas requeridas
+        columnas_requeridas = ['AREA', 'CANTIDAD']
+
+        columnas_excel = df.columns.tolist()
+        if not set(columnas_requeridas).issubset(columnas_excel):
+            # Manejar el error si alguna(s) columna(s) requerida(s) no está presente
+            messages.error(
+                request, '¡El archivo no contiene todas las columnas requeridas!')
+            return redirect('evento')
+
+        # Validar campos vacíos
+        registros = []
+        for _, row in df.iterrows():
+            if any(pd.isnull(row[columna]) or str(row[columna]).strip() == '' for columna in columnas_requeridas):
+                # Manejar el error si hay campos vacíos en las columnas requeridas
+                messages.error(
+                    request, '¡El archivo contiene campos vacíos en las columnas requeridas! Por favor corrija e intente nuevamente.')
+                return redirect('evento')
+
+        # Procesar los datos y guardar en la base de datos
+        registros = []
+
+        for _, row in df.iterrows():
+            registro = inventarioBrazalete(
+                id_evento=id_evento,
+                nombre_brazalete=row['AREA'],
+                cantidad_brazalete=row['CANTIDAD'],
+                evento_cerrado = 0
+            )
+            registros.append(registro)
+        inventarioBrazalete.objects.bulk_create(registros)
+
+        ### Borrar la tabla si tiene registros ###
+
+        messages.success(request, '¡Los datos se han importado exitosamente!')
+        return redirect('evento')
+
+    return redirect('evento')
 
             
         

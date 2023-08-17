@@ -19,5 +19,6 @@ urlpatterns = [
     path('scan/',views.vistaSensei, name="vista_sensei"),
     path('exportarExcel/<int:id>',views.exportarExcel, name="exportar_excel"),
     path('listadoEventos/',views.listadoEventos, name="listado_eventos"),
+    path('importarBrazaletes/<int:id_evento>',views.importarBrazaletes, name="importar_brazaletes"),
 
 ]
