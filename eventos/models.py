@@ -47,18 +47,6 @@ class inventarioBrazalete(models.Model):
     nombre_brazalete = models.CharField(max_length=50)
     cantidad_brazalete = models.IntegerField()
     cantidad_entregada = models.IntegerField(default=0)
+    cantidad_resta = models.IntegerField(default=0)
     evento_cerrado = models.BooleanField(default=False)
 
-class vistaEstadoBrazaletes(models.Model):
-    id = models.AutoField(primary_key=True)
-    id_evento = models.IntegerField()
-    nombre_brazalete = models.CharField(max_length=50)
-    cantidad_brazalete = models.IntegerField()
-    cantidad_entregada = models.IntegerField()
-    resta = models.IntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'vista_estado_brazaletes'
-        auto_created = True
-        

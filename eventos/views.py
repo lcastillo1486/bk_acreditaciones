@@ -290,6 +290,7 @@ def acreditarPersonal(request, id_reg):
     zona = acreditado.zona_acceso
     actu_brazalete = inventarioBrazalete.objects.get(id_evento = cod_evento, nombre_brazalete__icontains = zona)
     actu_brazalete.cantidad_entregada = actu_brazalete.cantidad_entregada +1
+    actu_brazalete.cantidad_resta = actu_brazalete.cantidad_brazalete - actu_brazalete.cantidad_entregada
     actu_brazalete.save()
 
     #busca estadisticas
@@ -867,6 +868,7 @@ def acreditacionMultiple(request):
             cod_evento = registro.id_evento_id
             actu_brazalete = inventarioBrazalete.objects.get(id_evento = cod_evento, nombre_brazalete__icontains = zona)
             actu_brazalete.cantidad_entregada = actu_brazalete.cantidad_entregada +1
+            actu_brazalete.cantidad_resta = actu_brazalete.cantidad_brazalete - actu_brazalete.cantidad_entregada
             actu_brazalete.save()
 
         
@@ -1049,16 +1051,7 @@ def verEstado(request, id_evento):
     eventos_proceso = bkt_eventos.objects.filter(id = evento_id, evento_activo=1, acreditacion_activa = 1).order_by('fecha_evento')
     estado_brazalete = inventarioBrazalete.objects.filter(id_evento = evento_id)
 
-    for resgistros in estado_brazalete:
-        resgistros.resta = resgistros.cantidad_brazalete - resgistros.cantidad_entregada
-    
-    context = {
-        'registros':resgistros,
-        'eventoProceso':eventos_proceso,
-        
-    }
-
-    return render(request,'estadoEvento.html',context)
+    return render(request,'estadoEvento.html',{'eventoProceso':eventos_proceso, 'estado_brazalete':estado_brazalete})
 
             
         
