@@ -82,7 +82,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for c in estado_brazalete %}
+            {% for c in registros %}
             <tr>
                 <td>
                     {{c.nombre_brazalete}}
@@ -94,7 +94,7 @@
                     {{c.cantidad_entregada}}
                 </td>
                 <td>
-                    {{c.cantidad_brazalete - c.cantidad_entregada }} 
+                    {{c.resta }} 
                 </td>
             </tr>
 
