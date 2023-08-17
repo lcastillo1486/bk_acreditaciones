@@ -1,11 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
 </head>
+
+
+{% extends 'config.html' %}
+{% block content %}
+
 <body>
-    
+    <div class="centrar">
+        <!-- <h3> Listado de Eventos Finalizados </h3> -->
+    </div>
+    {% load crispy_forms_tags %}
+    <!-- <h5>Nuevo Evento:</h5> -->
+
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == 'success' %}
+    <div class=" alert alert-success">
+        {{ message }}
+    </div>
+    {% else %}
+    <div class=" alert alert-error">
+        {{ message }}
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    <h3>Listado de Eventos en Proceso:</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Evento:
+                </th>
+                <th>
+                    Lugar:
+                </th>
+                <th>
+                    Fecha:
+                </th>
+                
+                <th>
+
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in eventoProceso %}
+            <tr>
+                <td>
+                    {{c.nombre_evento}}
+                </td>
+                <td>
+                    {{c.lugar_evento}}
+                </td>
+                <td>
+                    {{c.fecha_evento}}
+                </td>
+                
+                <td>
+
+
+                </td>
+            </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        setTimeout(function () {
+            var messages = document.getElementsByClassName('alert');
+            for (var i = 0; i < messages.length; i++) {
+                messages[i].style.display = 'none';
+            }
+        }, 7000);  // 5000 milisegundos = 5 segundos
+
+        document.getElementById('inicial').addEventListener('click', function (event) {
+            event.preventDefault(); // Evita que se siga el enlace automáticamente
+            var confirmacion = confirm('!ATENCIóN¡ \n\ Si continúa, el sistema hará uso del último listado importado como definitivo. \n\ ¿Está seguro de ejecutar esta acción?');
+            if (confirmacion) {
+                // Si el usuario confirma, redirige a la URL o ejecuta la acción deseada
+                window.location.href = event.target.href; // Redirige a la URL del enlace
+            } else {
+                // Si el usuario cancela, no se realiza ninguna acción
+                return;
+            }
+        });
+
+        document.getElementById('detienee').addEventListener('click', function (event) {
+            event.preventDefault(); // Evita que se siga el enlace automáticamente
+            var confirmacion = confirm('!ATENCIóN¡ \n\ Si continúa, se dará por finalizado el proceso de acreditación. \n\ ¿Está seguro de ejecutar esta acción?');
+            if (confirmacion) {
+                // Si el usuario confirma, redirige a la URL o ejecuta la acción deseada
+                window.location.href = event.target.href; // Redirige a la URL del enlace
+            } else {
+                // Si el usuario cancela, no se realiza ninguna acción
+                return;
+            }
+        });
+
+    </script>
 </body>
+
+{% endblock %}
+
 </html>
