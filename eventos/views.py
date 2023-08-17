@@ -1042,5 +1042,8 @@ def importarBrazaletes(request, id_evento):
 
     return redirect('evento')
 
+def verEstado(request):
+    return render(request,'estadoEvento.html')
+
             
         
