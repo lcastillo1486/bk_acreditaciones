@@ -962,7 +962,7 @@ def exportarExcel(request, id):
     return response
 
 def listadoEventos(request):
-    eventos_cerrados = bkt_eventos.objects.filter(evento_activo=0, acreditacion_activa = 0)
+    eventos_cerrados = bkt_eventos.objects.filter(evento_activo=0, acreditacion_activa = 0).order_by('fecha_evento')
     return render(request,'listadoEventos.html',{'eventosCerrados':eventos_cerrados})
 
 def importarBrazaletes(request, id_evento):
