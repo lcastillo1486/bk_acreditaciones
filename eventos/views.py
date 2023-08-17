@@ -973,7 +973,7 @@ def importarBrazaletes(request, id_evento):
     
     #verificar que ya se importó
 
-    if inventarioBrazalete.objects.filerts(id_evento = id_evento).exists():
+    if inventarioBrazalete.objects.filter(id_evento = id_evento).exists():
         messages.error(request, '¡Ya se ha importado!')
         return redirect('evento')
 
