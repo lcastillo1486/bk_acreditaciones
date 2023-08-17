@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import formEvento
-from .models import bkt_eventos, acreditados_tmp, acreditados_def, acreditadorEvento, inventarioBrazalete, vistaEstadoBrazaletes
+from .models import bkt_eventos, acreditados_tmp, acreditados_def, acreditadorEvento, inventarioBrazalete
 from django.contrib import messages
 import pandas as pd
 from django.http import FileResponse
