@@ -54,7 +54,7 @@ class vistaEstadoBrazaletes(models.Model):
     id_evento = models.CharField(max_length=50)
     nombre_brazalete = models.CharField(max_length=50)
     cantidad_brazalete = models.CharField(max_length=50)
-    cabtidad_entregada = models.CharField(max_length=50)
+    cantidad_entregada = models.CharField(max_length=50)
     resta = models.CharField(max_length=50)
 
     class Meta:
