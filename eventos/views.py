@@ -288,9 +288,9 @@ def acreditarPersonal(request, id_reg):
 
     # actualizar inventario brazaletes 
     zona = acreditado.zona_acceso
-    # actu_brazalete = inventarioBrazalete.objects.get(id_evento = cod_evento, nombre_brazalete__contains = zona)
-    # actu_brazalete.cantidad_entregada = actu_brazalete.cantidad_entregada +1
-    # actu_brazalete.save()
+    actu_brazalete = inventarioBrazalete.objects.get(id_evento = cod_evento, nombre_brazalete__icontains = zona)
+    actu_brazalete.cantidad_entregada = actu_brazalete.cantidad_entregada +1
+    actu_brazalete.save()
 
     #busca estadisticas
     busca_stad = acreditados_def.objects.get(id = id_reg, acreditado = 1)
