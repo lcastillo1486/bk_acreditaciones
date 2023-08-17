@@ -44,11 +44,6 @@
                 <th>
                     Fecha:
                 </th>
-                
-                <th>
-
-                </th>
-
             </tr>
         </thead>
         <tbody>
@@ -63,10 +58,40 @@
                 <td>
                     {{c.fecha_evento}}
                 </td>
-                
+            </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Zona:
+                </th>
+                <th>
+                    Total:
+                </th>
+                <th>
+                    Entregados:
+                </th>
+                <th>
+                    Quedan:
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in estado_brazalete %}
+            <tr>
                 <td>
-
-
+                    {{c.nombre_brazalete}}
+                </td>
+                <td>
+                    {{c.cantidad_brazalete}}
+                </td>
+                <td>
+                    {{c.cantidad_brazalete}} - {{c.cantidad_entregada}}
                 </td>
             </tr>
 
