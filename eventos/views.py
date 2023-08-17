@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import formEvento
-from .models import bkt_eventos, acreditados_tmp, acreditados_def, acreditadorEvento, inventarioBrazalete
+from .models import bkt_eventos, acreditados_tmp, acreditados_def, acreditadorEvento, inventarioBrazalete, inventarioBrazaleteAcreditardor
 from django.contrib import messages
 import pandas as pd
 from django.http import FileResponse
@@ -205,6 +205,7 @@ def detieneAcreditacion(request, id_evento):
         acreditados_def.objects.filter(id_evento_id = id_evento).update(evento_cerrado=1)
         acreditadorEvento.objects.filter(evento = id_evento).update(cerrado = 1)
         inventarioBrazalete.objects.filter(id_evento = id_evento).update(evento_cerrado = 1)
+        inventarioBrazaleteAcreditardor.objects.filter(id_evento = id_evento).update(evento_cerrado = 1)
 
 
         return redirect('evento')
@@ -292,6 +293,15 @@ def acreditarPersonal(request, id_reg):
     actu_brazalete.cantidad_entregada = actu_brazalete.cantidad_entregada +1
     actu_brazalete.cantidad_resta = actu_brazalete.cantidad_brazalete - actu_brazalete.cantidad_entregada
     actu_brazalete.save()
+
+    # actualizar inventario brazaletes acreditador
+    zona = acreditado.zona_acceso
+    acreditador = request.user.username
+    actu_brazalete_acred = inventarioBrazaleteAcreditardor.objects.get(id_evento = cod_evento, nombre_brazalete__icontains = zona, nombre_acreditador = acreditador)
+    actu_brazalete_acred.cantidad_entregada = actu_brazalete_acred.cantidad_entregada +1
+    actu_brazalete_acred.cantidad_resta = actu_brazalete_acred.cantidad_brazalete - actu_brazalete_acred.cantidad_entregada
+    actu_brazalete_acred.save()
+
 
     #busca estadisticas
     busca_stad = acreditados_def.objects.get(id = id_reg, acreditado = 1)
@@ -991,20 +1001,14 @@ def importarBrazaletes(request, id_evento):
     if not request.user.is_superuser:
         messages.error(request,'¡No tiene permisos para importar listados!')
         return redirect('evento')
-    
-    #verificar que ya se importó
-
-    if inventarioBrazalete.objects.filter(id_evento = id_evento).exists():
-        messages.error(request, '¡Ya se ha importado!')
-        return redirect('evento')
-
 
     if request.method == 'POST' and 'archivo_excel_braza' in request.FILES:
         archivo = request.FILES['archivo_excel_braza']
 
         # Leer el archivo Excel utilizando pandas
         try:
-            df = pd.read_excel(archivo, dtype={'CANTIDAD': str})
+            df = pd.read_excel(archivo, sheet_name='Hoja1', dtype={'CANTIDAD': str})
+            df2 = pd.read_excel(archivo,sheet_name='Hoja2', dtype={'ACREDITADOR': str})
         except:
             # Manejar el error si el archivo no se puede leer correctamente
             messages.error(request, '¡El archivo no es válido!')
@@ -1019,17 +1023,33 @@ def importarBrazaletes(request, id_evento):
 
         # Verificar las columnas requeridas
         columnas_requeridas = ['AREA', 'CANTIDAD']
+        columnas_requeridas_braza = ['ACREDITADOR', 'AREA','CANTIDAD']
 
         columnas_excel = df.columns.tolist()
+        columnas_excel_braza = df2.columns.tolist()
+
         if not set(columnas_requeridas).issubset(columnas_excel):
             # Manejar el error si alguna(s) columna(s) requerida(s) no está presente
             messages.error(
                 request, '¡El archivo no contiene todas las columnas requeridas!')
             return redirect('evento')
+        
+        if not set(columnas_requeridas_braza).issubset(columnas_excel_braza):
+            # Manejar el error si alguna(s) columna(s) requerida(s) no está presente
+            messages.error(
+                request, '¡El archivo no contiene todas las columnas requeridas aa!')
+            return redirect('evento')
 
         # Validar campos vacíos
         registros = []
         for _, row in df.iterrows():
+            if any(pd.isnull(row[columna]) or str(row[columna]).strip() == '' for columna in columnas_requeridas):
+                # Manejar el error si hay campos vacíos en las columnas requeridas
+                messages.error(
+                    request, '¡El archivo contiene campos vacíos en las columnas requeridas! Por favor corrija e intente nuevamente.')
+                return redirect('evento')
+        
+        for _, row in df2.iterrows():
             if any(pd.isnull(row[columna]) or str(row[columna]).strip() == '' for columna in columnas_requeridas):
                 # Manejar el error si hay campos vacíos en las columnas requeridas
                 messages.error(
@@ -1047,13 +1067,30 @@ def importarBrazaletes(request, id_evento):
                 evento_cerrado = 0
             )
             registros.append(registro)
+        
+        registros_braza = []
+
+        for _, row in df2.iterrows():
+            registro = inventarioBrazaleteAcreditardor(
+                id_evento=id_evento,
+                nombre_acreditador=row['ACREDITADOR'],
+                nombre_brazalete=row['AREA'],
+                cantidad_brazalete=row['CANTIDAD'],
+                evento_cerrado = 0
+            )
+            registros_braza.append(registro)
+
+        
+        if inventarioBrazalete.objects.filter(id_evento = id_evento).exists():
+            inventarioBrazalete.objects.filter(id_evento = id_evento).delete()
+        
+        if inventarioBrazaleteAcreditardor.objects.filter(id_evento = id_evento).exists():
+            inventarioBrazaleteAcreditardor.objects.filter(id_evento = id_evento).delete()
+
         inventarioBrazalete.objects.bulk_create(registros)
-
-        ### Borrar la tabla si tiene registros ###
-
-        messages.success(request, '¡Los datos se han importado exitosamente!')
-        return redirect('evento')
-
+        inventarioBrazaleteAcreditardor.objects.bulk_create(registros_braza)
+    
+    messages.success(request, '¡Los datos se han importado exitosamente!')
     return redirect('evento')
 
 def verEstado(request, id_evento):

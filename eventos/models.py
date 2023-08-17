@@ -54,6 +54,7 @@ class inventarioBrazaleteAcreditardor(models.Model):
     id_evento = models.IntegerField()
     nombre_acreditador = models.CharField(max_length=50)
     nombre_brazalete = models.CharField(max_length=50)
+    cantidad_brazalete = models.IntegerField(default=0)
     cantidad_entregada = models.IntegerField(default=0)
     cantidad_resta = models.IntegerField(default=0)
     evento_cerrado = models.BooleanField(default=False)
