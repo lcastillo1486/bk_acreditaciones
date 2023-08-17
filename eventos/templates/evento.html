@@ -122,7 +122,7 @@
                             name="btn-importar">Importar</button>
                     </form>
 <br>
-                    Inventario Brazaletes:
+                    Brazaletes:
                     <form action='/importarBrazaletes/{{c.id}}' method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="file" name="archivo_excel_braza" id="archivo_excel_braza" class="file-input">
