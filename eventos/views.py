@@ -970,6 +970,13 @@ def importarBrazaletes(request, id_evento):
     if not request.user.is_superuser:
         messages.error(request,'¡No tiene permisos para importar listados!')
         return redirect('evento')
+    
+    #verificar que ya se importó
+
+    if inventarioBrazalete.objects.filerts(id_evento = id_evento).exists():
+        messages.error(request, '¡Ya se ha importado!')
+        return redirect('evento')
+
 
     if request.method == 'POST' and 'archivo_excel_braza' in request.FILES:
         archivo = request.FILES['archivo_excel_braza']
