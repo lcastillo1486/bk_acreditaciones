@@ -965,6 +965,18 @@ def exportarExcel(request, id):
 
         hoja_totales.append([nombre_empresa, zona, total_acreditados, total_no_acreditados]) 
 
+    
+    ###RESUMEN BRAZALETES#####
+    
+    hoja_brazaletes = wb.create_sheet(title="Inventario_Brazaletes")
+
+    queryset_brazaletes = inventarioBrazalete.objects.filter(id_evento=id, evento_cerrado = 1)
+    hoja_totales.append(['Tipo Brazalete', 'Cantidad Inicial', 'Cantidad Entregada', 'Inventario Final'])
+    
+    for item in queryset_brazaletes:
+        hoja_brazaletes.append([item.nombre_brazalete, item.cantidad_brazalete, item.cantidad_entregada, item.cantidad_resta])
+
+
     # Guardar el libro de Excel en la respuesta HTTP que lo mande el navegador
     wb.save(response)
     
