@@ -42,4 +42,11 @@ class acreditadorEvento(models.Model):
     evento = models.CharField(max_length=50, blank=True, null=True)
     cerrado = models.BooleanField(default=False)
 
+class inventarioBrazalete(models.Model):
+    id_evento = models.IntegerField()
+    nombre_brazalete = models.CharField(max_length=50)
+    cantidad_brazalete = models.IntegerField()
+    cantidad_entregada = models.IntegerField(default=0)
+    evento_cerrado = models.BooleanField(default=False)
+
     
