@@ -199,7 +199,7 @@
                     {% for c in listado_eventos %}
                     <tr>
                         <td>
-                            <a href='/verEstado/{{c.id}}'>{{ c.nombre_evento }}</a>
+                            {{ c.nombre_evento }}
                         </td>
                         <td>
                             {{c.lugar_evento}}
