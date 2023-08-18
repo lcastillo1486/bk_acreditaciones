@@ -297,10 +297,11 @@ def acreditarPersonal(request, id_reg):
     # actualizar inventario brazaletes acreditador
     zona = acreditado.zona_acceso
     acreditador = request.user.username
-    actu_brazalete_acred = inventarioBrazaleteAcreditardor.objects.get(id_evento = cod_evento, nombre_brazalete__icontains = zona, nombre_acreditador = acreditador)
-    actu_brazalete_acred.cantidad_entregada = actu_brazalete_acred.cantidad_entregada +1
-    actu_brazalete_acred.cantidad_resta = actu_brazalete_acred.cantidad_brazalete - actu_brazalete_acred.cantidad_entregada
-    actu_brazalete_acred.save()
+    if inventarioBrazaleteAcreditardor.objects.filter(id_evento = cod_evento, nombre_brazalete__icontains = zona, nombre_acreditador = acreditador).exists():
+        actu_brazalete_acred = inventarioBrazaleteAcreditardor.objects.get(id_evento = cod_evento, nombre_brazalete__icontains = zona, nombre_acreditador = acreditador)
+        actu_brazalete_acred.cantidad_entregada = actu_brazalete_acred.cantidad_entregada +1
+        actu_brazalete_acred.cantidad_resta = actu_brazalete_acred.cantidad_brazalete - actu_brazalete_acred.cantidad_entregada
+        actu_brazalete_acred.save()
 
 
     #busca estadisticas
