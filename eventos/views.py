@@ -211,20 +211,16 @@ def detieneAcreditacion(request, id_evento):
         return redirect('evento')
 @login_required
 def descargaFormato(request):
-     # Nombre del archivo Excel
-    nombre_archivo = 'Formato_Acreditaciones.xlsx'
+    
+    ruta_archivo_zip = os.path.join(settings.BASE_DIR, 'Formato_Acreditaciones.zip')
 
-    # Ruta completa al archivo en la raíz del proyecto
-    ruta_archivo = os.path.join(settings.BASE_DIR, nombre_archivo)
+    # Generar la respuesta con el contenido del archivo ZIP
+    with open(ruta_archivo_zip, 'rb') as archivo_zip:
+        contenido_zip = archivo_zip.read()
 
-    # Abre el archivo en modo binario y lee su contenido
-    with open(ruta_archivo, 'rb') as archivo:
-        contenido = archivo.read()
-
-    # Genera la respuesta con el contenido del archivo
-    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename="Formato_Acreditaciones.xlsx"'
-    response.write(contenido)
+    response = HttpResponse(content_type='application/zip')
+    response['Content-Disposition'] = 'attachment; filename="Formato_Acreditaciones.zip"'
+    response.write(contenido_zip)
 
     return response
 @login_required
