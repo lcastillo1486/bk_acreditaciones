@@ -882,6 +882,15 @@ def acreditacionMultiple(request):
             actu_brazalete.cantidad_resta = actu_brazalete.cantidad_brazalete - actu_brazalete.cantidad_entregada
             actu_brazalete.save()
 
+            # actualizar inventario brazaletes acreditador
+            zona = registro.zona_acceso
+            acreditador = request.user.username
+            if inventarioBrazaleteAcreditardor.objects.filter(id_evento = cod_evento, nombre_brazalete__icontains = zona, nombre_acreditador = acreditador).exists():
+                actu_brazalete_acred = inventarioBrazaleteAcreditardor.objects.get(id_evento = cod_evento, nombre_brazalete__icontains = zona, nombre_acreditador = acreditador)
+                actu_brazalete_acred.cantidad_entregada = actu_brazalete_acred.cantidad_entregada +1
+                actu_brazalete_acred.cantidad_resta = actu_brazalete_acred.cantidad_brazalete - actu_brazalete_acred.cantidad_entregada
+                actu_brazalete_acred.save()
+
         
         total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
         total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
