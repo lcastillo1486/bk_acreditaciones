@@ -155,6 +155,36 @@
         </tbody>
     </table>
 </div>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Total Acreditables:
+                </th>
+                <th>
+                    Acreditados:
+                </th>
+                <th>
+                    Ratio:
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    {{total_acreditado}}
+                </td>
+                <td>
+                    {{total_registros}}
+                </td>
+                <td>
+                    {{porcentaje}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
     <script>
         setTimeout(function () {
             var messages = document.getElementsByClassName('alert');

@@ -211,7 +211,7 @@ def detieneAcreditacion(request, id_evento):
         return redirect('evento')
 @login_required
 def descargaFormato(request):
-    
+
     ruta_archivo_zip = os.path.join(settings.BASE_DIR, 'Formato_Acreditaciones.zip')
 
     # Generar la respuesta con el contenido del archivo ZIP
@@ -1117,7 +1117,14 @@ def verEstado(request, id_evento):
     estado_brazalete = inventarioBrazalete.objects.filter(id_evento = evento_id)
     estado_brazalete_acreditador = inventarioBrazaleteAcreditardor.objects.filter(id_evento = evento_id).order_by('nombre_acreditador')
 
-    return render(request,'estadoEvento.html',{'eventoProceso':eventos_proceso, 'estado_brazalete':estado_brazalete, 'estado_brazalete_acreditador':estado_brazalete_acreditador})
+    #busca estadisticas
+    total_acreditado = acreditados_def.objects.filter(id_evento_id = evento_id, acreditado = 1).count()
+    total_registros = acreditados_def.objects.filter(id_evento_id = evento_id).count()
+    porcentaje = round((total_acreditado /total_registros)*100,4)
+
+    return render(request,'estadoEvento.html',{'eventoProceso':eventos_proceso, 'estado_brazalete':estado_brazalete,
+                                                'estado_brazalete_acreditador':estado_brazalete_acreditador, 'total_acreditado':total_acreditado, 'total_registros':total_registros,
+                                                'porcentaje':porcentaje})
 
             
         
