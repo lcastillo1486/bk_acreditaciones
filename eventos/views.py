@@ -605,9 +605,12 @@ def vistaMovil(request):
 def buscarPersonaMovil(request):
 
     usuario = request.user
-    evento_buscar = acreditadorEvento.objects.get(usuario = usuario, cerrado = 0)
-    cod_event = evento_buscar.evento
-
+    if not acreditadorEvento.objects.filter(usuario = usuario, cerrado = 0).exists():
+        messages.error(request, '¡No se ha iniciado el proceso de acreditación!')
+        return redirect('evento')
+    else:
+        evento_buscar = acreditadorEvento.objects.get(usuario = usuario, cerrado = 0)
+        cod_event = evento_buscar.evento
 
         
     if not bkt_eventos.objects.filter(acreditacion_activa = 1).exists():
