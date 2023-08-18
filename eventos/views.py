@@ -991,7 +991,7 @@ def exportarExcel(request, id):
     
     hoja_brazaletes_acreditador = wb.create_sheet(title="Inventario_Acreditador")
 
-    queryset_brazaletes_acreditador = inventarioBrazaleteAcreditardor.objects.filter(id_evento=id, evento_cerrado = 1)
+    queryset_brazaletes_acreditador = inventarioBrazaleteAcreditardor.objects.filter(id_evento=id, evento_cerrado = 1).order_by('nombre_acreditador')
     hoja_brazaletes_acreditador.append(['Acreditador','Tipo Brazalete', 'Cantidad Inicial', 'Cantidad Entregada', 'Inventario Final'])
     
     for item in queryset_brazaletes_acreditador:
