@@ -1100,8 +1100,9 @@ def verEstado(request, id_evento):
 
     eventos_proceso = bkt_eventos.objects.filter(id = evento_id, evento_activo=1, acreditacion_activa = 1).order_by('fecha_evento')
     estado_brazalete = inventarioBrazalete.objects.filter(id_evento = evento_id)
+    estado_brazalete_acreditador = inventarioBrazaleteAcreditardor.objects.filter(id_evento = evento_id)
 
-    return render(request,'estadoEvento.html',{'eventoProceso':eventos_proceso, 'estado_brazalete':estado_brazalete})
+    return render(request,'estadoEvento.html',{'eventoProceso':eventos_proceso, 'estado_brazalete':estado_brazalete, 'estado_brazalete_acreditador':estado_brazalete_acreditador})
 
             
         
