@@ -965,7 +965,7 @@ def exportarExcel(request, id):
         empleados_por_empresa_zona[(nombre_empresa, zona)].append(item)
 
     # Crear una nueva hoja para los totales generales
-    hoja_totales = wb.create_sheet(title="Totales")
+    hoja_totales = wb.create_sheet(title="Totales_Empresa")
 
     hoja_totales.append(['Empresa', 'Zona', 'Total Acreditados', 'Total No Acreditados'])
 
@@ -989,13 +989,13 @@ def exportarExcel(request, id):
     
     ###RESUMEN BRAZALETES ACREDITADOR#####
     
-    hoja_brazaletes_acreditador = wb.create_sheet(title="Inventario_Brazaletes_Acreditador")
+    hoja_brazaletes_acreditador = wb.create_sheet(title="Inventario_Acreditador")
 
     queryset_brazaletes_acreditador = inventarioBrazaleteAcreditardor.objects.filter(id_evento=id, evento_cerrado = 1)
     hoja_brazaletes_acreditador.append(['Acreditador','Tipo Brazalete', 'Cantidad Inicial', 'Cantidad Entregada', 'Inventario Final'])
     
     for item in queryset_brazaletes_acreditador:
-        hoja_brazaletes_acreditador.append([item.nombre_brazalete, item.nombre_brazalete, item.cantidad_brazalete, item.cantidad_entregada, item.cantidad_resta])
+        hoja_brazaletes_acreditador.append([item.nombre_acreditador, item.nombre_brazalete, item.cantidad_brazalete, item.cantidad_entregada, item.cantidad_resta])
 
 
     # Guardar el libro de Excel en la respuesta HTTP que lo mande el navegador
@@ -1110,7 +1110,7 @@ def verEstado(request, id_evento):
 
     eventos_proceso = bkt_eventos.objects.filter(id = evento_id, evento_activo=1, acreditacion_activa = 1).order_by('fecha_evento')
     estado_brazalete = inventarioBrazalete.objects.filter(id_evento = evento_id)
-    estado_brazalete_acreditador = inventarioBrazaleteAcreditardor.objects.filter(id_evento = evento_id)
+    estado_brazalete_acreditador = inventarioBrazaleteAcreditardor.objects.filter(id_evento = evento_id).order_by('nombre_acreditador')
 
     return render(request,'estadoEvento.html',{'eventoProceso':eventos_proceso, 'estado_brazalete':estado_brazalete, 'estado_brazalete_acreditador':estado_brazalete_acreditador})
 
