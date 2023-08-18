@@ -38,6 +38,7 @@
     {% endif %}
 
     <h3>Estado Actual de Acreditación:</h3>
+    <div class="table-responsive">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -69,7 +70,8 @@
             {% endfor %}
         </tbody>
     </table>
-
+    </div>
+    <div class="table-responsive">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -107,7 +109,8 @@
             {% endfor %}
         </tbody>
     </table>
-
+</div>
+<div class="table-responsive">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -151,7 +154,7 @@
             {% endfor %}
         </tbody>
     </table>
-
+</div>
     <script>
         setTimeout(function () {
             var messages = document.getElementsByClassName('alert');

@@ -19,6 +19,13 @@
             color: black;
         }
 
+        .page-container {
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            border-radius: 50%;
+        }
+
         .header {
             background-color: #003399;
             width: 100%;
@@ -411,14 +418,13 @@
         </nav>
     </div>
 
-    <div class="content">
+    <!-- <div class="content">
         <div class="sidebar-left">
-            <!-- Contenido de la barra lateral izquierda -->
         </div>
 
         <div class="sidebar-right">
             {{user.username}}
-        </div>
+        </div> -->
 
         <div class="main">
             {% block content %}
@@ -426,7 +432,7 @@
             {% endblock %}
         </div>
 
-    </div>
+ 
     <div class="footer">
         <b>Copyright © BakTrack Elite. Todos los derechos reservados.</b>
     </div>
