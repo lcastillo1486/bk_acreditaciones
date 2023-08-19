@@ -1137,7 +1137,7 @@ def verEstado(request, id_evento):
     porcentaje = round((total_acreditado /total_registros)*100,4)
 
     #grafico de totales
-    total_brazalete = inventarioBrazalete.objects.filter(id_evento = 3)
+    total_brazalete = inventarioBrazalete.objects.filter(id_evento = evento_id)
     etiquetas = [brazalete.nombre_brazalete for brazalete in total_brazalete]
     valores = [cantidad.cantidad_brazalete for cantidad in total_brazalete]
     fig, ax = ptl.subplots()
