@@ -1134,8 +1134,8 @@ def verEstado(request, id_evento):
 
     #grafico distribucion brazaletes general
     total_brazalete = inventarioBrazalete.objects.filter(id_evento = evento_id)
-    etiquetas = [total_brazalete.nombre_brazalete for brazalete in total_brazalete]
-    valores = [total_brazalete.cantidad_brazalete for cantidad in total_brazalete]
+    etiquetas = [brazalete.nombre_brazalete for brazalete in total_brazalete]
+    valores = [cantidad.cantidad_brazalete for cantidad in total_brazalete]
 
     fig, ax = ptl.subplots()
     ax.pie(valores, labels=etiquetas,autopct='%1.1f%%',startangle=140)
