@@ -21,5 +21,6 @@ urlpatterns = [
     path('listadoEventos/',views.listadoEventos, name="listado_eventos"),
     path('importarBrazaletes/<int:id_evento>',views.importarBrazaletes, name="importar_brazaletes"),
     path('verEstado/<int:id_evento>',views.verEstado, name="ver_estado"),
+    path('exportarPdfFinal/<int:id>',views.exportarPDFfinal, name="exportar_pdf_final"),
 
 ]

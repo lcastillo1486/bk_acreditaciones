@@ -21,6 +21,14 @@ import matplotlib.pyplot as ptl
 from io import BytesIO
 import base64
 from django.db.models import Count
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter, legal, portrait
+from reportlab.lib.units import cm
+
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.pdfmetrics import registerFont, registerFontFamily
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.lib import fonts
 # Create your views here.
 
 @login_required
@@ -915,10 +923,10 @@ def acreditacionMultiple(request):
         total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
         porcentaje = round((total_acreditado /total_registros)*100,4)
         return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
-
+@login_required
 def vistaSensei(request):
     return render(request, 'PanelDeLuis.html')
-
+@login_required
 def exportarExcel(request, id):
     #recibir aqui el id del evento. Necesito un litsado de eventos
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
@@ -1018,11 +1026,11 @@ def exportarExcel(request, id):
     wb.save(response)
     
     return response
-
+@login_required
 def listadoEventos(request):
     eventos_cerrados = bkt_eventos.objects.filter(evento_activo=0, acreditacion_activa = 0).order_by('fecha_evento')
     return render(request,'listadoEventos.html',{'eventosCerrados':eventos_cerrados})
-
+@login_required
 def importarBrazaletes(request, id_evento):
 
     if not request.user.is_superuser:
@@ -1119,7 +1127,7 @@ def importarBrazaletes(request, id_evento):
     
     messages.success(request, '¡Los datos se han importado exitosamente!')
     return redirect('evento')
-
+@login_required
 def verEstado(request, id_evento):
     
     evento_id = id_evento
@@ -1173,6 +1181,133 @@ def verEstado(request, id_evento):
     return render(request,'estadoEvento.html',{'eventoProceso':eventos_proceso, 'estado_brazalete':estado_brazalete,
                                                 'estado_brazalete_acreditador':estado_brazalete_acreditador, 'total_acreditado':total_acreditado, 'total_registros':total_registros,
                                                 'porcentaje':porcentaje,'imagen':grafico1, 'imagen2':grafico2})
+@login_required
+def exportarPDFfinal(request, id):
+    id_evento = id
+
+    #DATOS DEL EVENTO#########
+
+    datos_evento = bkt_eventos.objects.get(id = id_evento,evento_activo=0)
+    nombre_evento = datos_evento.nombre_evento
+    lugar_evento = datos_evento.lugar_evento
+    fecha_evento = datos_evento.fecha_evento
+
+    ###DATO TOTAL ACREDITABLES##
+    total_acreditables = acreditados_def.objects.filter(id_evento_id = id_evento).count()
+    total_acreditados = acreditados_def.objects.filter(id_evento_id = id_evento, acreditado = 1).count()
+    total_faltante = total_acreditables - total_acreditados
+
+    ###DATO ACREDITABLES POR ZONA##
+
+    total_acreditables_zona = acreditados_def.objects.filter(id_evento_id=id_evento).values('zona_acceso').annotate(cantidad=Count('pk'))
+
+    ###DATO ACREDITADOS POR ZONA##
+
+    total_acreditados_zona = acreditados_def.objects.filter(id_evento_id=id_evento, acreditado = 1).values('zona_acceso').annotate(cantidad=Count('pk'))
+
+    ###DATO ACREDITADOS POR ACREDITADOR##
+
+    total_acreditados_acreditador = acreditados_def.objects.filter(id_evento_id=id_evento, acreditado = 1).values('acreditado_por').annotate(cantidad=Count('pk'))
+
+    ###DATO INVENTARIO INICIAL DE BRAZALETES##
+
+    inventario_brazaletes = inventarioBrazalete.objects.filter(id_evento = id_evento, evento_cerrado = 1)
+
+   
+    buffer = BytesIO()
+    pdf = canvas.Canvas(buffer)
+    ancho_pagina, altura_pagina = letter = (21.59*cm, 27.94*cm)
+    
+    ####TITULO#########
+    titulo = "REPORTE FINAL DE ACREDITACIÓN"
+    ancho_texto = pdf.stringWidth(titulo, "Helvetica", 12)
+    # Calcular la posición horizontal para centrar
+    pos_x = (ancho_pagina - ancho_texto) / 2
+    # Definir la posición vertical
+    pos_y = altura_pagina - 2*cm
+
+    
+    
+
+    # ESCRIBIR DATOS DEL PDF ####
+    pdf.setFillColorRGB(0, 0, 1)
+    pdf.drawString(pos_x, pos_y, titulo)
+    pdf.setFillColorRGB(0, 0, 0)
+
+    pdf.setFillColorRGB(1, 0, 0)
+    pdf.drawString(2*cm, altura_pagina - 3.5*cm, "Evento: "+ nombre_evento)
+    pdf.drawString(2*cm, altura_pagina - 4*cm, "Lugar: "+ lugar_evento)
+    pdf.drawString(2*cm, altura_pagina - 4.5*cm, "Fecha: "+ str(fecha_evento))
+    pdf.setFillColorRGB(0, 0, 0)
+
+    pdf.drawString(2*cm, altura_pagina - 5.5*cm, "Total Acreditables: "+ str(total_acreditables))
+    pdf.drawString(2*cm, altura_pagina - 6*cm, "Total Acreditados: "+ str(total_acreditados))
+    pdf.drawString(2*cm, altura_pagina - 6.5*cm, "Total Faltantes: "+ str(total_faltante))
+    
+    pdf.setFillColorRGB(0, 0, 1)
+    
+    pdf.drawString(2*cm, altura_pagina - 7.5*cm, "Total Acreditables por Zona:")
+
+    pdf.setFillColorRGB(0, 0, 0)
+    x = 8.5*cm
+    for zona in total_acreditables_zona:
+        acreditables_zona = f"Zona: {zona['zona_acceso']}    -    Cantidad: {zona['cantidad']}"
+        pdf.drawString(2*cm, altura_pagina - x, acreditables_zona)
+        x += 0.5*cm
+    
+    x += 1*cm
+    pdf.setFillColorRGB(0, 0, 1)
+    pdf.drawString(2*cm, altura_pagina - x, "Total Acreditados por Zona:")
+    pdf.setFillColorRGB(0, 0, 0)
+    x += 0.5*cm
+    for zona in total_acreditados_zona:
+        acreditados_zona = f"Zona: {zona['zona_acceso']}    -    Cantidad: {zona['cantidad']}"
+        pdf.drawString(2*cm, altura_pagina - x, acreditados_zona)
+        x += 0.5*cm
+
+    x += 0.5*cm
+    pdf.setFillColorRGB(0, 0, 1)
+    pdf.drawString(2*cm, altura_pagina - x, "Total Acreditados por Acreditador:")
+    pdf.setFillColorRGB(0, 0, 0)
+    x += 0.5*cm
+    for acreditador in total_acreditados_acreditador:
+        acreditados_acredit = f"Acreditador: {acreditador['acreditado_por']}    -    Cantidad: {zona['cantidad']}"
+        pdf.drawString(2*cm, altura_pagina - x, acreditados_acredit)
+        x += 0.5*cm
+
+    x += 0.5*cm
+    pdf.setFillColorRGB(0, 0, 1)
+    pdf.drawString(2*cm, altura_pagina - x, "Inventario Inicial de Brazaletes:")
+    pdf.setFillColorRGB(0, 0, 0)
+    x += 0.5*cm
+    for brazalete in inventario_brazaletes:
+        total_por_zona = f'Zona: {brazalete.nombre_brazalete}    -    Cantidad: {brazalete.cantidad_brazalete}'
+        pdf.drawString(2*cm, altura_pagina - x, total_por_zona)
+        x += 0.5*cm
+        
+    x += 0.5*cm
+    pdf.setFillColorRGB(0, 0, 1)
+    pdf.drawString(2*cm, altura_pagina - x, "Inventario Final de Brazaletes:")
+    pdf.setFillColorRGB(0, 0, 0)
+    x += 0.5*cm
+    for brazalete_final in inventario_brazaletes:
+        total_por_zona_restante = f'Zona: {brazalete_final.nombre_brazalete}    - Cantidad entregada: {brazalete_final.cantidad_entregada} - Sobrante: {brazalete_final.cantidad_resta}'
+        pdf.drawString(2*cm, altura_pagina - x, total_por_zona_restante)
+        x += 0.5*cm
+
+    pdf.showPage()
+
+    pdf.save()
+
+    buffer.seek(0)
+
+    nombre_archivo = nombre_evento+'_'+str(fecha_evento)+'.pdf'
+
+    response = HttpResponse(buffer, content_type='application/pdf')
+    response['Content-Disposition'] = f'inline; filename= {nombre_archivo}'
+
+
+    return response
 
             
         
