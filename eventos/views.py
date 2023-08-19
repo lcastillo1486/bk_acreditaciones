@@ -1132,24 +1132,11 @@ def verEstado(request, id_evento):
     total_registros = acreditados_def.objects.filter(id_evento_id = evento_id).count()
     porcentaje = round((total_acreditado /total_registros)*100,4)
 
-    #grafico distribucion brazaletes general
-    total_brazalete = inventarioBrazalete.objects.filter(id_evento = evento_id)
-    etiquetas = [brazalete.nombre_brazalete for brazalete in total_brazalete]
-    valores = [cantidad.cantidad_brazalete for cantidad in total_brazalete]
-
-    fig, ax = ptl.subplots()
-    ax.pie(valores, labels=etiquetas,autopct='%1.1f%%',startangle=140)
-    ax.axis('equal')
-
-    buffer = BytesIO()
-    ptl.savefig(buffer, format='png')
-    buffer.seek(0)
-    image_base64 = base64.b64encode(buffer.read()).decode()
-    grafico1 = "data:image/png;base64," + image_base64 
+    
 
     return render(request,'estadoEvento.html',{'eventoProceso':eventos_proceso, 'estado_brazalete':estado_brazalete,
                                                 'estado_brazalete_acreditador':estado_brazalete_acreditador, 'total_acreditado':total_acreditado, 'total_registros':total_registros,
-                                                'porcentaje':porcentaje, 'imagen':grafico1})
+                                                'porcentaje':porcentaje})
 
             
         
