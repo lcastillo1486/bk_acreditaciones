@@ -20,6 +20,7 @@ from collections import defaultdict
 import matplotlib.pyplot as ptl
 from io import BytesIO
 import base64
+from django.db.models import Count
 # Create your views here.
 
 @login_required
@@ -1148,13 +1149,29 @@ def verEstado(request, id_evento):
     ptl.savefig(buffer, format='png')
     buffer.seek(0)
     image_base64 = base64.b64encode(buffer.read()).decode()
-    grafico1 = "data:image/png;base64," + image_base64 
+    grafico1 = "data:image/png;base64," + image_base64
+
+    #grafico acreditados x acreditador
+    acreditados_x_acreditador = acreditados_def.objects.filter(id_evento=evento_id).values('acreditado_por').annotate(total_acreditado=Count('pk', filter=Q(acreditado=True)))
+
+    etiquetas1 = [item['acreditado_por'] for item in acreditados_x_acreditador]
+    valore1s = [item['total_acreditado'] for item in acreditados_x_acreditador]
+    fig1, ax1 = ptl.subplots()
+    ax1.pie(valore1s, labels=etiquetas1,autopct='%1.1f%%',startangle=140)
+    ax1.axis('equal')
+    ax1.set_title('Distribución de Acreditados por Acreditador')
+    
+    buffer1 = BytesIO()
+    ptl.savefig(buffer1, format='png')
+    buffer1.seek(0)
+    image_base641 = base64.b64encode(buffer1.read()).decode()
+    grafico2 = "data:image/png;base64," + image_base641 
 
     
 
     return render(request,'estadoEvento.html',{'eventoProceso':eventos_proceso, 'estado_brazalete':estado_brazalete,
                                                 'estado_brazalete_acreditador':estado_brazalete_acreditador, 'total_acreditado':total_acreditado, 'total_registros':total_registros,
-                                                'porcentaje':porcentaje,'imagen':grafico1})
+                                                'porcentaje':porcentaje,'imagen':grafico1, 'imagen2':grafico2})
 
             
         
