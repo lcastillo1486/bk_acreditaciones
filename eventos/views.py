@@ -1144,6 +1144,7 @@ def verEstado(request, id_evento):
     fig, ax = ptl.subplots()
     ax.pie(valores, labels=etiquetas,autopct='%1.1f%%',startangle=140)
     ax.axis('equal')
+    ax.set_title('Distribución de brazaletes por Tipo')
 
     buffer = BytesIO()
     ptl.savefig(buffer, format='png')
