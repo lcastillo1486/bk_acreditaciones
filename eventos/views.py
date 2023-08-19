@@ -1291,7 +1291,8 @@ def exportarPDFfinal(request, id):
     pdf.setFillColorRGB(0, 0, 0)
     x += 0.5*cm
     for brazalete_final in inventario_brazaletes:
-        total_por_zona_restante = f'Zona: {brazalete_final.nombre_brazalete}    - Cantidad entregada: {brazalete_final.cantidad_entregada} - Sobrante: {brazalete_final.cantidad_resta}'
+        total_restante = brazalete_final.cantidad_brazalete - brazalete_final.cantidad_entregada
+        total_por_zona_restante = f'Zona: {brazalete_final.nombre_brazalete}    - Cantidad entregada: {brazalete_final.cantidad_entregada} - Sobrante: {total_restante}'
         pdf.drawString(2*cm, altura_pagina - x, total_por_zona_restante)
         x += 0.5*cm
 
