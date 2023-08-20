@@ -68,7 +68,9 @@
                             Empresa:
                         </th>
                         <th>
-                            <button type="submit" id="boton-areditarmulti" style="margin-bottom: 10px;" class="btn btn-success">ACREDITAR</button>
+                            <button type="submit" id="boton-areditarmulti" style="margin-bottom: 10px;" class="btn btn-success">ACREDITAR</button><br>
+                            <input type="checkbox" id="checkTodo" onchange="toggleCheckboxes(this)">
+                            <label for="checkTodo">Seleccionar Todos</label>
                         </th>
                         
                     </tr>
@@ -95,7 +97,7 @@
                             {% if c.acreditado %}
                             <font style="color: green;">ACREDITADO</font>
                             {% else %}
-                            <input type="checkbox" name="regitrosAcreditar", value="{{c.id}}">
+                            <input type="checkbox" name="regitrosAcreditar" class="checkbox-item", value="{{c.id}}">
                             {% endif %}
                         </td>                            
                     </tr>
@@ -106,6 +108,14 @@
         </div>
     </div>
 
+    <script>
+        function toggleCheckboxes(checkbox) {
+            var checkboxes = document.getElementsByClassName('checkbox-item');
+            for (var i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = checkbox.checked;
+            }
+        }
+        </script>
     
 </body>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
