@@ -1028,6 +1028,10 @@ def exportarExcel(request, id):
     return response
 @login_required
 def listadoEventos(request):
+    if not request.user.is_superuser:
+        messages.error(request,'No cuenta con los permisos necesarios para acceder a esta sección')
+        return redirect('evento')
+    
     eventos_cerrados = bkt_eventos.objects.filter(evento_activo=0, acreditacion_activa = 0).order_by('fecha_evento')
     return render(request,'listadoEventos.html',{'eventosCerrados':eventos_cerrados})
 @login_required
@@ -1129,6 +1133,10 @@ def importarBrazaletes(request, id_evento):
     return redirect('evento')
 @login_required
 def verEstado(request, id_evento):
+
+    if not request.user.is_superuser:
+        messages.error(request,'No cuenta con los permisos necesarios para acceder a esta sección')
+        return redirect('evento')
     
     evento_id = id_evento
 
