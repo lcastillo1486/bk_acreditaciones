@@ -134,7 +134,7 @@
 <body>
   {{error}}
   <div>
-  <img src="{% static 'backtrak_logo.png' %}" width="150" height="150">
+  <img src="{% static 'logo.png' %}" width="150" height="150">
   <form action="/registro/" method="POST">
     {% csrf_token %}
     {{registro_form.as_p}}
