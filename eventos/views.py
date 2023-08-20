@@ -1271,7 +1271,7 @@ def exportarPDFfinal(request, id):
     pdf.setFillColorRGB(0, 0, 0)
     x += 0.5*cm
     for acreditador in total_acreditados_acreditador:
-        acreditados_acredit = f"Acreditador: {acreditador['acreditado_por']}    -    Cantidad: {zona['cantidad']}"
+        acreditados_acredit = f"Acreditador: {acreditador['acreditado_por']}    -    Cantidad: {acreditador['cantidad']}"
         pdf.drawString(2*cm, altura_pagina - x, acreditados_acredit)
         x += 0.5*cm
 
