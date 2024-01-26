@@ -161,9 +161,9 @@ def iniciaAcreditacion(request, id_evento):
     
     # verifica si se subio listado de brazaletes
 
-    # if not inventarioBrazalete.objects.filter(id_evento = id_evento, evento_cerrado = 0).exists():
-    #     messages.error(request, '¡Debe importar el inventario de brazaletes para poder iniciar el proceso de acreditación!')
-    #     return redirect('evento')
+    if not inventarioBrazalete.objects.filter(id_evento = id_evento, evento_cerrado = 0).exists():
+        messages.error(request, '¡Debe importar el inventario de brazaletes para poder iniciar el proceso de acreditación!')
+        return redirect('evento')
     
     # verifica si ya esta activada 
 
