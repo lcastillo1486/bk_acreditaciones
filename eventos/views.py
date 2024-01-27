@@ -106,11 +106,11 @@ def importarExcel(request, id_evento):
         columnas_requeridas = ['NOMBRES', 'APELLIDOS', 'TIPO_DOCUMENTO',
                                'NUMERO_DOCUMENTO','EMPRESA', 'CARGO Y O FUNCIÓN', 'AREA_DE_TRABAJO']
         columnas_excel = df.columns.tolist()
-        if not set(columnas_requeridas).issubset(columnas_excel):
-            # Manejar el error si alguna(s) columna(s) requerida(s) no está presente
-            messages.error(
-                request, '¡El archivo no contiene todas las columnas requeridas!')
-            return redirect('evento')
+        # if not set(columnas_requeridas).issubset(columnas_excel):
+        #     # Manejar el error si alguna(s) columna(s) requerida(s) no está presente
+        #     messages.error(
+        #         request, '¡El archivo no contiene todas las columnas requeridas!')
+        #     return redirect('evento')
 
         # Validar campos vacíos
         registros = []
