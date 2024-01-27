@@ -327,6 +327,7 @@ def acreditarPersonal(request, id_reg):
 @login_required
 def buscarPersona(request):
 
+    return redirect('evento')
     usuario = request.user
     if not acreditadorEvento.objects.filter(usuario = usuario, cerrado = 0).exists():
         messages.error(request, '¡No se ha iniciado el proceso de acreditación!')
