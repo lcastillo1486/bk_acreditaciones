@@ -130,9 +130,10 @@ def importarExcel(request, id_evento):
                 apellido_persona=row['APELLIDOS'],
                 tipo_doc=row['TIPO_DOCUMENTO'],
                 numero_doc=row['NUMERO_DOCUMENTO'],
+                empresa=row['EMPRESA'],
                 cargo=row['CARGO Y O FUNCIÓN'],
                 zona_acceso=row['AREA_DE_TRABAJO'],
-                empresa=row['EMPRESA'],
+                
                 id_evento_id = id_evento
             )
             registros.append(registro)
