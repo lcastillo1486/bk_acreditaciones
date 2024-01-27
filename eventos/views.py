@@ -104,7 +104,7 @@ def importarExcel(request, id_evento):
 
         # Verificar las columnas requeridas
         columnas_requeridas = ['NOMBRES', 'APELLIDOS', 'TIPO_DOCUMENTO',
-                               'NUMERO_DOCUMENTO', 'CARGO Y O FUNCIÓN', 'AREA_DE_TRABAJO']
+                               'NUMERO_DOCUMENTO','EMPRESA', 'CARGO Y O FUNCIÓN', 'AREA_DE_TRABAJO']
         columnas_excel = df.columns.tolist()
         if not set(columnas_requeridas).issubset(columnas_excel):
             # Manejar el error si alguna(s) columna(s) requerida(s) no está presente
@@ -327,7 +327,7 @@ def acreditarPersonal(request, id_reg):
 @login_required
 def buscarPersona(request):
 
-    return redirect('evento')
+    # return redirect('evento')
     usuario = request.user
     if not acreditadorEvento.objects.filter(usuario = usuario, cerrado = 0).exists():
         messages.error(request, '¡No se ha iniciado el proceso de acreditación!')
