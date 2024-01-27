@@ -327,17 +327,6 @@ def acreditarPersonal(request, id_reg):
 @login_required
 def buscarPersona(request):
 
-    user_agent_string = request.META['HTTP_USER_AGENT']
-    user_agent = parse(user_agent_string)
-
-    is_mobile = user_agent.is_mobile
-    is_tablet = user_agent.is_tablet
-
-    if is_mobile or is_tablet:
-        return redirect('buscar_personal_movil')
-
-
-
     usuario = request.user
     if not acreditadorEvento.objects.filter(usuario = usuario, cerrado = 0).exists():
         messages.error(request, '¡No se ha iniciado el proceso de acreditación!')
@@ -372,7 +361,7 @@ def buscarPersona(request):
 
         #evaluar si los tres estan vacios
         if len(documento) == 0 and len(nombre) == 0 and len(apellido)==0 and len(nombre_empresa) ==0:
-            messages.error(request, '¡Debe ingresar datos para la búsqueda!')
+            messages.error(request, '¡Debe ingresar al menos un dato para la búsqueda!')
             return render(request, 'acredpersonal.html')
         
         #evaluar si se ha introducido solo un nombre
@@ -388,8 +377,8 @@ def buscarPersona(request):
         #si busca empresa solamente
         if len(documento) == 0 and len(nombre) == 0 and len(apellido) == 0 and len(nombre_empresa) > 0:
             if acreditados_def.objects.filter(empresa__icontains = nombre_empresa, id_evento_id = cod_event).exists():    
-                personal_empresa = acreditados_def.objects.filter(empresa__icontains = nombre_empresa, id_evento_id = cod_event).order_by('apellido_persona')
-                return render(request,'personalempresa.html', {'personal':personal_empresa})
+                personal_empresa = acreditados_def.objects.filter(empresa__icontains = nombre_empresa, id_evento_id = cod_event)
+                return render(request,'personalempresa.html',{'personal':personal_empresa})
             else:
                 messages.error( request,'¡La empresa indicada no existe en los registros de este evento!')
                 total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
@@ -397,12 +386,14 @@ def buscarPersona(request):
                 porcentaje = round((total_acreditado /total_registros)*100,4)
                 return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
         
+        
         #busca por nombre y apellido
         if len(documento) == 0 and len(nombre) > 0 and len(apellido) > 0:
             if acreditados_def.objects.filter(Q(nombre_persona__icontains=nombre) & Q(apellido_persona__icontains=apellido, id_evento_id = cod_event)).exists():
                 try:
                     persona = acreditados_def.objects.get(Q(nombre_persona__icontains=nombre) & Q(apellido_persona__icontains=apellido, id_evento_id = cod_event))
                     if persona.acreditado == 1:
+                        messages.error(request, '¡Esta persona ya fue acreditada anteriormente!')
                         nombre = persona.nombre_persona
                         apellido = persona.apellido_persona
                         documento = persona.numero_doc
@@ -410,7 +401,6 @@ def buscarPersona(request):
                         area = persona.zona_acceso
                         id_reg = persona.id
                         id_even = persona.id_evento_id
-                        hora = persona.hora
 
                         #busca nombre evento
                         nombre_event = bkt_eventos.objects.get(id = id_even)
@@ -420,7 +410,7 @@ def buscarPersona(request):
                         total_acreditado = acreditados_def.objects.filter(id_evento_id = id_even, acreditado = 1).count()
                         total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
                         porcentaje = round((total_acreditado /total_registros)*100,4)
-                        messages.error(request, f'¡Ya fue acreditado anteriormente a las: {hora}!')
+
                         return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
                                                                     'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
                     else:
@@ -448,7 +438,7 @@ def buscarPersona(request):
                     messages.error(request,'¡Múltiples registros coinciden con los parámetros indicados, por favor realice una búsqueda número de documento o agregue un segundo apellido!')
                     return redirect('buscar_personal')
             else:
-                messages.error(request, '¡No hay concidencias en la busqueda!')
+                messages.error(request, '¡No hay concidencias en las busqueda!')
                 return redirect('buscar_personal')
         
         #busca por apellido
@@ -499,6 +489,7 @@ def buscarPersona(request):
 
         if len(documento) > 0:
             doc = str(documento)[-7:]
+
             cuenta_reg = acreditados_def.objects.filter(numero_doc__endswith = doc, id_evento_id = cod_event).count()
             if cuenta_reg > 1:               
                 #busca estadisticas
@@ -519,18 +510,17 @@ def buscarPersona(request):
                 area = persona.zona_acceso
                 id_reg = persona.id
                 id_even = persona.id_evento_id
-                hora = persona.hora
                 
                 #busca nombre evento
                 nombre_event = bkt_eventos.objects.get(id = id_even)
                 event_name = nombre_event.nombre_evento
+                messages.error(request, '¡Esta persona ya fue acreditada anteriormente!')
 
                 #busca estadisticas
                 total_acreditado = acreditados_def.objects.filter(id_evento_id = id_even, acreditado = 1).count()
                 total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
                 porcentaje = round((total_acreditado /total_registros)*100,4)
 
-                messages.error(request, f'¡Ya fue acreditado anteriormente a las {hora}!')
                 return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
                                                               'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
                 
@@ -560,18 +550,10 @@ def buscarPersona(request):
                                                              'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
             else:
                 
-                #busca estadisticas
-                total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
-                total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
-                porcentaje = round((total_acreditado /total_registros)*100,4)
-                messages.error(request, '¡No hay concidencias en la busqueda!')
-                return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+                messages.error(request, '¡Los datos suministrados no coinciden con ningún registro!')
+                return render(request, 'acredpersonal.html')
 
-    #busca estadisticas
-    total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
-    total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
-    porcentaje = round((total_acreditado /total_registros)*100,4)
-    return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+    return render(request, 'acredpersonal.html')
 @login_required
 def registraUsuario(request, cod_event):
 
@@ -587,7 +569,7 @@ def registraUsuario(request, cod_event):
         acreditadorEvento.objects.create(usuario = usuario, evento = cod_event, cerrado = 0)
         evento_buscar = acreditadorEvento.objects.get(usuario = usuario, evento = cod_event, cerrado = 0)
         if is_mobile or is_tablet:
-            return redirect('buscar_personal_movil')
+            return redirect('buscar_personal')
         else:
             return redirect('buscar_personal')
         
@@ -596,7 +578,7 @@ def registraUsuario(request, cod_event):
         event_cod = evento_buscar.evento
         if int(event_cod) == int(cod_event):
             if is_mobile or is_tablet:
-                return redirect('buscar_personal_movil')
+                return redirect('buscar_personal')
             else:
                 return redirect('buscar_personal')
             
