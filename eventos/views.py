@@ -29,6 +29,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.pdfmetrics import registerFont, registerFontFamily
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib import fonts
+import io
 # Create your views here.
 
 @login_required
@@ -104,13 +105,13 @@ def importarExcel(request, id_evento):
 
         # Verificar las columnas requeridas
         columnas_requeridas = ['NOMBRES', 'APELLIDOS', 'TIPO_DOCUMENTO',
-                               'NUMERO_DOCUMENTO','EMPRESA', 'CARGO Y O FUNCIÓN', 'AREA_DE_TRABAJO']
+                               'NUMERO_DOCUMENTO', 'CARGO Y O FUNCIÓN', 'AREA_DE_TRABAJO']
         columnas_excel = df.columns.tolist()
-        # if not set(columnas_requeridas).issubset(columnas_excel):
-        #     # Manejar el error si alguna(s) columna(s) requerida(s) no está presente
-        #     messages.error(
-        #         request, '¡El archivo no contiene todas las columnas requeridas!')
-        #     return redirect('evento')
+        if not set(columnas_requeridas).issubset(columnas_excel):
+            # Manejar el error si alguna(s) columna(s) requerida(s) no está presente
+            messages.error(
+                request, '¡El archivo no contiene todas las columnas requeridas!')
+            return redirect('evento')
 
         # Validar campos vacíos
         registros = []
@@ -130,10 +131,9 @@ def importarExcel(request, id_evento):
                 apellido_persona=row['APELLIDOS'],
                 tipo_doc=row['TIPO_DOCUMENTO'],
                 numero_doc=row['NUMERO_DOCUMENTO'],
-                empresa=row['EMPRESA'],
                 cargo=row['CARGO Y O FUNCIÓN'],
                 zona_acceso=row['AREA_DE_TRABAJO'],
-                
+                empresa=row['EMPRESA'],
                 id_evento_id = id_evento
             )
             registros.append(registro)
@@ -162,9 +162,9 @@ def iniciaAcreditacion(request, id_evento):
     
     # verifica si se subio listado de brazaletes
 
-    if not inventarioBrazalete.objects.filter(id_evento = id_evento, evento_cerrado = 0).exists():
-        messages.error(request, '¡Debe importar el inventario de brazaletes para poder iniciar el proceso de acreditación!')
-        return redirect('evento')
+    # if not inventarioBrazalete.objects.filter(id_evento = id_evento, evento_cerrado = 0).exists():
+    #     messages.error(request, '¡Debe importar el inventario de brazaletes para poder iniciar el proceso de acreditación!')
+    #     return redirect('evento')
     
     # verifica si ya esta activada 
 
@@ -297,20 +297,20 @@ def acreditarPersonal(request, id_reg):
     acreditado.save()
 
     # actualizar inventario brazaletes 
-    zona = acreditado.zona_acceso
-    actu_brazalete = inventarioBrazalete.objects.get(id_evento = cod_evento, nombre_brazalete__icontains = zona)
-    actu_brazalete.cantidad_entregada = actu_brazalete.cantidad_entregada +1
-    actu_brazalete.cantidad_resta = actu_brazalete.cantidad_brazalete - actu_brazalete.cantidad_entregada
-    actu_brazalete.save()
+    # zona = acreditado.zona_acceso
+    # actu_brazalete = inventarioBrazalete.objects.get(id_evento = cod_evento, nombre_brazalete__icontains = zona)
+    # actu_brazalete.cantidad_entregada = actu_brazalete.cantidad_entregada +1
+    # actu_brazalete.cantidad_resta = actu_brazalete.cantidad_brazalete - actu_brazalete.cantidad_entregada
+    # actu_brazalete.save()
 
     # actualizar inventario brazaletes acreditador
     zona = acreditado.zona_acceso
     acreditador = request.user.username
-    if inventarioBrazaleteAcreditardor.objects.filter(id_evento = cod_evento, nombre_brazalete__icontains = zona, nombre_acreditador = acreditador).exists():
-        actu_brazalete_acred = inventarioBrazaleteAcreditardor.objects.get(id_evento = cod_evento, nombre_brazalete__icontains = zona, nombre_acreditador = acreditador)
-        actu_brazalete_acred.cantidad_entregada = actu_brazalete_acred.cantidad_entregada +1
-        actu_brazalete_acred.cantidad_resta = actu_brazalete_acred.cantidad_brazalete - actu_brazalete_acred.cantidad_entregada
-        actu_brazalete_acred.save()
+    # if inventarioBrazaleteAcreditardor.objects.filter(id_evento = cod_evento, nombre_brazalete__icontains = zona, nombre_acreditador = acreditador).exists():
+    #     actu_brazalete_acred = inventarioBrazaleteAcreditardor.objects.get(id_evento = cod_evento, nombre_brazalete__icontains = zona, nombre_acreditador = acreditador)
+    #     actu_brazalete_acred.cantidad_entregada = actu_brazalete_acred.cantidad_entregada +1
+    #     actu_brazalete_acred.cantidad_resta = actu_brazalete_acred.cantidad_brazalete - actu_brazalete_acred.cantidad_entregada
+    #     actu_brazalete_acred.save()
 
 
     #busca estadisticas
@@ -328,7 +328,17 @@ def acreditarPersonal(request, id_reg):
 @login_required
 def buscarPersona(request):
 
-    # return redirect('evento')
+    user_agent_string = request.META['HTTP_USER_AGENT']
+    user_agent = parse(user_agent_string)
+
+    is_mobile = user_agent.is_mobile
+    is_tablet = user_agent.is_tablet
+
+    if is_mobile or is_tablet:
+        return redirect('buscar_personal_movil')
+
+
+
     usuario = request.user
     if not acreditadorEvento.objects.filter(usuario = usuario, cerrado = 0).exists():
         messages.error(request, '¡No se ha iniciado el proceso de acreditación!')
@@ -363,7 +373,7 @@ def buscarPersona(request):
 
         #evaluar si los tres estan vacios
         if len(documento) == 0 and len(nombre) == 0 and len(apellido)==0 and len(nombre_empresa) ==0:
-            messages.error(request, '¡Debe ingresar al menos un dato para la búsqueda!')
+            messages.error(request, '¡Debe ingresar datos para la búsqueda!')
             return render(request, 'acredpersonal.html')
         
         #evaluar si se ha introducido solo un nombre
@@ -379,8 +389,8 @@ def buscarPersona(request):
         #si busca empresa solamente
         if len(documento) == 0 and len(nombre) == 0 and len(apellido) == 0 and len(nombre_empresa) > 0:
             if acreditados_def.objects.filter(empresa__icontains = nombre_empresa, id_evento_id = cod_event).exists():    
-                personal_empresa = acreditados_def.objects.filter(empresa__icontains = nombre_empresa, id_evento_id = cod_event)
-                return render(request,'personalempresa.html',{'personal':personal_empresa})
+                personal_empresa = acreditados_def.objects.filter(empresa__icontains = nombre_empresa, id_evento_id = cod_event).order_by('apellido_persona')
+                return render(request,'personalempresa.html', {'personal':personal_empresa})
             else:
                 messages.error( request,'¡La empresa indicada no existe en los registros de este evento!')
                 total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
@@ -388,14 +398,12 @@ def buscarPersona(request):
                 porcentaje = round((total_acreditado /total_registros)*100,4)
                 return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
         
-        
         #busca por nombre y apellido
         if len(documento) == 0 and len(nombre) > 0 and len(apellido) > 0:
             if acreditados_def.objects.filter(Q(nombre_persona__icontains=nombre) & Q(apellido_persona__icontains=apellido, id_evento_id = cod_event)).exists():
                 try:
                     persona = acreditados_def.objects.get(Q(nombre_persona__icontains=nombre) & Q(apellido_persona__icontains=apellido, id_evento_id = cod_event))
                     if persona.acreditado == 1:
-                        messages.error(request, '¡Esta persona ya fue acreditada anteriormente!')
                         nombre = persona.nombre_persona
                         apellido = persona.apellido_persona
                         documento = persona.numero_doc
@@ -403,6 +411,7 @@ def buscarPersona(request):
                         area = persona.zona_acceso
                         id_reg = persona.id
                         id_even = persona.id_evento_id
+                        hora = persona.hora
 
                         #busca nombre evento
                         nombre_event = bkt_eventos.objects.get(id = id_even)
@@ -412,7 +421,7 @@ def buscarPersona(request):
                         total_acreditado = acreditados_def.objects.filter(id_evento_id = id_even, acreditado = 1).count()
                         total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
                         porcentaje = round((total_acreditado /total_registros)*100,4)
-
+                        messages.error(request, f'¡Ya fue acreditado anteriormente a las: {hora}!')
                         return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
                                                                     'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
                     else:
@@ -440,7 +449,7 @@ def buscarPersona(request):
                     messages.error(request,'¡Múltiples registros coinciden con los parámetros indicados, por favor realice una búsqueda número de documento o agregue un segundo apellido!')
                     return redirect('buscar_personal')
             else:
-                messages.error(request, '¡No hay concidencias en las busqueda!')
+                messages.error(request, '¡No hay concidencias en la busqueda!')
                 return redirect('buscar_personal')
         
         #busca por apellido
@@ -491,7 +500,6 @@ def buscarPersona(request):
 
         if len(documento) > 0:
             doc = str(documento)[-7:]
-
             cuenta_reg = acreditados_def.objects.filter(numero_doc__endswith = doc, id_evento_id = cod_event).count()
             if cuenta_reg > 1:               
                 #busca estadisticas
@@ -512,17 +520,18 @@ def buscarPersona(request):
                 area = persona.zona_acceso
                 id_reg = persona.id
                 id_even = persona.id_evento_id
+                hora = persona.hora
                 
                 #busca nombre evento
                 nombre_event = bkt_eventos.objects.get(id = id_even)
                 event_name = nombre_event.nombre_evento
-                messages.error(request, '¡Esta persona ya fue acreditada anteriormente!')
 
                 #busca estadisticas
                 total_acreditado = acreditados_def.objects.filter(id_evento_id = id_even, acreditado = 1).count()
                 total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
                 porcentaje = round((total_acreditado /total_registros)*100,4)
 
+                messages.error(request, f'¡Ya fue acreditado anteriormente a las {hora}!')
                 return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
                                                               'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
                 
@@ -552,10 +561,18 @@ def buscarPersona(request):
                                                              'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
             else:
                 
-                messages.error(request, '¡Los datos suministrados no coinciden con ningún registro!')
-                return render(request, 'acredpersonal.html')
+                #busca estadisticas
+                total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
+                total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
+                porcentaje = round((total_acreditado /total_registros)*100,4)
+                messages.error(request, '¡No hay concidencias en la busqueda!')
+                return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
 
-    return render(request, 'acredpersonal.html')
+    #busca estadisticas
+    total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
+    total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
+    porcentaje = round((total_acreditado /total_registros)*100,4)
+    return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
 @login_required
 def registraUsuario(request, cod_event):
 
@@ -571,7 +588,7 @@ def registraUsuario(request, cod_event):
         acreditadorEvento.objects.create(usuario = usuario, evento = cod_event, cerrado = 0)
         evento_buscar = acreditadorEvento.objects.get(usuario = usuario, evento = cod_event, cerrado = 0)
         if is_mobile or is_tablet:
-            return redirect('buscar_personal')
+            return redirect('buscar_personal_movil')
         else:
             return redirect('buscar_personal')
         
@@ -580,7 +597,7 @@ def registraUsuario(request, cod_event):
         event_cod = evento_buscar.evento
         if int(event_cod) == int(cod_event):
             if is_mobile or is_tablet:
-                return redirect('buscar_personal')
+                return redirect('buscar_personal_movil')
             else:
                 return redirect('buscar_personal')
             
@@ -876,10 +893,10 @@ def acreditacionMultiple(request):
             # actualizar inventario brazaletes 
             zona = registro.zona_acceso
             cod_evento = registro.id_evento_id
-            actu_brazalete = inventarioBrazalete.objects.get(id_evento = cod_evento, nombre_brazalete__icontains = zona)
-            actu_brazalete.cantidad_entregada = actu_brazalete.cantidad_entregada +1
-            actu_brazalete.cantidad_resta = actu_brazalete.cantidad_brazalete - actu_brazalete.cantidad_entregada
-            actu_brazalete.save()
+            # actu_brazalete = inventarioBrazalete.objects.get(id_evento = cod_evento, nombre_brazalete__icontains = zona)
+            # actu_brazalete.cantidad_entregada = actu_brazalete.cantidad_entregada +1
+            # actu_brazalete.cantidad_resta = actu_brazalete.cantidad_brazalete - actu_brazalete.cantidad_entregada
+            # actu_brazalete.save()
 
             # actualizar inventario brazaletes acreditador
             zona = registro.zona_acceso
@@ -1013,9 +1030,8 @@ def exportarExcel(request, id):
 @login_required
 def listadoEventos(request):
     if not request.user.is_superuser:
-        messages.error(request,'No cuenta con los permisos necesarios para acceder a esta sección')
+        messages.error(request,'No cuenta con los permisos necesarios para acceder a esta sección.')
         return redirect('evento')
-    
     eventos_cerrados = bkt_eventos.objects.filter(evento_activo=0, acreditacion_activa = 0).order_by('fecha_evento')
     return render(request,'listadoEventos.html',{'eventosCerrados':eventos_cerrados})
 @login_required
@@ -1205,6 +1221,23 @@ def exportarPDFfinal(request, id):
 
     inventario_brazaletes = inventarioBrazalete.objects.filter(id_evento = id_evento, evento_cerrado = 1)
 
+    #grafico acreditados x acreditador
+    acreditados_x_acreditador = acreditados_def.objects.filter(id_evento=id_evento).values('acreditado_por').annotate(total_acreditado=Count('pk', filter=Q(acreditado=True)))
+
+    etiquetas1 = [item['acreditado_por'] for item in acreditados_x_acreditador]
+    valore1s = [item['total_acreditado'] for item in acreditados_x_acreditador]
+    fig1, ax1 = ptl.subplots()
+    ax1.pie(valore1s, labels=etiquetas1,autopct='%1.1f%%',startangle=140)
+    ax1.axis('equal')
+    ax1.set_title('Distribución de Acreditados por Acreditador')
+    
+    buffer1 = BytesIO()
+    ptl.savefig(buffer1, format='png')
+    buffer1.seek(0)
+    image_base641 = base64.b64encode(buffer1.read()).decode()
+    grafico2 = "data:image/png;base64," + image_base641 
+
+
    
     buffer = BytesIO()
     pdf = canvas.Canvas(buffer)
@@ -1287,8 +1320,14 @@ def exportarPDFfinal(request, id):
         total_por_zona_restante = f'Zona: {brazalete_final.nombre_brazalete}    - Cantidad entregada: {brazalete_final.cantidad_entregada} - Sobrante: {total_restante}'
         pdf.drawString(2*cm, altura_pagina - x, total_por_zona_restante)
         x += 0.5*cm
+    
+    x += 0.5*cm
+    
+    pdf.showPage() #final 
 
-    pdf.showPage()
+    # pdf.drawImage(grafico2,2*cm, altura_pagina - 3.5*cm, width=6*cm, height=5*cm)
+
+    # pdf.showPage()
 
     pdf.save()
 

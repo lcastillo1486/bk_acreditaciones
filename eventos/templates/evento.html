@@ -124,12 +124,12 @@
                     </form>
 <br>
                     
-                    <form action='/importarBrazaletes/{{c.id}}' method="post" enctype="multipart/form-data">
+                    <!-- <form action='/importarBrazaletes/{{c.id}}' method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="file" name="archivo_excel_braza" id="archivo_excel_braza" class="file-input">
                         <button type="submit" id="btn-importar_braza" class="btn btn-primary"
                             name="btn-importar">Importar Brazaletes</button>
-                    </form>
+                    </form> -->
 
                     {% if c.num_cargas == 0 %}
                     <a href='/iniciaAcreditacion/{{c.id}}' class="btn btn-info disabled">Iniciar Acreditación</a>

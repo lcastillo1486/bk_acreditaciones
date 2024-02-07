@@ -31,7 +31,7 @@
 </style>
 <body>
     <div class="header">
-        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: black;">
+        <nav class="navbar navbar-expand-lg navbar-light" style="background-color:rgb(113, 164, 230);">
             <div class="navbar-nav" style="margin-left: 20px;">
                 <img src="{% static 'logo.png' %}" width="30" height="30">
                 <a class="nav-item nav-link text-white" href='/buscarPersonal/' style="margin-left: 20px;">Buscar Personal</a>
@@ -97,7 +97,7 @@
                             {% if c.acreditado %}
                             <font style="color: green;">ACREDITADO</font>
                             {% else %}
-                            <input type="checkbox" name="regitrosAcreditar" class="checkbox-item", value="{{c.id}}">
+                            <input type="checkbox" name="regitrosAcreditar" class="checkbox-item" value="{{c.id}}">
                             {% endif %}
                         </td>                            
                     </tr>
