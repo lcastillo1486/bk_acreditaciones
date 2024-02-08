@@ -31,9 +31,10 @@
         text-align: center;
         justify-content: center;
         place-items: center;
-        overflow: auto;
-        font-family: poppins;
+        /* overflow: auto; */
+        font-family: poppins;margin-top: 10px;
         min-height: 100vh;
+        overflow-y: auto;
     }
 
     .container {
@@ -94,12 +95,13 @@
     }
 
     input {
-        background: #ecf0f3;
+        background: #00003d;
         padding: 10px;
         padding-left: 20px;
         height: 50px;
         font-size: 14px;
         border-radius: 50px;
+        color: white;
         box-shadow: inset 6px 6px 6px #cbced1, inset -6px -6px 6px white;
     }
 
@@ -123,12 +125,14 @@
         position: relative;
         font-size: 8px;
         bottom: 4px;
-        right: 4px;
+        /* right: 4px; */
         text-decoration: none;
         color: black;
         background: yellow;
         border-radius: 10px;
-        padding: 2px;
+        margin-top: 5px;
+
+
     }
 
     h1 {
@@ -137,7 +141,6 @@
         left: 0;
         color: #00003d;
     }
-
     h3 {
         color: white;
         font-weight: bold;
@@ -147,16 +150,81 @@
         text-transform: uppercase;
         border-radius: 10px;
         padding-left: 10px;
-        margin-left: 5px;
     }
-    th {
-        margin-left: 10px;
+    h14 {
+      /* color: rgb(25, 10, 238); */
+      font-weight: bold;
+      font-style: italic;
+      text-align: left;
+      background: linear-gradient(to right, #e1e1eb, #00ff40);
+      text-transform: uppercase;
+      border-radius: 10px;
+      font-size: 30px;
+      text-align: center;
     }
-    td{
-        margin-left: 10px;
+    .parpadeo {
+      animation: blink 1s infinite;
+      display: inline-block;
     }
-</style>
 
+    .fijo {
+      animation: none;
+      opacity: 1;
+      transition: opacity 1s;
+    }
+    .alert-success {
+      background-color: #4bdb9d;
+      color: #080cee;
+      font-weight: bold;
+      z-index: 1000;
+
+    }
+
+    .alert-error {
+      background-color: #a51f1f;
+      color: #f5ecec;
+      font-weight: bold;
+      z-index: 1000;
+    }
+    .f {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 10vh;
+      text-decoration: none;
+      color: #0e0909;
+      background-color: #1fec0d;
+      border: none;
+      border-radius: 10px;
+      padding: 20px 40px;
+      font-size: 24px;
+      cursor: pointer;
+      max-width: 100px;
+      /* Ancho máximo deseado */
+      margin: 0 auto;
+      /* Centrar horizontalmente */
+      font-weight: bold;
+    }
+  
+        #modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        #modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+        }
+   
+</style>
 <body>
     <div>
         <div class="centrar">
