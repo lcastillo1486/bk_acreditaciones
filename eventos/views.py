@@ -143,7 +143,7 @@ def importarExcel(request, id_evento):
         if acreditados_tmp.objects.filter(id_evento_id = id_evento).exists():
             acreditados_tmp.objects.filter(id_evento_id = id_evento).delete()
 
-        acreditados_tmp.objects.bulk_create(registros)
+        # acreditados_tmp.objects.bulk_create(registros)
 
         actualiza_cargas = bkt_eventos.objects.get(id=id_evento)
         actualiza_cargas.num_cargas = actualiza_cargas.num_cargas + 1
