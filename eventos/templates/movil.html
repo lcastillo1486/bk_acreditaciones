@@ -32,7 +32,8 @@
         justify-content: center;
         place-items: center;
         /* overflow: auto; */
-        font-family: poppins;margin-top: 10px;
+        font-family: poppins;
+        margin-top: 10px;
         min-height: 100vh;
         overflow-y: auto;
     }
@@ -141,6 +142,7 @@
         left: 0;
         color: #00003d;
     }
+
     h3 {
         color: white;
         font-weight: bold;
@@ -151,184 +153,110 @@
         border-radius: 10px;
         padding-left: 10px;
     }
+
     h14 {
-      /* color: rgb(25, 10, 238); */
-      font-weight: bold;
-      font-style: italic;
-      text-align: left;
-      background: linear-gradient(to right, #e1e1eb, #00ff40);
-      text-transform: uppercase;
-      border-radius: 10px;
-      font-size: 30px;
-      text-align: center;
+        /* color: rgb(25, 10, 238); */
+        font-weight: bold;
+        font-style: italic;
+        text-align: left;
+        background: linear-gradient(to right, #e1e1eb, #00ff40);
+        text-transform: uppercase;
+        border-radius: 10px;
+        font-size: 30px;
+        text-align: center;
     }
+
     .parpadeo {
-      animation: blink 1s infinite;
-      display: inline-block;
+        animation: blink 1s infinite;
+        display: inline-block;
     }
 
     .fijo {
-      animation: none;
-      opacity: 1;
-      transition: opacity 1s;
+        animation: none;
+        opacity: 1;
+        transition: opacity 1s;
     }
+
     .alert-success {
-      background-color: #4bdb9d;
-      color: #080cee;
-      font-weight: bold;
-      z-index: 1000;
+        background-color: #4bdb9d;
+        color: #080cee;
+        font-weight: bold;
+        z-index: 1000;
 
     }
 
     .alert-error {
-      background-color: #a51f1f;
-      color: #f5ecec;
-      font-weight: bold;
-      z-index: 1000;
+        background-color: #a51f1f;
+        color: #f5ecec;
+        font-weight: bold;
+        z-index: 1000;
     }
-    .f {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 10vh;
-      text-decoration: none;
-      color: #0e0909;
-      background-color: #1fec0d;
-      border: none;
-      border-radius: 10px;
-      padding: 20px 40px;
-      font-size: 24px;
-      cursor: pointer;
-      max-width: 100px;
-      /* Ancho máximo deseado */
-      margin: 0 auto;
-      /* Centrar horizontalmente */
-      font-weight: bold;
-    }
-  
-        #modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            align-items: center;
-            justify-content: center;
-        }
 
-        #modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-        }
-   
+    .f {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 10vh;
+        text-decoration: none;
+        color: #0e0909;
+        background-color: #1fec0d;
+        border: none;
+        border-radius: 10px;
+        padding: 20px 40px;
+        font-size: 24px;
+        cursor: pointer;
+        max-width: 100px;
+        /* Ancho máximo deseado */
+        margin: 0 auto;
+        /* Centrar horizontalmente */
+        font-weight: bold;
+    }
+
+    #modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        align-items: center;
+        justify-content: center;
+    }
+
+    #modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+    }
 </style>
 
 <body>
 
     <div class="row">
+        <div style="text-align: center;" class="col-sm-12 col-md-6 col-lg-2 col-xl-2">
 
-        <img src="{% static 'logo.png' %}" width="100" height="100" style="margin-top: 70px;">
+            <img src="{% static 'logo.png' %}" width="100" height="100" style="margin-top: 70px;">
 
-        <h2>Sistema de Gestión de Acreditaciones</h2>
-    {% if messages %}
-      {% for message in messages %}
-      {% if message.tags == 'success' %}
-      <div class=" alert alert-success">
-        {{ message }}
-      </div>
-      {% else %}
-      <div class=" alert alert-error">
-        {{ message }}
-      </div>
-      {% endif %}
-      {% endfor %}
-      {% endif %}
-        <br>
-        
+            <h2>Sistema de Gestión de Acreditaciones</h2>
+            {% if messages %}
+            {% for message in messages %}
+            {% if message.tags == 'success' %}
+            <div class=" alert alert-success">
+                {{ message }}
+            </div>
+            {% else %}
+            <div class=" alert alert-error">
+                {{ message }}
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            <br>
+        </div>
     </div>
 
-    <div class="row">
 
-    <div class="table responsive py-2" style="margin: 0 5px; margin-left: 5px;">
-        <table class="table table-striped" style="margin: 0 5px; margin-left: 5px;">
-            <thead>
-                <tr>
-                    <th>
-                        Evento:
-                    </th>
-                    <th>
-                        Lugar:
-                    </th>
-                    <th>
-                        Estado Acreditación:
-                    </th>
-                    <th>
-
-                    </th>
-
-                </tr>
-            </thead>
-            <tbody>
-                {% for c in listado_eventos %}
-                <tr>
-                    <td>
-                        {{ c.nombre_evento }}
-                    </td>
-                    <td>
-                        {{c.lugar_evento}}
-                    </td>
-                    <td>
-                        {% if c.acreditacion_activa == 1 %}
-
-                        <font style="color: green;">
-                            <B>ACREDITANDO</B>
-                        </font>
-                        {% else %}
-                        <font style="color: red;">
-                            <b>NO INICIADO</b>
-                        </font>
-                        {% endif %}
-                    </td>
-                    <td>
-
-
-
-                        <!-- <form action='/importarExcel/{{c.id}}' method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="file" name="archivo_excel" id="archivo_excel" class="file-input">
-                    <button type="submit" id="btn-importar" class="btn btn-primary"
-                        name="btn-importar">Importar</button>
-                </form>
-
-                {% if c.num_cargas == 0 %}
-                <a href='/iniciaAcreditacion/{{c.id}}' class="btn btn-info disabled">Iniciar Acreditación</a>
-                <a href='/detieneAcreditacion/{{c.id}}' class="btn btn-danger disabled">Cerrar Acreditación</a>
-                <a href='/buscarPersonal/{{c.id}}' class="btn btn-danger disabled">Acreditar</a>
-                {% else %}
-                <a href='/iniciaAcreditacion/{{c.id}}' id="inicial" data-toggle="tooltip"
-                    title="Iniciar el proceso de acreditación al personal" class="btn btn-info">Iniciar Acreditación</a>
-                <a href='/detieneAcreditacion/{{c.id}}' id="detienee" data-toggle="tooltip" title="Finalizar el proceso de acreditación al personal"
-                    class="btn btn-danger">Cerrar Acreditación</a> -->
-                        {% if c.acreditacion_activa == 1 %}
-                        <a href='/registraUsuario/{{c.id}}' id="acredita" data-toggle="tooltip"
-                            title="Buscar personal y acreditar" class="btn btn-warning">Acreditar</a>
-                        {% endif %}
-                        <!-- {% endif %} -->
-                        <!-- <a href='/#{{c.id}}' class="btn btn-danger">Cerrar Acreditación</a> -->
-
-                        <!-- <a href='/#{{c.id}}' class="btn btn-success">Subir Listado</a> -->
-
-                    </td>
-                </tr>
-
-                {% endfor %} 
-            </tbody>
-        </table>
-    </div>
-</div>
 
 
 
@@ -373,7 +301,7 @@
         });
 
     </script>
-                   
+
     <script src="https://cdn.jsdelivr.net/npm/jsqr@2.0.3/dist/jsQR.min.js"></script>
 
     <script>
