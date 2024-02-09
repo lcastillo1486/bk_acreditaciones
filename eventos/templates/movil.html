@@ -145,7 +145,7 @@
         color: white;
         font-weight: bold;
         font-style: italic;
-        text-align: center;
+        text-align: left;
         background: linear-gradient(to right, #0000ff, #00ff40);
         text-transform: uppercase;
         border-radius: 10px;
@@ -225,111 +225,50 @@
         }
    
 </style>
+
 <body>
-    <div style="margin-left: 40px;">
+
+    <div>
+
+        <img src="{% static 'logo.png' %}" width="100" height="100" style="margin-top: 70px;">
+
+        <h2>Sistema de Gestión de Acreditaciones</h2>
+    {% if messages %}
+      {% for message in messages %}
+      {% if message.tags == 'success' %}
+      <div class=" alert alert-success">
+        {{ message }}
+      </div>
+      {% else %}
+      <div class=" alert alert-error">
+        {{ message }}
+      </div>
+      {% endif %}
+      {% endfor %}
+      {% endif %}
+        <br>
         
-            <img src="{% static 'logo.png' %}" width="100" height="100" style="margin-top: 70px;">
-            <h2 style="text-align: center;">Sistema de Gestión de Acreditaciones</h2>
-            <h3> Eventos Activos: </h3>
-
-        {% if messages %}
-        {% for message in messages %}
-        {% if message.tags == 'success' %}
-        <div class=" alert alert-success">
-            {{ message }}
-        </div>
-        {% else %}
-        <div class=" alert alert-error">
-            {{ message }}
-        </div>
-        {% endif %}
-        {% endfor %}
-        {% endif %}
-        <div class="table responsive py-2" style="margin: 0 5px; margin-left: 5px;">
-            <table class="table table-striped" style="margin: 0 5px; margin-left: 5px;">
-                <thead>
-                    <tr>
-                        <th>
-                            Evento:
-                        </th>
-                        <th>
-                            Lugar:
-                        </th>
-                        <th>
-                            Estado Acreditación:
-                        </th>
-                        <th>
-
-                        </th>
-
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for c in listado_eventos %}
-                    <tr>
-                        <td>
-                            {{ c.nombre_evento }}
-                        </td>
-                        <td>
-                            {{c.lugar_evento}}
-                        </td>
-                        <td>
-                            {% if c.acreditacion_activa == 1 %}
-
-                            <font style="color: green;">
-                                <B>ACREDITANDO</B>
-                            </font>
-                            {% else %}
-                            <font style="color: red;">
-                                <b>NO INICIADO</b>
-                            </font>
-                            {% endif %}
-                        </td>
-                        <td>
-
-
-
-                            <!-- <form action='/importarExcel/{{c.id}}' method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <input type="file" name="archivo_excel" id="archivo_excel" class="file-input">
-                        <button type="submit" id="btn-importar" class="btn btn-primary"
-                            name="btn-importar">Importar</button>
-                    </form>
-
-                    {% if c.num_cargas == 0 %}
-                    <a href='/iniciaAcreditacion/{{c.id}}' class="btn btn-info disabled">Iniciar Acreditación</a>
-                    <a href='/detieneAcreditacion/{{c.id}}' class="btn btn-danger disabled">Cerrar Acreditación</a>
-                    <a href='/buscarPersonal/{{c.id}}' class="btn btn-danger disabled">Acreditar</a>
-                    {% else %}
-                    <a href='/iniciaAcreditacion/{{c.id}}' id="inicial" data-toggle="tooltip"
-                        title="Iniciar el proceso de acreditación al personal" class="btn btn-info">Iniciar Acreditación</a>
-                    <a href='/detieneAcreditacion/{{c.id}}' id="detienee" data-toggle="tooltip" title="Finalizar el proceso de acreditación al personal"
-                        class="btn btn-danger">Cerrar Acreditación</a> -->
-                            {% if c.acreditacion_activa == 1 %}
-                            <a href='/registraUsuario/{{c.id}}' id="acredita" data-toggle="tooltip"
-                                title="Buscar personal y acreditar" class="btn btn-warning">Acreditar</a>
-                            {% endif %}
-                            <!-- {% endif %} -->
-                            <!-- <a href='/#{{c.id}}' class="btn btn-danger">Cerrar Acreditación</a> -->
-
-                            <!-- <a href='/#{{c.id}}' class="btn btn-success">Subir Listado</a> -->
-
-                        </td>
-                    </tr>
-
-                    {% endfor %} 
-                </tbody>
-            </table>
-            <a href='/logout/' id="salir" class="btn btn-danger w-100" style="margin-top: 15px;">Salir</a>
-        </div>
-
-
-        <br><br><br><br>
-        <!-- Construido y Desarrollado para Backtrack Telecomunicaciones por L. Castillo  -->
-
-
     </div>
+
+
+
+
     <script>
+        function addNumber(number) {
+            var input = document.getElementById('number-input');
+            input.value += number;
+        }
+        document.getElementById("number-input").focus();
+
+        document.addEventListener("keyup", function (event) {
+            if (event.key === "Enter" || event.keyCode === 13) {
+                var botonBuscar = document.getElementById("boton-buscar");
+                if (botonBuscar) {
+                    botonBuscar.click();
+                }
+            }
+        });
+
         setTimeout(function () {
             var messages = document.getElementsByClassName('alert');
             for (var i = 0; i < messages.length; i++) {
@@ -337,37 +276,89 @@
             }
         }, 7000);  // 5000 milisegundos = 5 segundos
 
-        document.getElementById('inicial').addEventListener('click', function (event) {
-            event.preventDefault(); // Evita que se siga el enlace automáticamente
-            var confirmacion = confirm('!ATENCIóN¡ \n\ Si continúa, el sistema hará uso del último listado importado como definitivo. \n\ ¿Está seguro de ejecutar esta acción?');
-            if (confirmacion) {
-                // Si el usuario confirma, redirige a la URL o ejecuta la acción deseada
-                window.location.href = event.target.href; // Redirige a la URL del enlace
-            } else {
-                // Si el usuario cancela, no se realiza ninguna acción
-                return;
-            }
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const titulo = document.querySelector('#zona');
+
+            titulo.classList.add('parpadeo');
+
+            setTimeout(() => {
+                titulo.classList.remove('parpadeo');
+                titulo.classList.add('fijo');
+            }, 2000);
         });
 
-        document.getElementById('detienee').addEventListener('click', function (event) {
-            event.preventDefault(); // Evita que se siga el enlace automáticamente
-            var confirmacion = confirm('!ATENCIóN¡ \n\ Si continúa, se dará por finalizado el proceso de acreditación. \n\ ¿Está seguro de ejecutar esta acción?');
-            if (confirmacion) {
-                // Si el usuario confirma, redirige a la URL o ejecuta la acción deseada
-                window.location.href = event.target.href; // Redirige a la URL del enlace
-            } else {
-                // Si el usuario cancela, no se realiza ninguna acción
-                return;
-            }
+        document.addEventListener("DOMContentLoaded", function () {
+
+            document.getElementById("acreditar").focus();
+
         });
 
     </script>
+                   
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@2.0.3/dist/jsQR.min.js"></script>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const startScanButton = document.getElementById('start-scan');
+        const scanner = document.getElementById('scanner');
+        const modal = document.getElementById('modal');
+        const modalContent = document.getElementById('modal-content');
 
+        startScanButton.addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' }
+                });
 
+                scanner.style.display = 'block';
+                scanner.srcObject = stream;
+                scanner.play();
+
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+
+                const scan = async () => {
+                    if (scanner.readyState === scanner.HAVE_ENOUGH_DATA) {
+                        canvas.width = scanner.videoWidth;
+                        canvas.height = scanner.videoHeight;
+                        context.drawImage(scanner, 0, 0, canvas.width, canvas.height);
+
+                        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                        const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+                        if (code && code.data) {
+                            showModal(code.data);
+                        }
+
+                        requestAnimationFrame(scan);
+                    }
+                };
+
+                scan();
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+            }
+        });
+
+        function showModal(qrData) {
+            modal.style.display = 'flex';
+            modalContent.textContent = qrData;
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+    </script>
+
+    <!-- Contenido del mensaje emergente -->
+    <div id="modal">
+        <div id="modal-content">
+            <p id="modal-text"></p>
+            <button onclick="closeModal()">Cerrar</button>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>
