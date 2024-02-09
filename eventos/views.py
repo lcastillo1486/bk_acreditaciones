@@ -1341,5 +1341,85 @@ def exportarPDFfinal(request, id):
 
     return response
 
+def importaAdicionales(request, id_evento):
+
+    if not request.user.is_superuser:
+        messages.error(request,'¡No tiene permisos para importar listados!')
+        return redirect('evento')
+
+    if request.method == 'POST' and 'archivo_excel' in request.FILES:
+        archivo = request.FILES['archivo_excel']
+
+        # Leer el archivo Excel utilizando pandas
+        try:
+            df = pd.read_excel(archivo, dtype={'NUMERO_DOCUMENTO': str})
+        except:
+            # Manejar el error si el archivo no se puede leer correctamente
+            messages.error(request, '¡El archivo no es válido!')
+            return redirect('evento')
+
+        # Verificar las columnas requeridas
+        columnas_requeridas = ['NOMBRES', 'APELLIDOS', 'TIPO_DOCUMENTO',
+                               'NUMERO_DOCUMENTO', 'CARGO Y O FUNCIÓN', 'AREA_DE_TRABAJO']
+        columnas_excel = df.columns.tolist()
+        if not set(columnas_requeridas).issubset(columnas_excel):
+            # Manejar el error si alguna(s) columna(s) requerida(s) no está presente
+            messages.error(
+                request, '¡El archivo no contiene todas las columnas requeridas!')
+            return redirect('evento')
+
+        # Validar campos vacíos
+        registros = []
+        for _, row in df.iterrows():
+            if any(pd.isnull(row[columna]) or str(row[columna]).strip() == '' for columna in columnas_requeridas):
+                # Manejar el error si hay campos vacíos en las columnas requeridas
+                messages.error(
+                    request, '¡El archivo contiene campos vacíos en las columnas requeridas! Por favor corrija e intente nuevamente.')
+                return redirect('evento')
+
+        # Procesar los datos y guardar en la base de datos
+        registros = []
+
+        for  _, row in df.iterrows():
+            registro = acreditados_tmp(
+                nombre_persona=row['NOMBRES'],
+                apellido_persona=row['APELLIDOS'],
+                tipo_doc=row['TIPO_DOCUMENTO'],
+                numero_doc=row['NUMERO_DOCUMENTO'],
+                cargo=row['CARGO Y O FUNCIÓN'],
+                zona_acceso=row['AREA_DE_TRABAJO'],
+                empresa=row['EMPRESA'],
+                id_evento_id = id_evento
+            )
+            registros.append(registro)
+
+        acreditados_tmp.objects.bulk_create(registros)
+
+        tabla_origen = acreditados_tmp.objects.filter(id_evento_id = id_evento)
+
+        tabla_destino =[]  
             
+        for dato in tabla_origen:
+            registros = acreditados_def(
+            nombre_persona = dato.nombre_persona,
+            apellido_persona = dato.apellido_persona,
+            tipo_doc = dato.tipo_doc,
+            numero_doc = dato.numero_doc,
+            cargo = dato.cargo,
+            zona_acceso = dato.zona_acceso,
+            empresa = dato.empresa,
+            id_evento_id = id_evento)
+
+            # validar que no este duplicado
+            if not acreditados_def.objects.filter(numero_doc = dato.numero_doc, id_evento = id_evento).exists(): 
+                tabla_destino.append(registros)
+
+        acreditados_def.objects.bulk_create(tabla_destino)
+
+        acreditados_tmp.objects.filter(id_evento_id=id_evento).delete()
+
+        messages.success(request, '¡Los datos se han importado exitosamente!')
+        return redirect('evento')
+
+    return redirect('evento')           
         

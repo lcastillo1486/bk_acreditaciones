@@ -116,12 +116,23 @@
 
 
                     
+                    {% if c.acreditacion_activa == 1 %}
+
+                    <form action='/importarExcelAdicionales/{{c.id}}' method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="file" name="archivo_excel" id="archivo_excel" class="file-input">
+                        <button type="submit" id="btn-importar" class="btn btn-primary"
+                            name="btn-importar">Importar Adicional</button>
+                    </form>
+
+                    {% else %}
                     <form action='/importarExcel/{{c.id}}' method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="file" name="archivo_excel" id="archivo_excel" class="file-input">
                         <button type="submit" id="btn-importar" class="btn btn-primary"
                             name="btn-importar">Importar Acreditables</button>
                     </form>
+                    {% endif %}
 <br>
                     
                     <!-- <form action='/importarBrazaletes/{{c.id}}' method="post" enctype="multipart/form-data">
