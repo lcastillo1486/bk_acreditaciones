@@ -148,44 +148,116 @@
         padding-left: 10px;
         margin-left: 5px;
     }
-
     th {
         margin-left: 10px;
     }
-
-    td {
+    td{
         margin-left: 10px;
     }
 </style>
 
 <body>
-    <div class="row">
-        <div style="text-align: center;" class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <div class="centrar">
-                <img src="{% static 'logo.png' %}" width="100" height="100" style="margin-top: 70px;">
-                <h2>Sistema de Gestión de Acreditaciones</h2>
-                <h3 style="margin-left: 15px;"> Eventos Activos: </h3>
-            </div>
-            {% if messages %}
-            {% for message in messages %}
-            {% if message.tags == 'success' %}
-            <div class=" alert alert-success">
-                {{ message }}
-            </div>
-            {% else %}
-            <div class=" alert alert-error">
-                {{ message }}
-            </div>
-            {% endif %}
-            {% endfor %}
-            {% endif %}
+    <div>
+        <div class="centrar">
+            <img src="{% static 'logo.png' %}" width="100" height="100" style="margin-top: 70px;">
+            <h2>Sistema de Gestión de Acreditaciones</h2>
+            <h3 style="margin-left: 15px;"> Eventos Activos: </h3>
+        </div>
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == 'success' %}
+        <div class=" alert alert-success">
+            {{ message }}
+        </div>
+        {% else %}
+        <div class=" alert alert-error">
+            {{ message }}
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        <div class="table responsive py-2" style="margin: 0 5px; margin-left: 5px;">
+            <table class="table table-striped" style="margin: 0 5px; margin-left: 5px;">
+                <thead>
+                    <tr>
+                        <th>
+                            Evento:
+                        </th>
+                        <th>
+                            Lugar:
+                        </th>
+                        <th>
+                            Estado Acreditación:
+                        </th>
+                        <th>
 
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in listado_eventos %}
+                    <tr>
+                        <td>
+                            {{ c.nombre_evento }}
+                        </td>
+                        <td>
+                            {{c.lugar_evento}}
+                        </td>
+                        <td>
+                            {% if c.acreditacion_activa == 1 %}
+
+                            <font style="color: green;">
+                                <B>ACREDITANDO</B>
+                            </font>
+                            {% else %}
+                            <font style="color: red;">
+                                <b>NO INICIADO</b>
+                            </font>
+                            {% endif %}
+                        </td>
+                        <td>
+
+
+
+                            <!-- <form action='/importarExcel/{{c.id}}' method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="file" name="archivo_excel" id="archivo_excel" class="file-input">
+                        <button type="submit" id="btn-importar" class="btn btn-primary"
+                            name="btn-importar">Importar</button>
+                    </form>
+
+                    {% if c.num_cargas == 0 %}
+                    <a href='/iniciaAcreditacion/{{c.id}}' class="btn btn-info disabled">Iniciar Acreditación</a>
+                    <a href='/detieneAcreditacion/{{c.id}}' class="btn btn-danger disabled">Cerrar Acreditación</a>
+                    <a href='/buscarPersonal/{{c.id}}' class="btn btn-danger disabled">Acreditar</a>
+                    {% else %}
+                    <a href='/iniciaAcreditacion/{{c.id}}' id="inicial" data-toggle="tooltip"
+                        title="Iniciar el proceso de acreditación al personal" class="btn btn-info">Iniciar Acreditación</a>
+                    <a href='/detieneAcreditacion/{{c.id}}' id="detienee" data-toggle="tooltip" title="Finalizar el proceso de acreditación al personal"
+                        class="btn btn-danger">Cerrar Acreditación</a> -->
+                            {% if c.acreditacion_activa == 1 %}
+                            <a href='/registraUsuario/{{c.id}}' id="acredita" data-toggle="tooltip"
+                                title="Buscar personal y acreditar" class="btn btn-warning">Acreditar</a>
+                            {% endif %}
+                            <!-- {% endif %} -->
+                            <!-- <a href='/#{{c.id}}' class="btn btn-danger">Cerrar Acreditación</a> -->
+
+                            <!-- <a href='/#{{c.id}}' class="btn btn-success">Subir Listado</a> -->
+
+                        </td>
+                    </tr>
+
+                    {% endfor %} 
+                </tbody>
+            </table>
+            <a href='/logout/' id="salir" class="btn btn-danger w-100" style="margin-top: 15px;">Salir</a>
         </div>
-    </div>
-    <div class="row">
-        <div style="text-align: center;" class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-        hola hola
-        </div>
+
+
+        <br><br><br><br>
+        <!-- Construido y Desarrollado para Backtrack Telecomunicaciones por L. Castillo  -->
+
 
     </div>
     <script>
