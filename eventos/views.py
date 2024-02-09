@@ -98,10 +98,10 @@ def importarExcel(request, id_evento):
         maximo = num_maximo.cargas_max
         cargas_real = num_maximo.num_cargas
 
-        if maximo == cargas_real:
-            messages.error(
-                request, '¡Ha alcanzado el número máximo de cargas permitido! \n Comuníquese con los encargados del sistema si requiere una nueva actualización.')
-            return redirect('evento')
+        # if maximo == cargas_real:
+        #     messages.error(
+        #         request, '¡Ha alcanzado el número máximo de cargas permitido! \n Comuníquese con los encargados del sistema si requiere una nueva actualización.')
+        #     return redirect('evento')
 
         # Verificar las columnas requeridas
         columnas_requeridas = ['NOMBRES', 'APELLIDOS', 'TIPO_DOCUMENTO',
