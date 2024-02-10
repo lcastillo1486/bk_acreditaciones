@@ -411,6 +411,7 @@ def buscarPersona(request):
                         documento = persona.numero_doc
                         empresa = persona.empresa
                         area = persona.zona_acceso
+                        color = persona.color_zona
                         id_reg = persona.id
                         id_even = persona.id_evento_id
                         hora = persona.hora
@@ -424,7 +425,7 @@ def buscarPersona(request):
                         total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
                         porcentaje = round((total_acreditado /total_registros)*100,4)
                         messages.error(request, f'¡Ya fue acreditado anteriormente a las: {hora}!')
-                        return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
+                        return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area,'color':color, 'id':id_reg, 'evento':event_name,
                                                                     'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
                     else:
                         nombre = persona.nombre_persona
@@ -432,6 +433,7 @@ def buscarPersona(request):
                         documento = persona.numero_doc
                         empresa = persona.empresa
                         area = persona.zona_acceso
+                        color = persona.color_zona
                         id_reg = persona.id
                         id_even = persona.id_evento_id
 
@@ -444,7 +446,7 @@ def buscarPersona(request):
                         total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
                         porcentaje = round((total_acreditado /total_registros)*100,4)
 
-                        return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
+                        return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area,'color':color, 'id':id_reg, 'evento':event_name,
                                                                     'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
 
                 except:
@@ -520,6 +522,7 @@ def buscarPersona(request):
                 documento = persona.numero_doc
                 empresa = persona.empresa
                 area = persona.zona_acceso
+                color = persona.color_zona
                 id_reg = persona.id
                 id_even = persona.id_evento_id
                 hora = persona.hora
@@ -534,7 +537,7 @@ def buscarPersona(request):
                 porcentaje = round((total_acreditado /total_registros)*100,4)
 
                 messages.error(request, f'¡Ya fue acreditado anteriormente a las {hora}!')
-                return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
+                return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area,'color':color, 'id':id_reg, 'evento':event_name,
                                                               'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
                 
             
@@ -545,6 +548,7 @@ def buscarPersona(request):
                 documento = persona.numero_doc
                 empresa = persona.empresa
                 area = persona.zona_acceso
+                color = persona.color_zona
                 id_reg = persona.id
                 id_even = persona.id_evento_id
 
@@ -559,7 +563,7 @@ def buscarPersona(request):
                 porcentaje = round((total_acreditado /total_registros)*100,4)
 
 
-                return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
+                return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area,'color':color, 'id':id_reg, 'evento':event_name,
                                                              'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
             else:
                 
@@ -689,6 +693,7 @@ def buscarPersonaMovil(request):
                         documento = persona.numero_doc
                         empresa = persona.empresa
                         area = persona.zona_acceso
+                        color = persona.color_zona
                         id_reg = persona.id
                         id_even = persona.id_evento_id
                         hora = persona.hora
@@ -703,7 +708,7 @@ def buscarPersonaMovil(request):
                         porcentaje = round((total_acreditado /total_registros)*100,4)
 
                         messages.error(request, f'¡Ya fue acreditado anteriormente a las: {hora}!')
-                        return render(request, 'acredpersonalmovil.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
+                        return render(request, 'acredpersonalmovil.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area,'color':color, 'id':id_reg, 'evento':event_name,
                                                                     'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
                     else:
                         nombre = persona.nombre_persona
@@ -711,6 +716,7 @@ def buscarPersonaMovil(request):
                         documento = persona.numero_doc
                         empresa = persona.empresa
                         area = persona.zona_acceso
+                        color = persona.color_zona
                         id_reg = persona.id
                         id_even = persona.id_evento_id
 
@@ -723,7 +729,7 @@ def buscarPersonaMovil(request):
                         total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
                         porcentaje = round((total_acreditado /total_registros)*100,4)
 
-                        return render(request, 'acredpersonalmovil.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
+                        return render(request, 'acredpersonalmovil.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area,'color':color, 'id':id_reg, 'evento':event_name,
                                                                     'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
 
                 except:
@@ -800,6 +806,7 @@ def buscarPersonaMovil(request):
                 documento = persona.numero_doc
                 empresa = persona.empresa
                 area = persona.zona_acceso
+                color = persona.color_zona
                 id_reg = persona.id
                 id_even = persona.id_evento_id
                 hora = persona.hora
@@ -814,7 +821,7 @@ def buscarPersonaMovil(request):
                 total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
                 porcentaje = round((total_acreditado /total_registros)*100,4)
 
-                return render(request, 'acredpersonalmovil.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
+                return render(request, 'acredpersonalmovil.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area,'color':color, 'id':id_reg, 'evento':event_name,
                                                               'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
                 
             
@@ -825,6 +832,7 @@ def buscarPersonaMovil(request):
                 documento = persona.numero_doc
                 empresa = persona.empresa
                 area = persona.zona_acceso
+                color = persona.color_zona
                 id_reg = persona.id
                 id_even = persona.id_evento_id
 
@@ -839,7 +847,7 @@ def buscarPersonaMovil(request):
                 porcentaje = round((total_acreditado /total_registros)*100,4)
 
 
-                return render(request, 'acredpersonalmovil.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area, 'id':id_reg, 'evento':event_name,
+                return render(request, 'acredpersonalmovil.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area,'color':color, 'id':id_reg, 'evento':event_name,
                                                              'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
             else:
                 
