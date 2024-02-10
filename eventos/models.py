@@ -21,6 +21,7 @@ class acreditados_tmp(models.Model):
     empresa = models.CharField(max_length=200, blank=True, null=True)
     cargo = models.CharField(max_length=50, blank=True, null=True)
     zona_acceso = models.CharField(max_length=50, blank=False, null=False)
+    color_zona = models.CharField(max_length=50, blank=True, null=True)
 
 class acreditados_def(models.Model):
     id_evento = models.ForeignKey(bkt_eventos, on_delete = models.DO_NOTHING)
@@ -31,6 +32,7 @@ class acreditados_def(models.Model):
     empresa = models.CharField(max_length=200, blank=True, null=True)
     cargo = models.CharField(max_length=50, blank=True, null=True)
     zona_acceso = models.CharField(max_length=50, blank=False, null=False)
+    color_zona = models.CharField(max_length=50, blank=True, null=True)
     acreditado = models.BooleanField(default=False, blank=False, null=False)
     acreditado_por = models.CharField(max_length=50, blank=True, null=True)
     asistencia = models.BooleanField(default=False)
