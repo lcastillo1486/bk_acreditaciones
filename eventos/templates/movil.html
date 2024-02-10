@@ -10,174 +10,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Acreditación</title>
 </head>
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;900&display=swap');
-    /* @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap'); */
-    /* @import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap'); */
-    /* @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap'); */
-    /* @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap'); */
 
-    input {
-        caret-color: red;
-    }
-
-    body {
-        margin: 0;
-        width: 100vw;
-        height: 80vh;
-        background: #ecf0f3;
-        display: flex;
-        align-items: center;
-        text-align: center;
-        justify-content: center;
-        place-items: center;
-        overflow: auto;
-        font-family: poppins;
-    }
-
-    .container {
-        position: relative;
-        width: 350px;
-        height: 500px;
-        border-radius: 20px;
-        padding: 40px;
-        box-sizing: border-box;
-        background: #ecf0f3;
-        box-shadow: 14px 14px 20px #cbced1, -14px -14px 20px white;
-    }
-
-    .brand-logo {
-        height: 100px;
-        width: 100px;
-        background: url("https://img.icons8.com/color/100/000000/twitter--v2.png");
-        margin: auto;
-        border-radius: 50%;
-        box-sizing: border-box;
-        box-shadow: 7px 7px 10px #cbced1, -7px -7px 10px white;
-    }
-
-    .brand-title {
-        margin-top: 10px;
-        font-weight: 900;
-        font-size: 1.8rem;
-        color: #1DA1F2;
-        letter-spacing: 1px;
-    }
-
-    .inputs {
-        text-align: left;
-        margin-top: 30px;
-    }
-
-    label,
-    input,
-    button {
-        display: block;
-        width: 100%;
-        padding: 0;
-        border: none;
-        outline: none;
-        box-sizing: border-box;
-    }
-
-    label {
-        margin-bottom: 4px;
-    }
-
-    label:nth-of-type(2) {
-        margin-top: 12px;
-    }
-
-    input::placeholder {
-        color: gray;
-    }
-
-    input {
-        background: #ecf0f3;
-        padding: 10px;
-        padding-left: 20px;
-        height: 50px;
-        font-size: 14px;
-        border-radius: 50px;
-        box-shadow: inset 6px 6px 6px #cbced1, inset -6px -6px 6px white;
-    }
-
-    button {
-        color: white;
-        margin-top: 20px;
-        background: #1d2931;
-        height: 40px;
-        border-radius: 20px;
-        cursor: pointer;
-        font-weight: 900;
-        box-shadow: 6px 6px 6px #cbced1, -6px -6px 6px white;
-        transition: 0.5s;
-    }
-
-    button:hover {
-        box-shadow: none;
-    }
-
-    a {
-        position: relative;
-        font-size: 8px;
-        bottom: 4px;
-        right: 4px;
-        text-decoration: none;
-        color: black;
-        background: yellow;
-        border-radius: 10px;
-        padding: 2px;
-    }
-
-    h1 {
-        position: relative;
-        top: 0;
-        left: 0;
-        color: #00003d;
-    }
-
-    h3 {
-        color: white;
-        font-weight: bold;
-        font-style: italic;
-        text-align: left;
-        background: linear-gradient(to right, #0000ff, #00ff40);
-        text-transform: uppercase;
-        border-radius: 10px;
-        padding-left: 10px;
-        margin-left: 5px;
-    }
-    th {
-        margin-left: 10px;
-    }
-    td{
-        margin-left: 10px;
-    }
-</style>
 
 <body>
-    <div>
-        <div class="centrar">
+    <div class="row">
+
+        <div style="text-align: center;" class="col-sm-12 col-md-6 col-lg-2 col-xl-2">
+
             <img src="{% static 'logo.png' %}" width="100" height="100" style="margin-top: 70px;">
             <h2>Sistema de Gestión de Acreditaciones</h2>
             <h3 style="margin-left: 15px;"> Eventos Activos: </h3>
+
+            {% if messages %}
+            {% for message in messages %}
+            {% if message.tags == 'success' %}
+            <div class=" alert alert-success">
+                {{ message }}
+            </div>
+            {% else %}
+            <div class=" alert alert-error">
+                {{ message }}
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
         </div>
-        {% if messages %}
-        {% for message in messages %}
-        {% if message.tags == 'success' %}
-        <div class=" alert alert-success">
-            {{ message }}
-        </div>
-        {% else %}
-        <div class=" alert alert-error">
-            {{ message }}
-        </div>
-        {% endif %}
-        {% endfor %}
-        {% endif %}
-        <div class="table responsive py-2" style="margin: 0 5px; margin-left: 5px;">
-            <table class="table table-striped" style="margin: 0 5px; margin-left: 5px;">
+    </div>
+
+    <div class="row">
+        <div class="table responsive py-2">
+            <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>
@@ -217,49 +79,23 @@
                             {% endif %}
                         </td>
                         <td>
-
-
-
-                            <!-- <form action='/importarExcel/{{c.id}}' method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <input type="file" name="archivo_excel" id="archivo_excel" class="file-input">
-                        <button type="submit" id="btn-importar" class="btn btn-primary"
-                            name="btn-importar">Importar</button>
-                    </form>
-
-                    {% if c.num_cargas == 0 %}
-                    <a href='/iniciaAcreditacion/{{c.id}}' class="btn btn-info disabled">Iniciar Acreditación</a>
-                    <a href='/detieneAcreditacion/{{c.id}}' class="btn btn-danger disabled">Cerrar Acreditación</a>
-                    <a href='/buscarPersonal/{{c.id}}' class="btn btn-danger disabled">Acreditar</a>
-                    {% else %}
-                    <a href='/iniciaAcreditacion/{{c.id}}' id="inicial" data-toggle="tooltip"
-                        title="Iniciar el proceso de acreditación al personal" class="btn btn-info">Iniciar Acreditación</a>
-                    <a href='/detieneAcreditacion/{{c.id}}' id="detienee" data-toggle="tooltip" title="Finalizar el proceso de acreditación al personal"
-                        class="btn btn-danger">Cerrar Acreditación</a> -->
                             {% if c.acreditacion_activa == 1 %}
                             <a href='/registraUsuario/{{c.id}}' id="acredita" data-toggle="tooltip"
                                 title="Buscar personal y acreditar" class="btn btn-warning">Acreditar</a>
                             {% endif %}
-                            <!-- {% endif %} -->
-                            <!-- <a href='/#{{c.id}}' class="btn btn-danger">Cerrar Acreditación</a> -->
-
-                            <!-- <a href='/#{{c.id}}' class="btn btn-success">Subir Listado</a> -->
-
                         </td>
                     </tr>
-
-                    {% endfor %} 
+                    {% endfor %}
                 </tbody>
             </table>
             <a href='/logout/' id="salir" class="btn btn-danger w-100" style="margin-top: 15px;">Salir</a>
         </div>
-
-
-        <br><br><br><br>
-        <!-- Construido y Desarrollado para Backtrack Telecomunicaciones por L. Castillo  -->
-
-
     </div>
+
+
+    <br><br><br><br>
+    <!-- Construido y Desarrollado para Backtrack Telecomunicaciones por L. Castillo  -->
+
     <script>
         setTimeout(function () {
             var messages = document.getElementsByClassName('alert');
