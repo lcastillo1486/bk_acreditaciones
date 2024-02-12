@@ -30,6 +30,7 @@ from reportlab.pdfbase.pdfmetrics import registerFont, registerFontFamily
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib import fonts
 import io
+from django.db.models import Count, Case, When, IntegerField
 # Create your views here.
 
 @login_required
@@ -1157,7 +1158,9 @@ def verEstado(request, id_evento):
     eventos_proceso = bkt_eventos.objects.filter(id = evento_id, evento_activo=1, acreditacion_activa = 1).order_by('fecha_evento')
     estado_brazalete = inventarioBrazalete.objects.filter(id_evento = evento_id)
     estado_brazalete_acreditador = inventarioBrazaleteAcreditardor.objects.filter(id_evento = evento_id).order_by('nombre_acreditador')
-    total_color = acreditados_def.objects.filter(id_evento_id = evento_id).values('color_zona').annotate(total_registros_color = Count('color_zona'))
+    total_color = acreditados_def.objects.filter(id_evento_id = evento_id).values('color_zona').annotate(total_registros_color = Count('color_zona'),
+    acreditados=Count(Case (When(acreditado=True, then=1),ouput_field = IntegerField())),
+    no_acreditados =Count(Case (When(acreditado=False, then=1),ouput_field = IntegerField())))
 
     #busca estadisticas
     total_acreditado = acreditados_def.objects.filter(id_evento_id = evento_id, acreditado = 1).count()
