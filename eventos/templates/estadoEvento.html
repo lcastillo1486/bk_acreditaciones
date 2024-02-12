@@ -88,13 +88,15 @@
             </tr>
         </thead>
         <tbody>
-            {% for i in total_color%}
             <tr>
                 <td>
-                    {{i.color_zona}}
+                    {{total_registros}}
                 </td>
                 <td>
-                    {{i.total_registros_color}}
+                    {{total_acreditado}}
+                </td>
+                <td>
+                    {{porcentaje}} %
                 </td>
             </tr>
         </tbody>
@@ -113,17 +115,16 @@
             </tr>
         </thead>
         <tbody>
+            {%  for i in total_color %}
             <tr>
                 <td>
-                    {{total_registros}}
+                    {{i.color_zona}}
                 </td>
                 <td>
-                    {{total_acreditado}}
-                </td>
-                <td>
-                    {{porcentaje}} %
+                    {{i.total_registros_color}}
                 </td>
             </tr>
+            {% end for %}
         </tbody>
     </table>
 </div>
