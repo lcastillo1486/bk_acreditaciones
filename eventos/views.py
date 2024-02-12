@@ -1198,7 +1198,7 @@ def verEstado(request, id_evento):
     
 
     return render(request,'estadoEvento.html',{'eventoProceso':eventos_proceso, 'estado_brazalete':estado_brazalete,
-                                                'estado_brazalete_acreditador':estado_brazalete_acreditador, 'total_acreditado':total_acreditado, 'total_registros':total_registros,
+                                                'estado_brazalete_acreditador':estado_brazalete_acreditador, 'total_acreditado':total_acreditado, 'total_registros':total_registros, 'total_color':total_color,
                                                 'porcentaje':porcentaje,'imagen':grafico1, 'imagen2':grafico2})
 @login_required
 def exportarPDFfinal(request, id):

@@ -88,6 +88,31 @@
             </tr>
         </thead>
         <tbody>
+            {% for i in total_color%}
+            <tr>
+                <td>
+                    {{i.color_zona}}
+                </td>
+                <td>
+                    {{i.total_registros_color}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Zona Color:
+                </th>
+                <th>
+                    Total:
+                </th>
+            </tr>
+        </thead>
+        <tbody>
             <tr>
                 <td>
                     {{total_registros}}
