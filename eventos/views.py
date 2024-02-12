@@ -416,6 +416,7 @@ def buscarPersona(request):
                         id_reg = persona.id
                         id_even = persona.id_evento_id
                         hora = persona.hora
+                        acreditador = persona.acreditado_por
 
                         #busca nombre evento
                         nombre_event = bkt_eventos.objects.get(id = id_even)
@@ -425,7 +426,7 @@ def buscarPersona(request):
                         total_acreditado = acreditados_def.objects.filter(id_evento_id = id_even, acreditado = 1).count()
                         total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
                         porcentaje = round((total_acreditado /total_registros)*100,4)
-                        messages.error(request, f'¡Ya fue acreditado anteriormente a las: {hora}!')
+                        messages.error(request, f'¡Ya fue acreditado anteriormente a las: {hora} por {acreditador}!')
                         return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area,'color':color, 'id':id_reg, 'evento':event_name,
                                                                     'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
                     else:
@@ -527,7 +528,7 @@ def buscarPersona(request):
                 id_reg = persona.id
                 id_even = persona.id_evento_id
                 hora = persona.hora
-                acreditador = persona.acreditador_por
+                acreditador = persona.acreditado_por
                 
                 #busca nombre evento
                 nombre_event = bkt_eventos.objects.get(id = id_even)
@@ -699,6 +700,7 @@ def buscarPersonaMovil(request):
                         id_reg = persona.id
                         id_even = persona.id_evento_id
                         hora = persona.hora
+                        acreditador = persona.acreditado_por
 
                         #busca nombre evento
                         nombre_event = bkt_eventos.objects.get(id = id_even)
@@ -709,7 +711,7 @@ def buscarPersonaMovil(request):
                         total_registros = acreditados_def.objects.filter(id_evento_id = id_even).count()
                         porcentaje = round((total_acreditado /total_registros)*100,4)
 
-                        messages.error(request, f'¡Ya fue acreditado anteriormente a las: {hora}!')
+                        messages.error(request, f'¡Ya fue acreditado anteriormente a las: {hora} por {acreditador}!')
                         return render(request, 'acredpersonalmovil.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area,'color':color, 'id':id_reg, 'evento':event_name,
                                                                     'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
                     else:
