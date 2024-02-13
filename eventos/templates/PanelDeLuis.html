@@ -97,16 +97,24 @@
                                     name="btn-importar">Importar Acreditables</button>
                             </form>
                             {% endif %}
-                            {% if c.acreditacion_activa == 1 %}
-                            <a href='/registraUsuario/{{c.id}}' id="acredita" data-toggle="tooltip"
-                                title="Buscar personal y acreditar" class="btn btn-warning">Acreditar</a>
-                            {% endif %}
+                            {% if c.num_cargas == 0 %}
+                            <a href='/iniciaAcreditacion/{{c.id}}' class="btn btn-info disabled">Iniciar
+                                Acreditación</a>
+                            <a href='/detieneAcreditacion/{{c.id}}' class="btn btn-danger disabled">Cerrar
+                                Acreditación</a>
+                            <a href='/buscarPersonal/{{c.id}}' class="btn btn-danger disabled">Acreditar</a>
+                            {% else %}
                             <a href='/iniciaAcreditacion/{{c.id}}' id="inicial" data-toggle="tooltip"
                                 title="Iniciar el proceso de acreditación al personal" class="btn btn-info">Iniciar
                                 Acreditación</a>
                             <a href='/detieneAcreditacion/{{c.id}}' id="detienee" data-toggle="tooltip"
                                 title="Finalizar el proceso de acreditación al personal" class="btn btn-danger">Cerrar
                                 Acreditación</a>
+                            {% if c.acreditacion_activa == 1 %}
+                            <a href='/registraUsuario/{{c.id}}' id="acredita" data-toggle="tooltip"
+                                title="Buscar personal y acreditar" class="btn btn-warning">Acreditar</a>
+                            {% endif %}
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
