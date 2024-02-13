@@ -941,7 +941,9 @@ def acreditacionMultiple(request):
         return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
 @login_required
 def vistaSensei(request):
-    return render(request, 'PanelDeLuis.html')
+    form_evento = formEvento()
+    eventos_activos = bkt_eventos.objects.filter(evento_activo=1)
+    return render(request, 'PanelDeLuis.html', {'form_evento': form_evento, 'listado_eventos': eventos_activos})
 @login_required
 def exportarExcel(request, id):
     #recibir aqui el id del evento. Necesito un litsado de eventos
