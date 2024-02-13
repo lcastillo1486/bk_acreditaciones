@@ -1,172 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+{% load static %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Acreditación</title>
 </head>
 
 
-{% extends 'config.html' %}
-{% block content %}
-
 <body>
-    
-    <div class="centrar">
-        <h3> nuevo evento </h3>
-    </div>
-    {% load crispy_forms_tags %}
-    <!-- <h5>Nuevo Evento:</h5> -->
+    <div class="row">
 
-    {% if messages %}
-    {% for message in messages %}
-    {% if message.tags == 'success' %}
-    <div class=" alert alert-success">
-        {{ message }}
-    </div>
-    {% else %}
-    <div class=" alert alert-error">
-        {{ message }}
-    </div>
-    {% endif %}
-    {% endfor %}
-    {% endif %}
+        <div style="text-align: center;" class="col-sm-12 col-md-6 col-lg-2 col-xl-2">
 
-    <form action="/guardarEvento/" id="form_evento" method="POST">
-        {% csrf_token %}
-        <div class="form-row">
-            <div class="form-group col-md-6 col-lg-6 col-xl-6">
-                <label class="campo-label">{{ form_evento.nombre_evento.label_tag }}</label>
-                {{ form_evento.nombre_evento }}
+            <img src="{% static 'logo.png' %}" width="100" height="100" style="margin-top: 70px;">
+            <h2>Sistema de Gestión de Acreditaciones</h2>
+            <h3 style="margin-left: 15px;"> Eventos Activos: </h3>
+
+            {% if messages %}
+            {% for message in messages %}
+            {% if message.tags == 'success' %}
+            <div class=" alert alert-success">
+                {{ message }}
             </div>
-            <div class="form-group col-md-6 col-lg-6 col-xl-6">
-                <label class="campo-label">{{ form_evento.lugar_evento.label_tag }}</label>
-                {{ form_evento.lugar_evento }}
+            {% else %}
+            <div class=" alert alert-error">
+                {{ message }}
             </div>
-        </div>
-            <div class="form-row">
-                <div class="form-group col-md-5 col-lg-5 col-xl-6">
-                    <label class="campo-label">{{ form_evento.fecha_evento.label_tag }}</label>
-                    {{ form_evento.fecha_evento }}
-                    <button type="submit" id="btn-importar" class="btn btn-primary">Guardar</button>
-                </div>
-            </div>
-            
-
-            <!-- <div>
-                <button type="submit" id="btn-importar" class="btn btn-primary">Guardar</button>
-            </div> -->
-    </form>
-    <br>
-    <h3>Eventos activos:</h3>
-    <div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>
-                    Evento:
-                </th>
-                <th>
-                    Lugar:
-                </th>
-                <th>
-                    Fecha:
-                </th>
-                <th>
-                    N° Actualizaciones:
-                </th>
-                <th>
-                    Estado Acreditación:
-                </th>
-                <th>
-
-                </th>
-
-            </tr>
-        </thead>
-        <tbody>
-            {% for c in listado_eventos %}
-            <tr>
-                <td>
-                    <a href='/verEstado/{{c.id}}'>{{ c.nombre_evento }}</a>
-                </td>
-                <td>
-                    {{c.lugar_evento}}
-                </td>
-                <td>
-                    {{c.fecha_evento}}
-                </td>
-                <td>
-                    {{c.num_cargas}}
-                </td>
-                <td>
-                    {% if c.acreditacion_activa == 1 %}
-
-                    <font style="color: green;">
-                        <B>ACREDITANDO</B>
-                    </font>
-                    {% else %}
-                    <font style="color: red;">
-                        <b>NO INICIADO</b>
-                    </font>
-                    {% endif %}
-                </td>
-                <td>
-
-
-
-                    
-                    {% if c.acreditacion_activa == 1 %}
-
-                    <form action='/importarExcelAdicionales/{{c.id}}' method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <input type="file" name="archivo_excel" id="archivo_excel" class="file-input">
-                        <button type="submit" id="btn-importar" class="btn btn-primary"
-                            name="btn-importar">Importar Adicional</button>
-                    </form>
-
-                    {% else %}
-                    <form action='/importarExcel/{{c.id}}' method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <input type="file" name="archivo_excel" id="archivo_excel" class="file-input">
-                        <button type="submit" id="btn-importar" class="btn btn-primary"
-                            name="btn-importar">Importar Acreditables</button>
-                    </form>
-                    {% endif %}
-<br>
-                    
-                    <!-- <form action='/importarBrazaletes/{{c.id}}' method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <input type="file" name="archivo_excel_braza" id="archivo_excel_braza" class="file-input">
-                        <button type="submit" id="btn-importar_braza" class="btn btn-primary"
-                            name="btn-importar">Importar Brazaletes</button>
-                    </form> -->
-
-                    {% if c.num_cargas == 0 %}
-                    <a href='/iniciaAcreditacion/{{c.id}}' class="btn btn-info disabled">Iniciar Acreditación</a>
-                    <a href='/detieneAcreditacion/{{c.id}}' class="btn btn-danger disabled">Cerrar Acreditación</a>
-                    <a href='/buscarPersonal/{{c.id}}' class="btn btn-danger disabled">Acreditar</a>
-                    {% else %}
-                    <a href='/iniciaAcreditacion/{{c.id}}' id="inicial" data-toggle="tooltip"
-                        title="Iniciar el proceso de acreditación al personal" class="btn btn-info">Iniciar Acreditación</a>
-                    <a href='/detieneAcreditacion/{{c.id}}' id="detienee" data-toggle="tooltip" title="Finalizar el proceso de acreditación al personal"
-                        class="btn btn-danger">Cerrar Acreditación</a>
-                        {% if c.acreditacion_activa == 1 %}
-                        <a href='/registraUsuario/{{c.id}}' id="acredita" data-toggle="tooltip" title="Buscar personal y acreditar"
-                        class="btn btn-warning">Acreditar</a>
-                        {% endif %}
-                    {% endif %}
-                    <!-- <a href='/#{{c.id}}' class="btn btn-danger">Cerrar Acreditación</a> -->
-
-                    <!-- <a href='/#{{c.id}}' class="btn btn-success">Subir Listado</a> -->
-
-                </td>
-            </tr>
-
+            {% endif %}
             {% endfor %}
-        </tbody>
-    </table>
+            {% endif %}
+        </div>
     </div>
+
+    <div class="row">
+        <div class="table responsive py-2">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            Evento:
+                        </th>
+                        <th>
+                            Lugar:
+                        </th>
+                        <th>
+                            Estado Acreditación:
+                        </th>
+                        <th>
+
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in listado_eventos %}
+                    <tr>
+                        <td>
+                            {{ c.nombre_evento }}
+                        </td>
+                        <td>
+                            {{c.lugar_evento}}
+                        </td>
+                        <td>
+                            {% if c.acreditacion_activa == 1 %}
+
+                            <font style="color: green;">
+                                <B>ACREDITANDO</B>
+                            </font>
+                            {% else %}
+                            <font style="color: red;">
+                                <b>NO INICIADO</b>
+                            </font>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if c.acreditacion_activa == 1 %}
+
+                            <form action='/importarExcelAdicionales/{{c.id}}' method="post"
+                                enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input type="file" name="archivo_excel" id="archivo_excel" class="file-input">
+                                <button type="submit" id="btn-importar" class="btn btn-primary"
+                                    name="btn-importar">Importar Adicional</button>
+                            </form>
+
+                            {% else %}
+                            <form action='/importarExcel/{{c.id}}' method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input type="file" name="archivo_excel" id="archivo_excel" class="file-input">
+                                <button type="submit" id="btn-importar" class="btn btn-primary"
+                                    name="btn-importar">Importar Acreditables</button>
+                            </form>
+                            {% endif %}
+                            {% if c.acreditacion_activa == 1 %}
+                            <a href='/registraUsuario/{{c.id}}' id="acredita" data-toggle="tooltip"
+                                title="Buscar personal y acreditar" class="btn btn-warning">Acreditar</a>
+                            {% endif %}
+                            <a href='/iniciaAcreditacion/{{c.id}}' id="inicial" data-toggle="tooltip"
+                                title="Iniciar el proceso de acreditación al personal" class="btn btn-info">Iniciar
+                                Acreditación</a>
+                            <a href='/detieneAcreditacion/{{c.id}}' id="detienee" data-toggle="tooltip"
+                                title="Finalizar el proceso de acreditación al personal" class="btn btn-danger">Cerrar
+                                Acreditación</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a href='/logout/' id="salir" class="btn btn-danger w-100" style="margin-top: 15px;">Salir</a>
+        </div>
+    </div>
+
+
+    <br><br><br><br>
+    <!-- Construido y Desarrollado para Backtrack Telecomunicaciones por L. Castillo  -->
+
     <script>
         setTimeout(function () {
             var messages = document.getElementsByClassName('alert');
@@ -200,8 +153,8 @@
         });
 
     </script>
-</body>
 
-{% endblock %}
+
+</body>
 
 </html>
