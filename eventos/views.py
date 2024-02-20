@@ -131,7 +131,7 @@ def importarExcel(request, id_evento):
                 nombre_persona=row['NOMBRES'],
                 apellido_persona=row['APELLIDOS'],
                 tipo_doc=row['TIPO_DOCUMENTO'],
-                numero_doc=row['NUMERO_DOCUMENTO'],
+                numero_doc=row['NUMERO_DOCUMENTO'].strip().replace(" ", ""),
                 cargo=row['CARGO Y O FUNCIÓN'],
                 zona_acceso=row['AREA_DE_TRABAJO'],
                 color_zona = row['COLOR_ZONA_BRAZALETE'],
