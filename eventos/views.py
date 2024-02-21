@@ -1299,8 +1299,9 @@ def exportarPDFfinal(request, id):
     for zona in total_acreditables_zona:
         acreditables_zona = f"Zona: {zona['zona_acceso']}    -    Cantidad: {zona['cantidad']}"
         pdf.drawString(2*cm, altura_pagina - x, acreditables_zona)
-        x += 0.5*cm
-    
+        x += 0.5*cm     
+
+
     x += 1*cm
     pdf.setFillColorRGB(0, 0, 1)
     pdf.drawString(2*cm, altura_pagina - x, "Total Acreditados por Zona:")
@@ -1320,6 +1321,10 @@ def exportarPDFfinal(request, id):
         acreditados_acredit = f"Acreditador: {acreditador['acreditado_por']}    -    Cantidad: {acreditador['cantidad']}"
         pdf.drawString(2*cm, altura_pagina - x, acreditados_acredit)
         x += 0.5*cm
+
+         ### COMPROBAR SI NECESITA NUEVA PAGINA ##########
+        if (altura_pagina - x) == 22*cm:
+            pdf.showPage()
     
     x += 0.5*cm
 
