@@ -1269,7 +1269,7 @@ def exportarPDFfinal(request, id):
     
     ####TITULO#########
     titulo = "REPORTE FINAL DE ACREDITACIÓN"
-    ancho_texto = pdf.stringWidth(titulo, "Helvetica", 12)
+    ancho_texto = pdf.stringWidth(titulo, "Helvetica", 9)
     # Calcular la posición horizontal para centrar
     pos_x = (ancho_pagina - ancho_texto) / 2
     # Definir la posición vertical
