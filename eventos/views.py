@@ -1323,7 +1323,7 @@ def exportarPDFfinal(request, id):
         x += 0.5*cm
 
          ### COMPROBAR SI NECESITA NUEVA PAGINA ##########
-        if (altura_pagina - x) >= 22*cm:
+        if (altura_pagina - x) >= 2*cm:
             pdf.showPage()
     
     x += 0.5*cm
