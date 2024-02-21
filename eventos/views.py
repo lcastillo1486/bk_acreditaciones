@@ -1241,6 +1241,10 @@ def exportarPDFfinal(request, id):
 
     inventario_brazaletes = inventarioBrazalete.objects.filter(id_evento = id_evento, evento_cerrado = 1)
 
+    ### DATO ACREDITADOS POR COLOR ###########
+
+    total_acreditados_color = acreditados_def.objects.filter(id_evento_id=id_evento, acreditado = 1).values('color_zona').annotate(cantidad=Count('pk'))
+
     #grafico acreditados x acreditador
     acreditados_x_acreditador = acreditados_def.objects.filter(id_evento=id_evento).values('acreditado_por').annotate(total_acreditado=Count('pk', filter=Q(acreditado=True)))
 
@@ -1270,9 +1274,6 @@ def exportarPDFfinal(request, id):
     pos_x = (ancho_pagina - ancho_texto) / 2
     # Definir la posición vertical
     pos_y = altura_pagina - 2*cm
-
-    
-    
 
     # ESCRIBIR DATOS DEL PDF ####
     pdf.setFillColorRGB(0, 0, 1)
@@ -1319,29 +1320,17 @@ def exportarPDFfinal(request, id):
         acreditados_acredit = f"Acreditador: {acreditador['acreditado_por']}    -    Cantidad: {acreditador['cantidad']}"
         pdf.drawString(2*cm, altura_pagina - x, acreditados_acredit)
         x += 0.5*cm
-
-    x += 0.5*cm
-    pdf.setFillColorRGB(0, 0, 1)
-    pdf.drawString(2*cm, altura_pagina - x, "Inventario Inicial de Brazaletes:")
-    pdf.setFillColorRGB(0, 0, 0)
-    x += 0.5*cm
-    for brazalete in inventario_brazaletes:
-        total_por_zona = f'Zona: {brazalete.nombre_brazalete}    -    Cantidad: {brazalete.cantidad_brazalete}'
-        pdf.drawString(2*cm, altura_pagina - x, total_por_zona)
-        x += 0.5*cm
-        
-    x += 0.5*cm
-    pdf.setFillColorRGB(0, 0, 1)
-    pdf.drawString(2*cm, altura_pagina - x, "Inventario Final de Brazaletes:")
-    pdf.setFillColorRGB(0, 0, 0)
-    x += 0.5*cm
-    for brazalete_final in inventario_brazaletes:
-        total_restante = brazalete_final.cantidad_brazalete - brazalete_final.cantidad_entregada
-        total_por_zona_restante = f'Zona: {brazalete_final.nombre_brazalete}    - Cantidad entregada: {brazalete_final.cantidad_entregada} - Sobrante: {total_restante}'
-        pdf.drawString(2*cm, altura_pagina - x, total_por_zona_restante)
-        x += 0.5*cm
     
     x += 0.5*cm
+
+    pdf.setFillColorRGB(0, 0, 1)
+    pdf.drawString(2*cm, altura_pagina - x, "Total Acreditados por Color Brazalete:")
+    pdf.setFillColorRGB(0, 0, 0)
+    x += 0.5*cm
+    for color in total_acreditados_color:
+        acreditados_zona = f"Acreditador: {color['color_zona']}    -    Cantidad: {color['cantidad']}"
+        pdf.drawString(2*cm, altura_pagina - x, acreditados_zona)
+        x += 0.5*cm
     
     pdf.showPage() #final 
 
@@ -1360,7 +1349,7 @@ def exportarPDFfinal(request, id):
 
 
     return response
-
+@login_required
 def importaAdicionales(request, id_evento):
 
     if not request.user.is_superuser:
@@ -1405,7 +1394,7 @@ def importaAdicionales(request, id_evento):
                 nombre_persona=row['NOMBRES'],
                 apellido_persona=row['APELLIDOS'],
                 tipo_doc=row['TIPO_DOCUMENTO'],
-                numero_doc=row['NUMERO_DOCUMENTO'],
+                numero_doc=row['NUMERO_DOCUMENTO'].strip().replace(" ", ""),
                 cargo=row['CARGO Y O FUNCIÓN'],
                 zona_acceso=row['AREA_DE_TRABAJO'],
                 color_zona=row['COLOR_ZONA_BRAZALETE'],
