@@ -1322,11 +1322,11 @@ def exportarPDFfinal(request, id):
         pdf.drawString(2*cm, altura_pagina - x, acreditados_acredit)
         x += 0.5*cm
 
-         ### COMPROBAR SI NECESITA NUEVA PAGINA ##########
-        if (altura_pagina - x) >= 2*cm:
-            pdf.showPage()
-    
     x += 0.5*cm
+
+    pdf.showPage()
+
+    x = 2*cm
 
     pdf.setFillColorRGB(0, 0, 1)
     pdf.drawString(2*cm, altura_pagina - x, "Total Acreditados por Color Brazalete:")
@@ -1337,11 +1337,9 @@ def exportarPDFfinal(request, id):
         pdf.drawString(2*cm, altura_pagina - x, acreditados_zona)
         x += 0.5*cm
     
-    pdf.showPage() #final 
+    pdf.showPage()
+    #final 
 
-    # pdf.drawImage(grafico2,2*cm, altura_pagina - 3.5*cm, width=6*cm, height=5*cm)
-
-    # pdf.showPage()
 
     pdf.save()
 
