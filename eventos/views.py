@@ -1312,7 +1312,9 @@ def exportarPDFfinal(request, id):
         pdf.drawString(2*cm, altura_pagina - x, acreditados_zona)
         x += 0.5*cm
 
-    x += 0.5*cm
+    pdf.showPage() ##pagina 1#########
+
+    x = 2*cm
     pdf.setFillColorRGB(0, 0, 1)
     pdf.drawString(2*cm, altura_pagina - x, "Total Acreditados por Acreditador:")
     pdf.setFillColorRGB(0, 0, 0)
