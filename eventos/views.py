@@ -1324,22 +1324,20 @@ def exportarPDFfinal(request, id):
 
     x += 0.5*cm
 
-    pdf.showPage()
-
-    x = 2*cm
-
     pdf.setFillColorRGB(0, 0, 1)
     pdf.drawString(2*cm, altura_pagina - x, "Total Acreditados por Color Brazalete:")
     pdf.setFillColorRGB(0, 0, 0)
     x += 0.5*cm
     for color in total_acreditados_color:
-        acreditados_zona = f"Acreditador: {color['color_zona']}    -    Cantidad: {color['cantidad']}"
+        acreditados_zona = f"Zona: {color['color_zona']}    -    Cantidad: {color['cantidad']}"
         pdf.drawString(2*cm, altura_pagina - x, acreditados_zona)
         x += 0.5*cm
     
-    pdf.showPage()
-    #final 
+    pdf.showPage() #final 
 
+    # pdf.drawImage(grafico2,2*cm, altura_pagina - 3.5*cm, width=6*cm, height=5*cm)
+
+    # pdf.showPage()
 
     pdf.save()
 
