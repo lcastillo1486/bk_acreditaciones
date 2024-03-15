@@ -78,10 +78,6 @@
                 <th>
                     Estado Acreditación:
                 </th>
-                <th>
-
-                </th>
-
             </tr>
         </thead>
         <tbody>
@@ -111,11 +107,9 @@
                     </font>
                     {% endif %}
                 </td>
-                <td>
-
-
-
-                    
+            </tr>
+            <tr>
+                <td colspan="6">  
                     {% if c.acreditacion_activa == 1 %}
 
                     <form action='/importarExcelAdicionales/{{c.id}}' method="post" enctype="multipart/form-data">
