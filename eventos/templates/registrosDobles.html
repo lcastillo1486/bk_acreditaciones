@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    {% load static %}
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acreditación</title>
+</head>
+<style>
+    tr {
+            padding: 1px;
+            text-align: center;
+            border: 3px solid #7ed957;
+            /* Agregar bordes a las celdas */
+        }
+
+        .centrar {
+            text-align: center;
+        }
+
+        th {
+            color: #0047ab;
+            padding: 1px;
+            text-align: center;
+            border: 3px solid #7ed957;
+            /* Agregar bordes a las celdas */
+            background-color: rgb(216, 201, 201);
+        }
+</style>
+<body>
+    <div class="header">
+        <nav class="navbar navbar-expand-lg navbar-light" style="background-color:rgb(113, 164, 230);">
+            <div class="navbar-nav" style="margin-left: 20px;">
+                <img src="{% static 'logo.png' %}" width="30" height="30">
+                <a class="nav-item nav-link text-white" href='/buscarPersonal/' style="margin-left: 20px;">Buscar Personal</a>
+                <a class="nav-item nav-link text-white" href='/logout/' style="margin-left: 20px;">Cerrar Sesión</a>
+            </div>
+        </nav>
+    </div>
+    <div style="text-align: center; background: linear-gradient(to right, #0000ff, #00ff40);">
+        <h1><b>
+            <img src="{% static 'logo.png' %}" width="100" height="100" style="margin-top: 10px;">
+            <h2><font style="color: white;"><b>Sistema de Gestión de Acreditaciones</b></h2></font>
+            <h2><font style="color: red;"><b>Registros Duplicados</b></h2></font>
+      </div>
+
+      <div class="row">
+        <form method="post" action="/acreditacionMultiple/">
+            {% csrf_token %}
+        <div class="table-responsive">
+            <table class="table table-striped" style="margin: 0 auto; ">
+                <thead>
+                    <tr>
+                        <th>
+                            Nombres y apellidos:
+                        </th>
+                        <th>
+                            Tipo Documento:
+                        </th>
+                        <th>
+                            Número de Documento:
+                        </th>
+                        <th>
+                            Zona:
+                        </th>
+                        <th>
+                            Empresa:
+                        </th>
+                        <th>
+                            <button type="submit" id="boton-areditarmulti" style="margin-bottom: 10px;" class="btn btn-success">ACREDITAR</button><br>
+                            <input type="checkbox" id="checkTodo" onchange="toggleCheckboxes(this)">
+                            <label for="checkTodo">Seleccionar Todos</label>
+                        </th>
+                        
+                    </tr>
+                </thead>
+
+                <tbody>
+                        {% for c in duplicado %}
+                        <tr>
+                        <td>
+                            {{c.apellido_persona}} {{c.nombre_persona}}
+                        </td>
+                        <td>
+                            {{c.tipo_doc}}
+                        </td>
+                        <td>
+                           <font style="color: red;"> {{c.numero_doc}} </font>
+                        </td>
+                        <td>
+                            {{c.zona_acceso}}
+                        </td>
+                        <td>
+                            {{c.empresa}}
+                        <td>
+                            {% if c.acreditado %}
+                            <font style="color: green;">ACREDITADO</font>
+                            {% else %}
+                            <input type="checkbox" name="regitrosAcreditar" class="checkbox-item" value="{{c.id}}" onchange="toggleCheckboxes(this)">
+                            {% endif %}
+                        </td>                            
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleCheckboxes(checkbox) {
+            var checkboxes = document.getElementsByClassName('checkbox-item');
+            for (var i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = checkbox.checked;
+            }
+        }
+        </script>
+    
+</body>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</html>
