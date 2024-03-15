@@ -171,7 +171,7 @@
 
         document.getElementById('inicial').addEventListener('click', function (event) {
             event.preventDefault(); // Evita que se siga el enlace automáticamente
-            var confirmacion = confirm('!ATENCIóN¡ \n\ Si continúa, el sistema hará uso del último listado importado como definitivo. \n\ ¿Está seguro de ejecutar esta acción?');
+            var confirmacion = confirm('!ATENCIóN¡ \n\ Si continúa, se dará inicio al proceso de acreditación. \n\ ¿Está seguro de ejecutar esta acción?');
             if (confirmacion) {
                 // Si el usuario confirma, redirige a la URL o ejecuta la acción deseada
                 window.location.href = event.target.href; // Redirige a la URL del enlace
