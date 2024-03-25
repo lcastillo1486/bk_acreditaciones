@@ -259,7 +259,7 @@
             {% csrf_token %}
             <input type="number" id="number-input" name="documento">
             <br>
-            <button id="scanButton">Escanear</button>
+            <button onclick="openBarcodeScanner()">Abrir Lector de Código de Barras</button>
             <br>
             <h2 style="text-align: left;">Nombres:</h2>
             <input type="text" id="nombre-input" name="nombre">
@@ -411,24 +411,23 @@
         }
     </script>
     <script>
-        document.getElementById('scanButton').addEventListener('click', function () {
-            if ('BarcodeDetector' in window) {
-                const barcodeDetector = new BarcodeDetector();
-
-                barcodeDetector.detect()
-                    .then(barcodes => {
-                        for (const barcode of barcodes) {
-                            console.log('Código de barras detectado:', barcode.rawValue);
-                            // Aquí puedes enviar el código de barras a tu backend Django para su procesamiento
-                        }
+        function openBarcodeScanner() {
+            // Verifica si el navegador soporta la API del lector de código de barras
+            if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
+                // Abre el lector de código de barras
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+                    .then(function(stream) {
+                        // Aquí puedes manejar la lógica después de abrir el lector
+                        console.log('Lector de código de barras abierto correctamente');
                     })
-                    .catch(error => {
-                        console.error('Error al detectar código de barras:', error);
+                    .catch(function(error) {
+                        console.error('Error al abrir el lector de código de barras:', error);
                     });
             } else {
-                console.error('El navegador no soporta la API de lectura de código de barras.');
+                // Si el navegador no soporta la API del lector de código de barras
+                alert('Tu navegador no soporta la funcionalidad de lector de código de barras.');
             }
-        });
+        }
     </script>
 
     <!-- Contenido del mensaje emergente -->
