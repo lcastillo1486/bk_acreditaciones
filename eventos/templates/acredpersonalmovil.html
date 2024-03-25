@@ -234,7 +234,7 @@
 
 <body>
 
-    <div>
+    <div style="overflow-y: auto; max-height: 80vh;">
 
         <img src="{% static 'logo.png' %}" width="100" height="100" style="margin-top: 70px;">
 
@@ -460,13 +460,13 @@
         }
 
         // Iniciar la inicialización de QuaggaJS cuando la ventana se haya cargado completamente
-        window.addEventListener('load', function () {
-            initQuagga();
-        });
-        // document.getElementById('startScanButton').addEventListener('click',
-        // function() {
+        // window.addEventListener('load', function () {
         //     initQuagga();
         // });
+        document.getElementById('startScanButton').addEventListener('click',
+        function() {
+            initQuagga();
+        });
     </script>
 
     <!-- Contenido del mensaje emergente -->
