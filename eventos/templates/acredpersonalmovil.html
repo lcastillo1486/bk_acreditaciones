@@ -440,9 +440,9 @@
             });
 
             // Escuchar el evento de clic en el botón de escaneo
-            document.getElementById('startScanButton').addEventListener('click', function () {
-                Quagga.start();
-            });
+            // document.getElementById('startScanButton').addEventListener('click', function () {
+            //     Quagga.start();
+            // });
 
             // Escuchar el evento de detección de código de barras
             Quagga.onDetected(function (result) {
@@ -466,6 +466,7 @@
         document.getElementById('startScanButton').addEventListener('click',
         function() {
             initQuagga();
+            Quagga.start();
         });
     </script>
 
