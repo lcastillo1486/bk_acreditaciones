@@ -8,6 +8,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/quagga/dist/quagga.min.js"></script>
     <title>Sistema de Acreditación</title>
 </head>
 <style>
@@ -307,8 +308,8 @@
         <!-- Contenido si hay mensajes de error -->
         {% endif %}
         {% endif %}
-        <button onclick="openBarcodeScanner()">Abrir Lector de Código de Barras</button>
-        <video id="video" width="100%" height="auto" autoplay></video>
+        <button onclick="startCamera()">Abrir Lector de Código de Barras</button>
+        <video id="video" width="80%" height="auto" autoplay></video>
         <a href='/logout/' id="salir" class="btn btn-danger w-100" style="margin-top: 15px;">Salir</a>
     </div>
 
@@ -410,25 +411,78 @@
             modal.style.display = 'none';
         }
     </script>
-    <script>
-        // Función para abrir el lector de códigos de barras
-        function openBarcodeScanner() {
-            // Elemento de vídeo para mostrar la vista de la cámara
-            var video = document.getElementById('video');
-            
-            // Solicitar acceso a la cámara del dispositivo
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-            .then(function(stream) {
-                // Asignar el flujo de video al elemento de vídeo
-                video.srcObject = stream;
-                console.log('Lector de códigos de barras abierto correctamente');
-            })
-            .catch(function(error) {
-                // Manejar errores al abrir el lector de códigos de barras
-                console.error('Error al abrir el lector de códigos de barras:', error);
-            });
-        }
-    </script>
+        <script>
+            // Función para iniciar la cámara
+            function startCamera() {
+                var video = document.getElementById('video');
+                // Solicitar acceso a la cámara del dispositivo
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+                .then(function(stream) {
+                    // Mostrar la vista de la cámara
+                    video.style.display = 'block';
+                    video.srcObject = stream;
+                    video.play();
+                    console.log('Cámara iniciada correctamente');
+                    // Iniciar la detección de código de barras
+                    startBarcodeDetection();
+                })
+                .catch(function(error) {
+                    // Manejar errores al abrir la cámara
+                    console.error('Error al iniciar la cámara:', error);
+                });
+            }
+    
+            // Función para iniciar la detección de código de barras
+            function startBarcodeDetection() {
+                Quagga.init({
+                    inputStream: {
+                        name: "Live",
+                        type: "LiveStream",
+                        target: document.getElementById('video'),
+                        constraints: {
+                            facingMode: "environment"
+                        },
+                    },
+                    decoder: {
+                        readers: ["ean_reader"] // Tipo de código de barras a detectar (EAN-13)
+                    }
+                }, function(err) {
+                    if (err) {
+                        console.error('Error al iniciar Quagga:', err);
+                        return;
+                    }
+                    Quagga.start();
+                    console.log('Quagga iniciado correctamente');
+                });
+    
+                // Escuchar el evento de detección de código de barras
+                Quagga.onDetected(function(result) {
+                    var code = result.codeResult.code;
+                    console.log('Código de barras detectado:', code);
+    
+                    // Enviar el código de barras a tu vista Django (aquí se muestra un ejemplo con una solicitud POST)
+                    fetch('/tu-vista-django/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ barcode: code })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error al enviar el código de barras a Django');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Respuesta de Django:', data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+            }
+        </script>
 
     <!-- Contenido del mensaje emergente -->
     <div id="modal">
