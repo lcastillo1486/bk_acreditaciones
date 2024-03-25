@@ -444,8 +444,12 @@
                 Quagga.onDetected(function(result) {
                     var code = result.codeResult.code;
                     console.log('Código de barras detectado:', code);
+                    // asiga al input
+                    document.getElementById('number-input').value = code;
+                    // mando el enter
+                    document.getElementById('number-input').dispatchEvent(new KeyboardEvent('keypress',{ 'key':'Enter'}));
                     // Aquí puedes enviar el código de barras a tu servidor o realizar otras acciones con él
-                    window.location.href = 'https://acreditaciones.onrender.com/eventos/';
+                    
                 });
             }
     
