@@ -259,8 +259,6 @@
             {% csrf_token %}
             <input type="number" id="number-input" name="documento">
             <br>
-            <button onclick="openBarcodeScanner()">Abrir Lector de Código de Barras</button>
-            <br>
             <h2 style="text-align: left;">Nombres:</h2>
             <input type="text" id="nombre-input" name="nombre">
             <h2 style="text-align: left;">Apellidos:</h2>
@@ -309,6 +307,7 @@
         <!-- Contenido si hay mensajes de error -->
         {% endif %}
         {% endif %}
+        <button onclick="openBarcodeScanner()">Abrir Lector de Código de Barras</button>
         <a href='/logout/' id="salir" class="btn btn-danger w-100" style="margin-top: 15px;">Salir</a>
     </div>
 
