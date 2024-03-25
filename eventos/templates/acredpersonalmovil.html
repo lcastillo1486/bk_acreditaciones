@@ -310,8 +310,8 @@
         {% endif %}
         <a href='/logout/' id="salir" class="btn btn-danger w-100" style="margin-top: 15px;">Salir</a>
 
-        <div id="scanner" style="border: 2px solid #e01414;">
-            <button id="startScanButton">Iniciar escaneo</button>
+        <div id="scanner">
+            <button id="startScanButton">Scaner D.N.I</button>
         </div>
     </div>
 
@@ -436,9 +436,10 @@
                     return;
                 }
                 console.log('Quagga iniciado correctamente');
-                document.getElementById('startScanButton').disabled = false; // Habilitar el botón de escaneo
+                document.getElementById('startScanButton').disabled = false;
+                Quagga.start(); 
             });
-
+            
             // Escuchar el evento de clic en el botón de escaneo
             // document.getElementById('startScanButton').addEventListener('click', function () {
             //     Quagga.start();
@@ -466,7 +467,7 @@
         document.getElementById('startScanButton').addEventListener('click',
         function() {
             initQuagga();
-            Quagga.start();
+            // Quagga.start();
         });
     </script>
 
