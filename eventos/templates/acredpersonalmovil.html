@@ -234,7 +234,7 @@
 
 <body>
 
-    <div style="overflow-y: auto; max-height: 80vh;">
+    <div style="overflow-y: auto; max-height: 100vh;">
 
         <img src="{% static 'logo.png' %}" width="100" height="100" style="margin-top: 70px;">
 
@@ -310,7 +310,7 @@
         {% endif %}
         <a href='/logout/' id="salir" class="btn btn-danger w-100" style="margin-top: 15px;">Salir</a>
 
-        <div id="scanner" style="border: 2px solid #e01414;">
+        <div id="scanner">
             <button id="startScanButton">Iniciar escaneo</button>
         </div>
     </div>
@@ -437,6 +437,7 @@
                 }
                 console.log('Quagga iniciado correctamente');
                 document.getElementById('startScanButton').disabled = false; // Habilitar el botón de escaneo
+                Quagga.start();
             });
 
             // Escuchar el evento de clic en el botón de escaneo
@@ -466,7 +467,6 @@
         document.getElementById('startScanButton').addEventListener('click',
         function() {
             initQuagga();
-            Quagga.start();
         });
     </script>
 
