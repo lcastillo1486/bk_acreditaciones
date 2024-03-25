@@ -456,13 +456,13 @@
             }
     
             // Iniciar la inicialización de QuaggaJS cuando la ventana se haya cargado completamente
-            // window.addEventListener('load', function() {
-            //     initQuagga();
-            // });
-            document.getElementById('startScanButton').addEventListener('click',
-            function() {
+            window.addEventListener('load', function() {
                 initQuagga();
             });
+            // document.getElementById('startScanButton').addEventListener('click',
+            // function() {
+            //     initQuagga();
+            // });
         </script>
 
     <!-- Contenido del mensaje emergente -->
