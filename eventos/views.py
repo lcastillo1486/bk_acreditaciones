@@ -134,8 +134,8 @@ def importarExcel(request, id_evento):
                 numero_doc=row['NUMERO_DOCUMENTO'].strip().replace(" ", ""),
                 cargo=row['CARGO Y O FUNCIÓN'],
                 zona_acceso=row['AREA_DE_TRABAJO'],
-                color_zona = row['COLOR_ZONA_BRAZALETE'].strip().replace(" ", ""),
-                empresa=row['EMPRESA'],
+                color_zona = row['COLOR_ZONA_BRAZALETE'].strip(),
+                empresa=row['EMPRESA'].strip(),
                 id_evento_id = id_evento
             )
             registros.append(registro)
@@ -1408,8 +1408,8 @@ def importaAdicionales(request, id_evento):
                 numero_doc=row['NUMERO_DOCUMENTO'].strip().replace(" ", ""),
                 cargo=row['CARGO Y O FUNCIÓN'],
                 zona_acceso=row['AREA_DE_TRABAJO'],
-                color_zona=row['COLOR_ZONA_BRAZALETE'],
-                empresa=row['EMPRESA'],
+                color_zona=row['COLOR_ZONA_BRAZALETE'].strip(),
+                empresa=row['EMPRESA'].strip(),
                 id_evento_id = id_evento
             )
             registros.append(registro)
