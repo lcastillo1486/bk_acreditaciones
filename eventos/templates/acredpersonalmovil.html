@@ -308,6 +308,7 @@
         {% endif %}
         {% endif %}
         <button onclick="openBarcodeScanner()">Abrir Lector de Código de Barras</button>
+        <video id="video" width="100%" height="auto" autoplay></video>
         <a href='/logout/' id="salir" class="btn btn-danger w-100" style="margin-top: 15px;">Salir</a>
     </div>
 
@@ -410,22 +411,22 @@
         }
     </script>
     <script>
-        function openBarcodeScanner() {
-            // Verifica si el navegador soporta la API del lector de código de barras
-            if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
-                // Abre el lector de código de barras
-                navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-                    .then(function(stream) {
-                        // Aquí puedes manejar la lógica después de abrir el lector
-                        console.log('Lector de código de barras abierto correctamente');
-                    })
-                    .catch(function(error) {
-                        console.error('Error al abrir el lector de código de barras:', error);
-                    });
-            } else {
-                // Si el navegador no soporta la API del lector de código de barras
-                alert('Tu navegador no soporta la funcionalidad de lector de código de barras.');
-            }
+        // Función para abrir el lector de códigos de barras
+        function openBarcodeReader() {
+            // Elemento de vídeo para mostrar la vista de la cámara
+            var video = document.getElementById('video');
+            
+            // Solicitar acceso a la cámara del dispositivo
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+            .then(function(stream) {
+                // Asignar el flujo de video al elemento de vídeo
+                video.srcObject = stream;
+                console.log('Lector de códigos de barras abierto correctamente');
+            })
+            .catch(function(error) {
+                // Manejar errores al abrir el lector de códigos de barras
+                console.error('Error al abrir el lector de códigos de barras:', error);
+            });
         }
     </script>
 
