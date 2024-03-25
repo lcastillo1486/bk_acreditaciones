@@ -310,11 +310,11 @@
         {% endif %}
         <a href='/logout/' id="salir" class="btn btn-danger w-100" style="margin-top: 15px;">Salir</a>
 
-        <div id="scanner" style="width: 100px; height: 100px;border: 2px solid #e01414;">
+        <div id="scanner" style="border: 2px solid #e01414;">
             <button id="startScanButton">Iniciar escaneo</button>
         </div>
     </div>
-    
+
 
 
 
@@ -413,59 +413,61 @@
             modal.style.display = 'none';
         }
     </script>
-        <script>
-            // Función para inicializar QuaggaJS y escanear códigos de barras
-            function initQuagga() {
-                Quagga.init({
-                    inputStream: {
-                        name: "Live",
-                        type: "LiveStream",
-                        target: document.querySelector('#scanner'),
-                        constraints: {
-                            facingMode: "environment" // Utilizar cámara trasera (si está disponible)
-                        },
+    <script>
+        // Función para inicializar QuaggaJS y escanear códigos de barras
+        function initQuagga() {
+            Quagga.init({
+                inputStream: {
+                    name: "Live",
+                    type: "LiveStream",
+                    target: document.querySelector('#scanner'),
+                    constraints: {
+                        facingMode: "environment" // Utilizar cámara trasera (si está disponible)
                     },
-                    decoder: {
-                        readers: ["ean_reader"] // Tipo de código de barras a detectar (EAN-13)
-                    }
-                }, function(err) {
-                    if (err) {
-                        console.error('Error al iniciar Quagga:', err);
-                        return;
-                    }
-                    console.log('Quagga iniciado correctamente');
-                    document.getElementById('startScanButton').disabled = false; // Habilitar el botón de escaneo
-                });
-    
-                // Escuchar el evento de clic en el botón de escaneo
-                document.getElementById('startScanButton').addEventListener('click', function() {
-                    Quagga.start();
-                });
-    
-                // Escuchar el evento de detección de código de barras
-                Quagga.onDetected(function(result) {
-                    var code = result.codeResult.code;
-                    console.log('Código de barras detectado:', code);
-                    // asiga al input
-                    document.getElementById('number-input').value = code;
-                    // mando el enter
-                    // document.getElementById('number-input').dispatchEvent(new KeyboardEvent('keypress',{ 'key':'Enter'}));
-                    //presiona boton buscar
-                    document.getElementById('boton-buscar').click();
-                    // Aquí puedes enviar el código de barras a tu servidor o realizar otras acciones con él
-                    
-                });
-            }
-    
-            // Iniciar la inicialización de QuaggaJS cuando la ventana se haya cargado completamente
-            window.addEventListener('load', function() {
-                initQuagga();
+                },
+                decoder: {
+                    readers: ["ean_reader",
+                        "code_128_reader",
+                        "code_39_reader"] // Tipo de código de barras a detectar (EAN-13)
+                }
+            }, function (err) {
+                if (err) {
+                    console.error('Error al iniciar Quagga:', err);
+                    return;
+                }
+                console.log('Quagga iniciado correctamente');
+                document.getElementById('startScanButton').disabled = false; // Habilitar el botón de escaneo
             });
-            // document.getElementById('startScanButton').addEventListener('click',
-            // function() {
-            //     initQuagga();
-            // });
-        </script>
+
+            // Escuchar el evento de clic en el botón de escaneo
+            document.getElementById('startScanButton').addEventListener('click', function () {
+                Quagga.start();
+            });
+
+            // Escuchar el evento de detección de código de barras
+            Quagga.onDetected(function (result) {
+                var code = result.codeResult.code;
+                console.log('Código de barras detectado:', code);
+                // asiga al input
+                document.getElementById('number-input').value = code;
+                // mando el enter
+                // document.getElementById('number-input').dispatchEvent(new KeyboardEvent('keypress',{ 'key':'Enter'}));
+                //presiona boton buscar
+                document.getElementById('boton-buscar').click();
+                // Aquí puedes enviar el código de barras a tu servidor o realizar otras acciones con él
+
+            });
+        }
+
+        // Iniciar la inicialización de QuaggaJS cuando la ventana se haya cargado completamente
+        window.addEventListener('load', function () {
+            initQuagga();
+        });
+        // document.getElementById('startScanButton').addEventListener('click',
+        // function() {
+        //     initQuagga();
+        // });
+    </script>
 
     <!-- Contenido del mensaje emergente -->
     <div id="modal">
