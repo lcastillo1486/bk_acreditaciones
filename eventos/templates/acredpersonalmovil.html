@@ -309,7 +309,7 @@
         {% endif %}
         {% endif %}
         <button id="startScanButton">Iniciar escaneo</button>
-        <div id="scanner" style="width: 300px; height: 200px; margin: 0; border: 2px solid #ccc;"></div>
+        <div id="scanner" style="width: 100px; height: 100px; margin: 0; border: 2px solid #ccc;"></div>
         <a href='/logout/' id="salir" class="btn btn-danger w-100" style="margin-top: 15px;">Salir</a>
     </div>
 
@@ -450,7 +450,11 @@
             }
     
             // Iniciar la inicialización de QuaggaJS cuando la ventana se haya cargado completamente
-            window.addEventListener('load', function() {
+            // window.addEventListener('load', function() {
+            //     initQuagga();
+            // });
+            document.getElementById('startScanButton').addEventListener('click',
+            function() {
                 initQuagga();
             });
         </script>
