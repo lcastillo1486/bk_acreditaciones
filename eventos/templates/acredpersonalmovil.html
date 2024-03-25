@@ -447,7 +447,9 @@
                     // asiga al input
                     document.getElementById('number-input').value = code;
                     // mando el enter
-                    document.getElementById('number-input').dispatchEvent(new KeyboardEvent('keypress',{ 'key':'Enter'}));
+                    // document.getElementById('number-input').dispatchEvent(new KeyboardEvent('keypress',{ 'key':'Enter'}));
+                    //presiona boton buscar
+                    document.getElementById('boton-buscar').click();
                     // Aquí puedes enviar el código de barras a tu servidor o realizar otras acciones con él
                     
                 });
