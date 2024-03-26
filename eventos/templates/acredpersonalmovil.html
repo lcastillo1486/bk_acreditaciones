@@ -9,6 +9,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/quagga"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@zxing/library@0.19.0"></script>
     <title>Sistema de Acreditación</title>
 </head>
 <style>
@@ -275,9 +277,11 @@
 
             <!-- <a href='##' class="btn btn-success" id="boton-buscar">ACEPTAR</a> -->
         </form>
-        <div id="scanner" style="margin-top: 5px;">
+        <!-- <div id="scanner" style="margin-top: 5px;">
             <button id="startScanButton">Scanear D.N.I</button>
-        </div>
+        </div> -->
+        <video id="video" width="300" height="200" autoplay></video>
+        <canvas id="canvas" style="display: none;"></canvas>
         <!-- <button id="start-scan">ESCANEAR</button>
         <video id="scanner" style="display: none;"></video> -->
         <h2>
@@ -415,7 +419,7 @@
             modal.style.display = 'none';
         }
     </script>
-    <script>
+    <!-- <script>
         // Función para inicializar QuaggaJS y escanear códigos de barras
         function initQuagga() {
             Quagga.init({
@@ -480,7 +484,30 @@
         function() {
             initQuagga();
         });
+    </script> -->
+
+    <script>
+        const codeReader = new ZXing.BrowserBarcodeReader();
+        const videoElement = document.getElementById('video');
+        const canvasElement = document.getElementById('canvas');
+        
+        codeReader.decodeFromVideoDevice(undefined, 'video', (result, error) => {
+            if (result) {
+                console.log('Barcode detected and processed:', result.text);
+                // Aquí puedes realizar la acción deseada con el código de barras capturado
+                var beepSound = document.getElementById("beepSound");
+                beepSound.play();
+                // asiga al input
+                document.getElementById('number-input').value = result.text;
+                //manda enter
+                document.getElementById('boton-buscar').click();
+            }
+            if (error) {
+                console.error(error);
+            }
+        });
     </script>
+
 
     <!-- Contenido del mensaje emergente -->
     <div id="modal">
