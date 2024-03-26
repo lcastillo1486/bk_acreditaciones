@@ -491,22 +491,28 @@
         const codeReader = new ZXing.BrowserBarcodeReader();
         const videoElement = document.getElementById('video');
         const canvasElement = document.getElementById('canvas');
-        
-        document.getElementById('startScanButton').addEventListener('click', function() {
-            codeReader.decodeFromVideoDevice(undefined, 'video', (result, error) => {
-                if (result) {
-                    console.log('Barcode detected and processed:', result.text);
-                    var beepSound = document.getElementById("beepSound");
-                beepSound.play();
-                // asiga al input
-                document.getElementById('number-input').value = result.text;
-                //manda enter
-                document.getElementById('boton-buscar').click();
-                    // Aquí puedes realizar la acción deseada con el código de barras capturado
-                }
-                if (error) {
-                    console.error(error);
-                }
+
+        document.getElementById('startScanButton').addEventListener('click', function () {
+            navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
+                videoElement.srcObject = stream;
+                videoElement.play();
+                codeReader.decodeFromVideoDevice(undefined, 'video', (result, error) => {
+                    if (result) {
+                        console.log('Barcode detected and processed:', result.text);
+                        var beepSound = document.getElementById("beepSound");
+                        beepSound.play();
+                        // asiga al input
+                        document.getElementById('number-input').value = result.text;
+                        //manda enter
+                        document.getElementById('boton-buscar').click();
+                        // Aquí puedes realizar la acción deseada con el código de barras capturado
+                    }
+                    if (error) {
+                        console.error(error);
+                    }
+                });
+            }).catch(function (error) {
+                console.error('Error accessing camera:', error);
             });
         });
     </script>
