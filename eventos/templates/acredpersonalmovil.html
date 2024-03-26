@@ -237,6 +237,9 @@
     <div style="overflow-y: auto; max-height: 100vh;">
 
         <img src="{% static 'logo.png' %}" width="100" height="100" style="margin-top: 70px;">
+        <audio id="beepSound" preload="auto" style="display:none">
+            <source src="{% static 'beep.mp3' %}" type="audio/mpeg">
+        </audio>
 
         <h2>Sistema de Gestión de Acreditaciones</h2>
         {% if messages %}
@@ -425,13 +428,17 @@
                     },
                 },
                 locator:{
-                    patchSize:"small"
+                    patchSize:"small",
+                    halfSample: true
                 },
                 decoder: {
                     readers: ["ean_reader",
                         "code_128_reader",
                         "code_39_reader"] // Tipo de código de barras a detectar (EAN-13)
-                }
+                },
+                numOfWorkers:4,
+                locate:true,
+                frequency:10
             }, function (err) {
                 if (err) {
                     console.error('Error al iniciar Quagga:', err);
@@ -451,6 +458,8 @@
             Quagga.onDetected(function (result) {
                 var code = result.codeResult.code;
                 console.log('Código de barras detectado:', code);
+                var beepSound = document.getElementById("beepSound");
+                beepSound.play();
                 // asiga al input
                 document.getElementById('number-input').value = code;
                 // mando el enter
