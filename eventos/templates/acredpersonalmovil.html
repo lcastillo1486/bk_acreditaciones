@@ -424,6 +424,8 @@
                     type: "LiveStream",
                     target: document.querySelector('#scanner'),
                     constraints: {
+                        width:1280,
+                        height:720,
                         facingMode: "environment" // Utilizar cámara trasera (si está disponible)
                     },
                 },
@@ -432,9 +434,8 @@
                     halfSample: true
                 },
                 decoder: {
-                    readers: ["ean_reader",
-                        "code_128_reader",
-                        "code_39_reader"] // Tipo de código de barras a detectar (EAN-13)
+                    readers: ["code_128_reader",
+                        "code_39_reader"] 
                 },
                 numOfWorkers:4,
                 locate:true,
