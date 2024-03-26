@@ -280,6 +280,7 @@
         <!-- <div id="scanner" style="margin-top: 5px;">
             <button id="startScanButton">Scanear D.N.I</button>
         </div> -->
+        <button id="startScanButton">Scanear D.N.I</button>
         <video id="video" width="300" height="200" autoplay></video>
         <canvas id="canvas" style="display: none;"></canvas>
         <!-- <button id="start-scan">ESCANEAR</button>
@@ -491,20 +492,22 @@
         const videoElement = document.getElementById('video');
         const canvasElement = document.getElementById('canvas');
         
-        codeReader.decodeFromVideoDevice(undefined, 'video', (result, error) => {
-            if (result) {
-                console.log('Barcode detected and processed:', result.text);
-                // Aquí puedes realizar la acción deseada con el código de barras capturado
-                var beepSound = document.getElementById("beepSound");
+        document.getElementById('startScanButton').addEventListener('click', function() {
+            codeReader.decodeFromVideoDevice(undefined, 'video', (result, error) => {
+                if (result) {
+                    console.log('Barcode detected and processed:', result.text);
+                    var beepSound = document.getElementById("beepSound");
                 beepSound.play();
                 // asiga al input
                 document.getElementById('number-input').value = result.text;
                 //manda enter
                 document.getElementById('boton-buscar').click();
-            }
-            if (error) {
-                console.error(error);
-            }
+                    // Aquí puedes realizar la acción deseada con el código de barras capturado
+                }
+                if (error) {
+                    console.error(error);
+                }
+            });
         });
     </script>
 
