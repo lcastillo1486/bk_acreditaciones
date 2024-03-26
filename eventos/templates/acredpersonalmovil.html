@@ -279,7 +279,7 @@
         <div id="scanner" style="margin-top: 5px;">
             <button id="startScanButton">Scanear D.N.I</button>
         </div>
-        
+
         <!-- <button id="start-scan">ESCANEAR</button>
         <video id="scanner" style="display: none;"></video> -->
         <h2>
@@ -318,12 +318,6 @@
         {% endif %}
         <a href='/logout/' id="salir" class="btn btn-danger w-100" style="margin-top: 15px;">Salir</a>
     </div>
-    <div style="overflow-y: auto; max-height: 100vh;">
-    aaaaaaaaaaaaaaaaaaaaaaaaaa
-    </div>
-
-
-
 
     <script>
         function addNumber(number) {
@@ -429,22 +423,33 @@
                     type: "LiveStream",
                     target: document.querySelector('#scanner'),
                     constraints: {
-                        width:1280,
-                        height:720,
+                        width: 1280,
+                        height: 720,
                         facingMode: "environment" // Utilizar cámara trasera (si está disponible)
                     },
                 },
-                locator:{
-                    patchSize:"medium",
+                locator: {
+                    patchSize: "medium",
                     halfSample: true
                 },
                 decoder: {
                     readers: ["code_128_reader",
-                        "code_39_reader",] 
+                        "code_39_reader",
+                        "ean_reader",
+                        "ean_8_reader",
+                        "ean_extended-reader",
+                        "code_39_vin_reader",
+                        "code_93_reader",
+                        "code_32_reader",
+                        "codebar_reader",
+                        "upc_reader",
+                        "2of5_reader",
+                        "code_11_reader",
+                        "codabar_reader"]
                 },
-                numOfWorkers:4,
-                locate:true,
-                frequency:20
+                numOfWorkers: 4,
+                locate: true,
+                frequency: 20
             }, function (err) {
                 if (err) {
                     console.error('Error al iniciar Quagga:', err);
@@ -482,12 +487,12 @@
         //     initQuagga();
         // });
         document.getElementById('startScanButton').addEventListener('click',
-        function() {
-            initQuagga();
-        });
+            function () {
+                initQuagga();
+            });
     </script>
 
-    
+
 
 
     <!-- Contenido del mensaje emergente -->
