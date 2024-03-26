@@ -423,14 +423,14 @@
                     type: "LiveStream",
                     target: document.querySelector('#scanner'),
                     constraints: {
-                        width: 480,
-                        height: 360,
+                        width: 1080,
+                        height: 720,
                         facingMode: "environment" // Utilizar cámara trasera (si está disponible)
                     },
                     
                 },
                 locator: {
-                    patchSize: "large",
+                    patchSize: "medium",
                     halfSample: true
                 },
                 decoder: {
