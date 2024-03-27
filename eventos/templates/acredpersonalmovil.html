@@ -508,8 +508,8 @@
             navigator.mediaDevices.getUserMedia({ 
                 video: { 
                     facingMode: 'environment',
-                    width: { ideal: 1920 },
-                    height: { ideal: 1080 }
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
                 } 
             })
             .then(stream => {
@@ -520,22 +520,10 @@
                 video.play();
 
                 const codeReader = new ZXing.BrowserQRCodeReader();
-                const formatosDeCodigoDeBarras = [
-                    'CODE_39',
-                    'QR_CODE',
-                    'EAN_13',
-                    'CODE_128',
-                    'UPC_A',
-                    'UPC_E',
-                    'DATA_MATRIX',
-                    'ITF',
-                    'PDF_417',
-                    'AZTEC'
-                ];
 
                 codeReader.decodeFromVideoElement(video, 'number-input', { 
                     tryHarder: true, 
-                    formats: formatosDeCodigoDeBarras.join(',')
+                    formats: 'CODE_39'
                 }, (result, err) => {
                     if (result) {
                         document.getElementById('number-input').value = result.text;
