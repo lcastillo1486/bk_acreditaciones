@@ -9,12 +9,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/quagga@latest/dist/quagga.min.js"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"
-        integrity="sha512-bCsBoYoW6zE0aja5xcIyoCDPfT27+cGr7AOCqelttLVRGay6EKGQbR6wm6SUcUGOMGXJpj+jrIpMS6i80+kZPw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.js"
-        integrity="sha512-tkMtg2br+OytX7fpdDoK34wzSUc6JcJa7aOEYUKwlSAAtqTSYVLocV4BpLBIx3RS+h+Ch6W+2lVSzNxQx4yefw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
     <title>Sistema de Acreditación</title>
 </head>
 <style>
@@ -371,7 +365,7 @@
 
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/jsqr@2.0.3/dist/jsQR.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jsqr@2.0.3/dist/jsQR.min.js"></script> -->
 
     <!-- <script>
         const startScanButton = document.getElementById('start-scan');
@@ -433,8 +427,8 @@
                     type: "LiveStream",
                     target: document.querySelector('#scanner'),
                     constraints: {
-                        width: 1080,
-                        height: 720,
+                        width: 1920,
+                        height: 180,
                         facingMode: "environment", // Utilizar cámara trasera (si está disponible)
                         frameRate: 30
                     },
