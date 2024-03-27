@@ -284,7 +284,7 @@
 
         
         
-        <div id="scanner" style="margin-top: 5px; margin-bottom: 10px; width: 400px; height: 300px; overflow: hidden; ">
+        <div id="scanner" style="margin-top: 5px; margin-bottom: 10px; width: 400px; height: 400px; overflow: hidden; ">
             <button id="startScanButton">Scanear D.N.I</button><br>
         </div>
             <!-- <video id="scanner" style="margin-top: 5px; margin-bottom: 5px; width: 640; height: 480;" autoplay></video> -->
@@ -435,7 +435,8 @@
                     constraints: {
                         width: 1024,
                         height: 768,
-                        facingMode: "environment" // Utilizar cámara trasera (si está disponible)
+                        facingMode: "environment", // Utilizar cámara trasera (si está disponible)
+                        frameRate:30 
                     },
                     area: { // defines rectangle of the detection/localization area
                         top: "0%",    // top offset
@@ -463,7 +464,7 @@
                 },
                 numOfWorkers: 4,
                 locate: true,
-                frequency: 20
+                frequency: 2
             }, function (err) {
                 if (err) {
                     console.error('Error al iniciar Quagga:', err);
