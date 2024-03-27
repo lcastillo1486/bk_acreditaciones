@@ -8,7 +8,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/quagga"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/quagga"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"
+        integrity="sha512-bCsBoYoW6zE0aja5xcIyoCDPfT27+cGr7AOCqelttLVRGay6EKGQbR6wm6SUcUGOMGXJpj+jrIpMS6i80+kZPw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.js"
+        integrity="sha512-tkMtg2br+OytX7fpdDoK34wzSUc6JcJa7aOEYUKwlSAAtqTSYVLocV4BpLBIx3RS+h+Ch6W+2lVSzNxQx4yefw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <title>Sistema de Acreditación</title>
 </head>
 <style>
@@ -423,11 +429,17 @@
                     type: "LiveStream",
                     target: document.querySelector('#scanner'),
                     constraints: {
-                        width: 360,
+                        width: 640,
                         height: 480,
                         facingMode: "environment" // Utilizar cámara trasera (si está disponible)
                     },
-                    
+                    area: { // defines rectangle of the detection/localization area
+                        top: "0%",    // top offset
+                        right: "0%",  // right offset
+                        left: "0%",   // left offset
+                        bottom: "0%"  // bottom offset
+                    },
+
                 },
                 locator: {
                     patchSize: "medium",
@@ -438,7 +450,7 @@
                         "code_39_reader",
                         "ean_reader"
                     ],
-                    
+
                 },
                 numOfWorkers: 4,
                 locate: true,
