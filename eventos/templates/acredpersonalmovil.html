@@ -527,9 +527,13 @@
                 }, (result, err) => {
                     if (result) {
                         document.getElementById('number-input').value = result.text;
+                        var beepSound = document.getElementById("beepSound");
+                        beepSound.play();
                     }
                     if (err && !(err instanceof ZXing.NotFoundException)) {
                         console.error(err);
+                        var beepSound = document.getElementById("beepSound");
+                        beepSound.play();
                     }
                 });
             })
