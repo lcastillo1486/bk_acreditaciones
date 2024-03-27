@@ -284,7 +284,9 @@
 
 
 
-        <div id="scanner" style="margin-top: 5px; margin-bottom: 10px; overflow: hidden; ">
+        <div id="contiene" style="margin-top: 5px; margin-bottom: 10px; overflow: hidden; ">
+            <video id="preview"></video>
+            <div id="scanArea"></div>
             <button id="startScanButton">Scanear D.N.I</button><br>
         </div>
         <!-- <video id="scanner" style="margin-top: 5px; margin-bottom: 5px; width: 640; height: 480;" autoplay></video> -->
@@ -505,39 +507,26 @@
     
     <script>
         document.getElementById('startScanButton').addEventListener('click', function() {
-            navigator.mediaDevices.getUserMedia({ 
-                video: { 
-                    facingMode: 'environment',
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 }
-                } 
-            })
-            .then(stream => {
-                const video = document.createElement('video');
-                video.srcObject = stream;
-                video.setAttribute('playsinline', true);
-                document.getElementById('scanner').appendChild(video);
-                video.play();
+            const codeReader = new ZXing.BrowserBarcodeReader();
+            const video = document.getElementById('preview');
+            const scanArea = document.getElementById('scanArea');
 
-                const codeReader = new ZXing.BrowserBarcodeReader();
-
-                codeReader.decodeFromVideoElement(video, 'number-input', { 
-                    tryHarder: true, 
-                    formats: 'CODE_39'
-                }, (result, err) => {
-                    if (result) {
-                        document.getElementById('number-input').value = result.text;
-                        var beepSound = document.getElementById("beepSound");
-                        beepSound.play();
-                    }
-                    if (err && !(err instanceof ZXing.NotFoundException)) {
-                        console.error(err);
-                        var beepSound = document.getElementById("beepSound");
-                        beepSound.play();
-                    }
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then((stream) => {
+                    video.srcObject = stream;
+                    video.play();
+                    codeReader.decodeFromVideoElement(video, 'number-input', (result, error) => {
+                        if (result) {
+                            document.getElementById('number-input').value = result.text;
+                        }
+                        if (error) {
+                            console.error(error);
+                        }
+                    });
+                })
+                .catch((err) => {
+                    console.error('Error accessing the camera:', err);
                 });
-            })
-            .catch(err => console.error('getUserMedia error:', err));
         });
     </script>
 
