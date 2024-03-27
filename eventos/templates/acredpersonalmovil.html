@@ -519,7 +519,7 @@
                 document.getElementById('scanner').appendChild(video);
                 video.play();
 
-                const codeReader = new ZXing.BrowserQRCodeReader();
+                const codeReader = new ZXing.BrowserBarcodeReader();
 
                 codeReader.decodeFromVideoElement(video, 'number-input', { 
                     tryHarder: true, 
