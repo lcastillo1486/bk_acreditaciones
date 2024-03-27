@@ -282,13 +282,13 @@
             <!-- <a href='##' class="btn btn-success" id="boton-buscar">ACEPTAR</a> -->
         </form>
 
-        
-        
+
+
         <div id="scanner" style="margin-top: 5px; margin-bottom: 10px; overflow: hidden; ">
             <button id="startScanButton">Scanear D.N.I</button><br>
         </div>
-            <!-- <video id="scanner" style="margin-top: 5px; margin-bottom: 5px; width: 640; height: 480;" autoplay></video> -->
-        
+        <!-- <video id="scanner" style="margin-top: 5px; margin-bottom: 5px; width: 640; height: 480;" autoplay></video> -->
+
 
         <!-- <button id="start-scan">ESCANEAR</button>
         <video id="scanner" style="display: none;"></video> -->
@@ -436,7 +436,7 @@
                         width: 1080,
                         height: 720,
                         facingMode: "environment", // Utilizar cámara trasera (si está disponible)
-                        frameRate:30 
+                        frameRate: 30
                     },
                     area: { // defines rectangle of the detection/localization area
                         top: "0%",    // top offset
@@ -451,15 +451,9 @@
                     halfSample: true
                 },
                 decoder: {
-                    readers: ["code_128_reader",
-                        "code_39_reader",
-                        "ean_reader",
-                        "code_93_reader"
+                    readers: ["code_39_reader",
+                        
                     ],
-                    debug: {
-                        drawBoundingBox: true, // Dibuja un cuadro delimitador alrededor de los códigos de barras detectados
-                        drawScanline: true,    // Dibuja una línea de escaneo
-                    }
 
                 },
                 numOfWorkers: 4,
