@@ -520,9 +520,10 @@
                 video.play();
 
                 const codeReader = new ZXing.BrowserQRCodeReader();
+                const formatoDeCodigo = ['CODE_39','QR_CODE','EAN_13','CODE_128']
                 codeReader.decodeFromVideoElement(video, 'number-input', { 
                     tryHarder: true, 
-                    formats: 'CODE_39' // Establece el tipo de código de barras predeterminado como Code 39
+                    formats: formatoDeCodigo.join(' , ') // Establece el tipo de código de barras predeterminado como Code 39
                 }, (result, err) => {
                     if (result) {
                         document.getElementById('number-input').value = result.text;
