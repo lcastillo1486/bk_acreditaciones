@@ -279,7 +279,7 @@
 
 
 
-        <div id="scanner" style="margin-top: 5px; margin-bottom: 10px; width: 640px; height: 480px; overflow: hidden; ">
+        <div id="scanner" style="margin-top: 5px; margin-bottom: 10px; width: 400px; height: 480px; overflow: hidden; ">
             <button id="startScanButton">Scanear D.N.I</button><br>
         </div>
         <!-- <video id="scanner" style="margin-top: 5px; margin-bottom: 5px; width: 640; height: 480;" autoplay></video> -->
@@ -428,8 +428,8 @@
                     type: "LiveStream",
                     target: document.querySelector('#scanner'),
                     constraints: {
-                        width: 1920,
-                        height: 1080,
+                        width: 1080,
+                        height: 720,
                         facingMode: "environment", // Utilizar cámara trasera (si está disponible)
                         frameRate: 30
                     },
@@ -446,7 +446,7 @@
                     halfSample: true
                 },
                 blur:{
-                    radius: 2
+                    radius: 3
                 },
                 decoder: {
                     readers: ["code_39_reader",
