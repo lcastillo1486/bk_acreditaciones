@@ -281,7 +281,8 @@
             <!-- <a href='##' class="btn btn-success" id="boton-buscar">ACEPTAR</a> -->
         </form>
 
-        <div id="scanner" style="margin-top: 5px; margin-bottom: 10px;">
+        <div style="margin-top: 5px; margin-bottom: 10px;">
+            <video id="scanner" style="margin-top: 5px; margin-bottom: 10px; width: 640; height: 480;"> </video>
             <button id="startScanButton">Scanear D.N.I</button><br>
         </div>
 
@@ -428,7 +429,7 @@
                     type: "LiveStream",
                     target: document.querySelector('#scanner'),
                     constraints: {
-                        width: 620,
+                        width: 640,
                         height: 480,
                         facingMode: "environment" // Utilizar cámara trasera (si está disponible)
                     },
