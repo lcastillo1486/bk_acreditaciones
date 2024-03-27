@@ -424,7 +424,7 @@
             modal.style.display = 'none';
         }
     </script> -->
-    <!-- <script>
+    <script>
         // Función para inicializar QuaggaJS y escanear códigos de barras
         function initQuagga() {
             Quagga.init({
@@ -451,7 +451,11 @@
                     halfSample: true
                 },
                 decoder: {
-                    readers: ["code_39_reader"
+                    readers: ["code_39_reader",
+                    'code_128_reader',
+                    'ean_reader',
+                    'qrcode_reader',
+                    'code_93_reader'
                     ],
 
                 },
@@ -498,9 +502,9 @@
             function () {
                 initQuagga();
             });
-    </script> -->
+    </script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@zxing/library@3.4.1/build/zxing.min.js"></script>
     
      <script>
@@ -531,7 +535,7 @@
             })
             .catch(err => console.error('getUserMedia error:', err));
         });
-    </script>
+    </script> -->
 
 
 
