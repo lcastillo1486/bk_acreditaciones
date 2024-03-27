@@ -284,7 +284,7 @@
 
         
         
-        <div id="scanner" style="margin-top: 5px; margin-bottom: 10px; overflow: hidden; ">
+        <div id="scanner" style="margin-top: 5px; margin-bottom: 10px; width: 400px; height: 300px; overflow: hidden; ">
             <button id="startScanButton">Scanear D.N.I</button><br>
         </div>
             <!-- <video id="scanner" style="margin-top: 5px; margin-bottom: 5px; width: 640; height: 480;" autoplay></video> -->
@@ -373,7 +373,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/jsqr@2.0.3/dist/jsQR.min.js"></script>
 
-    <script>
+    <!-- <script>
         const startScanButton = document.getElementById('start-scan');
         const scanner = document.getElementById('scanner');
         const modal = document.getElementById('modal');
@@ -423,7 +423,7 @@
         function closeModal() {
             modal.style.display = 'none';
         }
-    </script>
+    </script> -->
     <script>
         // Función para inicializar QuaggaJS y escanear códigos de barras
         function initQuagga() {
@@ -433,8 +433,8 @@
                     type: "LiveStream",
                     target: document.querySelector('#scanner'),
                     constraints: {
-                        width: 1280,
-                        height: 720,
+                        width: 1920,
+                        height: 1080,
                         facingMode: "environment" // Utilizar cámara trasera (si está disponible)
                     },
                     area: { // defines rectangle of the detection/localization area
