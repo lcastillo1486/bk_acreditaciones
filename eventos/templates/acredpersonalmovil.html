@@ -428,7 +428,7 @@
                     type: "LiveStream",
                     target: document.querySelector('#scanner'),
                     constraints: {
-                        width: 1080,
+                        width: 1280,
                         height: 720,
                         facingMode: "environment", // Utilizar cámara trasera (si está disponible)
                         frameRate: 30
@@ -444,6 +444,9 @@
                 locator: {
                     patchSize: "medium",
                     halfSample: true
+                },
+                blur:{
+                    radius: 3
                 },
                 decoder: {
                     readers: ["code_39_reader",
