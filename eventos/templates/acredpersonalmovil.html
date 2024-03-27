@@ -424,7 +424,7 @@
             modal.style.display = 'none';
         }
     </script> -->
-    <script>
+    <!-- <script>
         // Función para inicializar QuaggaJS y escanear códigos de barras
         function initQuagga() {
             Quagga.init({
@@ -498,6 +498,46 @@
             function () {
                 initQuagga();
             });
+    </script> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@zxing/library@3.0.0-alpha.1/build/zxing.min.js"></script>
+    
+    <script>
+        document.getElementById('startScanButton').addEventListener('click', function() {
+            navigator.mediaDevices.getUserMedia({ 
+                video: { 
+                    facingMode: 'environment',
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                } 
+            })
+            .then(stream => {
+                const video = document.createElement('video');
+                video.srcObject = stream;
+                video.setAttribute('playsinline', true);
+                document.getElementById('scanner').appendChild(video);
+                video.play();
+
+                const codeReader = new ZXing.BrowserQRCodeReader();
+                codeReader.decodeFromVideoElement(video, 'number-input', { 
+                    tryHarder: true, 
+                    formats: 'CODE_39' // Establece el tipo de código de barras predeterminado como Code 39
+                }, (result, err) => {
+                    if (result) {
+                        document.getElementById('number-input').value = result.text;
+                        var beepSound = document.getElementById("beepSound");
+                        beepSound.play();
+                        document.getElementById('boton-buscar').click();
+
+                    }
+                    if (err && !(err instanceof ZXing.NotFoundException)) {
+                        console.error(err);
+                    }
+                });
+            })
+            .catch(err => console.error('getUserMedia error:', err));
+        });
     </script>
 
 
