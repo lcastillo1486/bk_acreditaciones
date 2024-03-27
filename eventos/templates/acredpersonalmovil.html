@@ -427,8 +427,8 @@
                     type: "LiveStream",
                     target: document.querySelector('#scanner'),
                     constraints: {
-                        width: 1280,
-                        height: 720,
+                        width: 800,
+                        height: 600,
                         facingMode: "environment", // Utilizar cámara trasera (si está disponible)
                         frameRate: 30
                     },
@@ -445,7 +445,7 @@
                     halfSample: true
                 },
                 blur:{
-                    radius: 3
+                    radius: 1
                 },
                 decoder: {
                     readers: ["code_39_reader",
@@ -457,7 +457,7 @@
                 },
                 numOfWorkers: 4,
                 locate: true,
-                frequency: 10
+                frequency: 20
             }, function (err) {
                 if (err) {
                     console.error('Error al iniciar Quagga:', err);
