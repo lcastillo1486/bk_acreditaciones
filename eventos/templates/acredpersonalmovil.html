@@ -446,7 +446,7 @@
                     halfSample: true
                 },
                 blur:{
-                    radius: 1
+                    radius: 2
                 },
                 decoder: {
                     readers: ["code_39_reader",
@@ -458,7 +458,6 @@
                 },
                 numOfWorkers: 4,
                 locate: true,
-                frequency: 20
             }, function (err) {
                 if (err) {
                     console.error('Error al iniciar Quagga:', err);
