@@ -508,8 +508,8 @@
             navigator.mediaDevices.getUserMedia({ 
                 video: { 
                     facingMode: 'environment',
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 }
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 }
                 } 
             })
             .then(stream => {
@@ -520,17 +520,25 @@
                 video.play();
 
                 const codeReader = new ZXing.BrowserQRCodeReader();
-                const formatoDeCodigo = ['CODE_39','QR_CODE','EAN_13','CODE_128']
+                const formatosDeCodigoDeBarras = [
+                    'CODE_39',
+                    'QR_CODE',
+                    'EAN_13',
+                    'CODE_128',
+                    'UPC_A',
+                    'UPC_E',
+                    'DATA_MATRIX',
+                    'ITF',
+                    'PDF_417',
+                    'AZTEC'
+                ];
+
                 codeReader.decodeFromVideoElement(video, 'number-input', { 
                     tryHarder: true, 
-                    formats: formatoDeCodigo.join(' , ') // Establece el tipo de código de barras predeterminado como Code 39
+                    formats: formatosDeCodigoDeBarras.join(',')
                 }, (result, err) => {
                     if (result) {
                         document.getElementById('number-input').value = result.text;
-                        var beepSound = document.getElementById("beepSound");
-                        beepSound.play();
-                        document.getElementById('boton-buscar').click();
-
                     }
                     if (err && !(err instanceof ZXing.NotFoundException)) {
                         console.error(err);
