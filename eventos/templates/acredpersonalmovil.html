@@ -281,8 +281,7 @@
 
 
         <button id="startScanButton">Scanear D.N.I</button><br>
-        <!-- <div id="scanner" style="margin-top: 5px; margin-bottom: 10px; width: 400px; height: 480px; overflow: hidden; display: none; "></div> -->
-        <video id="preview" style="display: none;"></video>
+        <div id="scanner" style="margin-top: 5px; margin-bottom: 10px; width: 400px; height: 480px; overflow: hidden; display: none; "></div>
         <!-- <video id="scanner" style="margin-top: 5px; margin-bottom: 5px; width: 640; height: 480;" autoplay></video> -->
 
 
@@ -420,7 +419,7 @@
             modal.style.display = 'none';
         }
     </script> -->
-    <!-- <script>
+    <script>
         // Función para inicializar QuaggaJS y escanear códigos de barras
         function initQuagga() {
             Quagga.init({
@@ -443,7 +442,7 @@
 
                 },
                 locator: {
-                    patchSize: "medium",
+                    patchSize: "small",
                     halfSample: true
                 },
                 blur:{
@@ -501,7 +500,7 @@
                 initQuagga();
                 document.getElementById("scanner").style.display = "block";
             });
-    </script> -->
+    </script>
 
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@zxing/library@3.4.1/build/zxing.min.js"></script>
@@ -535,44 +534,7 @@
             .catch(err => console.error('getUserMedia error:', err));
         });
     </script> -->
-    <script>
-        // Obtener referencia a los elementos del DOM
-        let videoElement = document.getElementById('preview');
-        let startScanButton = document.getElementById('startScanButton');
-        let barcodeInput = document.getElementById('number-input');
-        let scanner = null;
 
-        // Función para iniciar el escaneo cuando se hace clic en el botón
-        startScanButton.addEventListener('click', function() {
-            // Si el escáner aún no está iniciado
-            if (!scanner) {
-                // Mostrar el video
-                videoElement.style.display = 'block';
-
-                // Inicializar un nuevo escáner de Instascan y pasar el elemento de video
-                scanner = new Instascan.Scanner({ video: videoElement });
-
-                // Agregar un listener para el evento "scan" que se activa cuando se detecta un código de barras
-                scanner.addListener('scan', function(content) {
-                    // Asignar el contenido del código de barras detectado al input
-                    barcodeInput.value = content;
-                });
-
-                // Iniciar el escáner
-                Instascan.Camera.getCameras().then(function(cameras) {
-                    // Si hay al menos una cámara disponible
-                    if (cameras.length > 0) {
-                        // Usar la primera cámara encontrada (cámara trasera por defecto)
-                        scanner.start(cameras[0]);
-                    } else {
-                        console.error('No se encontraron cámaras.');
-                    }
-                }).catch(function(error) {
-                    console.error('Error al acceder a la cámara:', error);
-                });
-            }
-        });
-    </script>
 
     <!-- Contenido del mensaje emergente -->
     <div id="modal">
