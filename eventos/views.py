@@ -1458,6 +1458,8 @@ def crearImagen(request, id_evento):
  # Pasar los resultados al contexto
     context = {
         'personal': personal_empresa,
+        'nombre_evento':nombre_evento,
+        'fecha':fecha,
     }
 
     # Renderizar la plantilla HTML con el contexto
