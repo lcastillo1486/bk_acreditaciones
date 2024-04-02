@@ -1455,7 +1455,7 @@ def crearImagen(request, id_evento):
     nombre_evento = evento_nombre.nombre_evento
     fecha = evento_nombre.fecha_evento
 
-    registros_por_pagina = 40
+    registros_por_pagina = 0
 
     lotes_registros = [personal_empresa[i:i+registros_por_pagina] for i in range(0, len(personal_empresa), registros_por_pagina)]
 
