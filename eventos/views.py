@@ -1453,7 +1453,7 @@ def crearImagen(request, id_evento):
     personal_empresa = acreditados_def.objects.filter(id_evento_id = id_evento).order_by('empresa')
     evento_nombre = bkt_eventos.objects.get(id = id_evento)
     nombre_evento = evento_nombre.nombre_evento
-    fecha = evento_nombre.fecha_evento
+    fecha = evento_nombre.fecha_evento 
 
  # Pasar los resultados al contexto
     context = {
