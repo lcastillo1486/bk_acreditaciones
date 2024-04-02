@@ -1485,5 +1485,4 @@ def crearImagen(request, id_evento):
         response.write('<pagebreak />')
 
     return response
-
         
