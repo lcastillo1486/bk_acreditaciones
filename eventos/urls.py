@@ -23,5 +23,6 @@ urlpatterns = [
     path('verEstado/<int:id_evento>',views.verEstado, name="ver_estado"),
     path('exportarPdfFinal/<int:id>',views.exportarPDFfinal, name="exportar_pdf_final"),
     path('importarExcelAdicionales/<int:id_evento>',views.importaAdicionales, name="importar_excel_adicionales"),
+    path('crearimagen/<int:id_evento>',views.crearImagen, name="exportar_imagen"),
 
 ]
