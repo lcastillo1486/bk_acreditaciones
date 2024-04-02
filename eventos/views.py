@@ -1455,7 +1455,7 @@ def crearImagen(request, id_evento):
     nombre_evento = evento_nombre.nombre_evento
     fecha = evento_nombre.fecha_evento 
 
- # Pasar los resultados al contexto
+ # Pasar los resultados al contexto 
     context = {
         'personal': personal_empresa,
         'nombre_evento':nombre_evento,
