@@ -1462,7 +1462,7 @@ def crearImagen(request, id_evento):
     # Crear un objeto HttpResponse para el PDF
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="archivo.pdf"'
-    cuenta_registros = 0
+
     # Generar una nueva página para cada lote de registros
     for lotes_registro in lotes_registros:
         # Pasar los registros al contexto
@@ -1471,22 +1471,18 @@ def crearImagen(request, id_evento):
             'nombre_evento':nombre_evento,
             'fecha':fecha,
         }
-        cuenta_registros +=1
-
-        if cuenta_registros > 20: 
-        # Agregar un salto de página entre cada lote de registros
-            response.write('<pagebreak />')
 
         # Renderizar la plantilla HTML con el contexto
-            template = get_template('personalempresacerrado.html')
-            html = template.render(context)
+        template = get_template('personalempresacerrado.html')
+        html = template.render(context)
 
         # Convertir HTML a PDF y agregarlo al objeto HttpResponse
         pisa_status = pisa.CreatePDF(html, dest=response)
         if pisa_status.err:
             return HttpResponse('Error al generar PDF: %s' % pisa_status.err)
 
-       
+        # Agregar un salto de página entre cada lote de registros
+        response.write('<pagebreak />')
 
     return response
 
