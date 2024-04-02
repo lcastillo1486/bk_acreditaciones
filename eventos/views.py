@@ -1060,7 +1060,7 @@ def listadoEventos(request):
     if not request.user.is_superuser:
         messages.error(request,'No cuenta con los permisos necesarios para acceder a esta sección.')
         return redirect('evento')
-    eventos_cerrados = bkt_eventos.objects.filter(evento_activo=0, acreditacion_activa = 0).order_by('fecha_evento')
+    eventos_cerrados = bkt_eventos.objects.exclude(nombre_evento='Prueba').filter(evento_activo=0, acreditacion_activa = 0).order_by('fecha_evento')
     return render(request,'listadoEventos.html',{'eventosCerrados':eventos_cerrados})
 @login_required
 def importarBrazaletes(request, id_evento):
