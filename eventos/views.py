@@ -1468,7 +1468,7 @@ def crearImagen(request, id_evento):
 
     # Crear un objeto HttpResponse con el contenido PDF
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename={nombre_evento}+.pdf'
+    response['Content-Disposition'] = f'attachment; filename={nombre_evento}.pdf'
 
     # Convertir HTML a PDF
     pisa_status = pisa.CreatePDF(html, dest=response)
