@@ -1441,6 +1441,10 @@ def importaAdicionales(request, id_evento):
 
         acreditados_def.objects.bulk_create(tabla_destino)
 
+        actualiza_cargas = bkt_eventos.objects.get(id=id_evento)
+        actualiza_cargas.num_cargas = actualiza_cargas.num_cargas + 1
+        actualiza_cargas.save()
+
         acreditados_tmp.objects.filter(id_evento_id=id_evento).delete()
 
         messages.success(request, '¡Los datos se han importado exitosamente!')
