@@ -235,7 +235,7 @@
       <source src="{% static 'beep.mp3' %}" type="audio/mpeg">
     </audio>
     <b>
-      <h4>Acreditación del Personal
+      <h4> BUSQUEDA Y ACREDITACIÓN 
     </b>
     </h4>
   </div>
@@ -243,7 +243,7 @@
   <div class="row">
     <div style="text-align: left; color: white;" class="col-sm-12 col-md-6 col-lg-2 col-xl-5">
       <div style="margin-left: 10px;">
-        <h3><b>Ingrese DNI o C.E</b></h3>
+        <h3><b>Ingrese D.N.I o C.E</b></h3>
       </div>
       <div class="teclado">
 
@@ -272,12 +272,12 @@
           {% csrf_token %}
           <input type="text" id="number-input" name="documento">
           <br><br>
+          <h2>Empresa:</h2>
+          <input type="text" id="empresa-input" class="input-nombre" name="empresa">
           <h2>Nombres:</h2>
           <input type="text" id="nombre-input" class="input-nombre" name="nombre">
           <h2>Apellidos:</h2>
           <input type="text" id="apellido-input" class="input-nombre" name="apellido">
-          <h2>Empresa:</h2>
-          <input type="text" id="empresa-input" class="input-nombre" name="empresa">
       </div>
       <div class="teclado">
         <button type="submit" id="boton-buscar" style="margin-bottom: 10px; margin-left: 50%; width: 100px;"
