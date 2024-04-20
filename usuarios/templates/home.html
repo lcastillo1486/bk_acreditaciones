@@ -146,9 +146,9 @@
 </style>
 
 <body>
-  <div>
+  <div class="fade-in" id="div">
     <!-- <h1>Bienvenido</h1> -->
-    <img src="{% static 'logo.png' %}" width="370" height="150" class="fade-in" id="logo">
+    <img src="{% static 'logo.png' %}" width="370" height="150">
     <h1><i>Sistema Integral de Gestión</h1>
     <h1>de Acreditaciones</h1></i>
 
@@ -170,7 +170,7 @@
   <script>
 
     document.addEventListener("DOMContentLoaded", function () {
-      var imagen = document.getElementById('logo');
+      var div = document.getElementById('div');
       imagen.style.opacity = '1';
     });
 
