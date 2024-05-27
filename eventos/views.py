@@ -1454,7 +1454,7 @@ def importaAdicionales(request, id_evento):
 
 def crearImagen(request, id_evento):
 
-    personal_empresa = acreditados_def.objects.filter(id_evento_id = id_evento).order_by('empresa')[:1000]
+    personal_empresa = acreditados_def.objects.filter(id_evento_id = id_evento).order_by('empresa')[:1500]
     evento_nombre = bkt_eventos.objects.get(id = id_evento)
     nombre_evento = evento_nombre.nombre_evento
     fecha = evento_nombre.fecha_evento 
