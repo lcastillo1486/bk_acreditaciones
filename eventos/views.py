@@ -109,7 +109,7 @@ def importarExcel(request, id_evento):
 
         # Verificar las columnas requeridas
         columnas_requeridas = ['NOMBRES', 'APELLIDOS', 'TIPO_DOCUMENTO',
-                               'NUMERO_DOCUMENTO', 'CARGO Y O FUNCIÓN', 'AREA_DE_TRABAJO', 'COLOR_ZONA_BRAZALETE']
+                               'NUMERO_DOCUMENTO','EMPRESA', 'CARGO Y O FUNCIÓN', 'AREA_DE_TRABAJO', 'COLOR_ZONA_BRAZALETE']
         columnas_excel = df.columns.tolist()
         if not set(columnas_requeridas).issubset(columnas_excel):
             # Manejar el error si alguna(s) columna(s) requerida(s) no está presente
@@ -1383,7 +1383,7 @@ def importaAdicionales(request, id_evento):
 
         # Verificar las columnas requeridas
         columnas_requeridas = ['NOMBRES', 'APELLIDOS', 'TIPO_DOCUMENTO',
-                               'NUMERO_DOCUMENTO', 'CARGO Y O FUNCIÓN', 'AREA_DE_TRABAJO', 'COLOR_ZONA_BRAZALETE']
+                               'NUMERO_DOCUMENTO','EMPRESA', 'CARGO Y O FUNCIÓN', 'AREA_DE_TRABAJO', 'COLOR_ZONA_BRAZALETE']
         columnas_excel = df.columns.tolist()
         if not set(columnas_requeridas).issubset(columnas_excel):
             # Manejar el error si alguna(s) columna(s) requerida(s) no está presente
