@@ -38,7 +38,7 @@
       background: #00003d;
       padding: 10px;
       /* padding-left: 20px; */
-      height: 60px;
+      height: 40px;
       width: 300px;
       font-size: 14px;
       border-radius: 50px;
@@ -69,7 +69,7 @@
       padding: 10px;
       padding-left: 20px;
       margin-top: 0px;
-      height: 60px;
+      height: 40px;
       width: 600px;
       font-size: 14px;
       border-radius: 50px;
@@ -98,7 +98,7 @@
       /* background: linear-gradient(to right, #0000ff, #00ff40); */
       text-transform: uppercase;
       border-radius: 10px;
-      font-size: 40px;
+      font-size: 30px;
     }
 
     h2 {
@@ -110,13 +110,14 @@
       text-transform: uppercase;
       border-radius: 10px;
       font-size: 30px;
+      color: black;
     }
 
     .f {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 10vh;
+      height: 50px;
       text-decoration: none;
       color: #0e0909;
       background-color: #1fec0d;
@@ -130,7 +131,7 @@
       margin: 0 auto;
       /* Centrar horizontalmente */
       font-weight: bold;
-      margin-top: 3px;
+      margin-top: 15px;
     }
 
     .mi-div {
@@ -145,7 +146,6 @@
       font-weight: bold;
       font-style: italic;
       text-align: left;
-      background: linear-gradient(to right, #e1e1eb, #00ff40);
       text-transform: uppercase;
       border-radius: 10px;
       font-size: 50px;
@@ -154,7 +154,29 @@
 
     h3 {
       margin-left: 20px;
-      color: white;
+      color: black;
+    }
+
+    .container {
+      position: absolute;
+      width: 100%;
+      max-width: 700px;
+      height: 50%;
+      border-radius: 20px;
+      padding: 20px;
+      box-sizing: border-box;
+      background: #ADD8E6;
+    }
+
+    .container1 {
+      position: relative;
+      width: 100%;
+      max-width: 700px;
+      height: 25%;
+      border-radius: 10px;
+      padding: 20px;
+      box-sizing: border-box;
+      background: #ADD8E6;
     }
 
     @keyframes blink {
@@ -183,7 +205,7 @@
     }
 
     body {
-      background: linear-gradient(to right, #0000ff, #e4e9e5);
+      background: white;
     }
 
     @media only screen and (max-width: 1910px) and (max-height: 1070px) {
@@ -235,129 +257,124 @@
       <source src="{% static 'beep.mp3' %}" type="audio/mpeg">
     </audio>
     <b>
-      <h4> BUSQUEDA Y ACREDITACIÓN 
+      <h4> BUSQUEDA Y ACREDITACIÓN
     </b>
     </h4>
   </div>
 
+  <!-- desde aqui -->
   <div class="row">
-    <div style="text-align: left; color: white;" class="col-sm-12 col-md-6 col-lg-2 col-xl-5">
-      <div style="margin-left: 10px;">
-        <h3><b>Ingrese D.N.I o C.E</b></h3>
+    <div style="text-align: left; color: white;" class="col-sm-6 col-md-6 col-lg-2 col-xl-5">
+      <div class="container" style="margin-left: 200px; margin-top: 80px;">
+        <div style="margin-left: 10px;">
+          <h3><b>Ingrese N° de Documento:</b></h3>
+        </div>
+        <div class="teclado">
+          <form action='/buscarPersonal/' method="POST">
+            {% csrf_token %}
+            <input type="text" id="number-input" name="documento">
+            <br><br>
+            <h2>Empresa:</h2>
+            <input type="text" id="empresa-input" class="input-nombre" name="empresa">
+            <h2>Nombres:</h2>
+            <input type="text" id="nombre-input" class="input-nombre" name="nombre">
+            <h2>Apellidos:</h2>
+            <input type="text" id="apellido-input" class="input-nombre" name="apellido">
+        </div>
+        <div class="d-flex justify-content-center" style="margin-top: 20px;">
+          <button type="submit" id="boton-buscar" style="margin-bottom: 20px; width: 100px; height: 50px;"
+            class="btn btn-primary">BUSCAR</button>
+          <!-- <a href='##' class="btn btn-success" id="boton-buscar">ACEPTAR</a> -->
+        </div>
       </div>
-      <div class="teclado">
-
-      </div>
-
-      <!-- <div id="num-pad" class="teclado">
-
-        <button onclick="addNumber(1)">1</button>
-        <button onclick="addNumber(2)">2</button>
-        <button onclick="addNumber(3)">3</button>
-        <button onclick="addNumber(4)">4</button>
-        <button onclick="addNumber(5)">5</button>
-        <button onclick="addNumber(6)">6</button>
-
-        <button onclick="addNumber(7)">7</button>
-        <button onclick="addNumber(8)">8</button>
-        <button onclick="addNumber(9)">9</button>
-        <button class="empty"></button>
-        <button onclick="addNumber(0)">0</button>
-        <button class="empty"></button>
-      </div> -->
-
-
-      <div class="teclado">
-        <form action='/buscarPersonal/' method="POST">
-          {% csrf_token %}
-          <input type="text" id="number-input" name="documento">
-          <br><br>
-          <h2>Empresa:</h2>
-          <input type="text" id="empresa-input" class="input-nombre" name="empresa">
-          <h2>Nombres:</h2>
-          <input type="text" id="nombre-input" class="input-nombre" name="nombre">
-          <h2>Apellidos:</h2>
-          <input type="text" id="apellido-input" class="input-nombre" name="apellido">
-      </div>
-      <div class="teclado">
-        <button type="submit" id="boton-buscar" style="margin-bottom: 10px; margin-left: 50%; width: 100px;"
-          class="btn btn-success">BUSCAR</button>
-        <!-- <a href='##' class="btn btn-success" id="boton-buscar">ACEPTAR</a> -->
-      </div>
+      </form>
     </div>
-    </form>
+    <div style="text-align: left; color: white;" class="col-sm-6 col-md-6 col-lg-2 col-xl-5">
+      <div class="container" style="margin-left: 200px; margin-top: 80px;">
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == 'success' %}
+        <div class=" alert alert-success">
+          {{ message }}
+        </div>
+        {% else %}
+        <div class=" alert alert-error">
+          {{ message }}
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
 
-    <div style="text-align: left;" class="col-sm-12 col-md-6 col-lg-2 col-xl-7">
-      {% if messages %}
-      {% for message in messages %}
-      {% if message.tags == 'success' %}
-      <div class=" alert alert-success">
-        {{ message }}
-      </div>
-      {% else %}
-      <div class=" alert alert-error">
-        {{ message }}
-      </div>
-      {% endif %}
-      {% endfor %}
-      {% endif %}
-
-      <font style="color: #a51f1f;">
-        {{mensaje}}
-      </font>
-      <br>
-      <!-- <select>
+        <font style="color: #a51f1f;">
+          {{mensaje}}
+        </font>
+        <br>
+        <!-- <select>
         {% for valor in cod %}
           <option value="{{ valor.0 }}">{{ valor.1 }}</option>
         {% endfor %}
       </select>
        -->
+       {% if id > 0 %}
+        <h1>
+          <font style="color: black;">Evento:</font>
+          <font style="color: #081fee;">{{evento}}</font>
+          <br>
+          <font style="color: black;">Nombres:</font>
+          <font style="color: #081fee;">{{nombre}}</font>
+          <br>
+          <font style="color: black;">Apellidos:</font>
+          <font style="color: #081fee;"> {{apellido}} </font>
+          <br>
+          <font style="color: black;">N° Documento:</font>
+          <font style="color: #081fee;">{{documento}}</font>
+          <br>
+          <font style="color: black;">Empresa:</font>
+          <font style="color: #081fee;">{{empresa}}</font>
+          <br>
+          <font style="color: black;">Color Zona:</font>
+          <font style="color: #081fee;">{{color}}</font>
+          <br>
+        </h1>
+        
+        <div class="d-flex justify-content-center">
+          <h14 id="zona" class="{% if nombre %}parpadeo{% else %}fijo{% endif %}">
+            <font style="color: #081fee;"> *** {{zona}} *** </font>
+          </h14>
+        </div>
+        {% else %}
+        <div class="d-flex justify-content-center" style="margin-top: 60px;">
+          <img src="{% static 'ingreso_datos.png' %}" alt="Descripción de la imagen"
+                                style="width: 150px; height: 150px;"><br><br>
 
+        </div>
+        <div class="d-flex justify-content-center" style="margin-top: 20px;">
+          <h1>INGRESE DATOS PARA LA BUSQUEDA</h1>
+        </div>
+        {% endif %}
+        <br>
+        <br>
 
+        {% if messages %}
+        {% for message in messages %}
+        {% if 'error' in message.tags %}
+        <!-- Contenido si hay mensajes de error -->
+        {% endif %}
+        {% endfor %}
+        {% else %}
+        {% if id > 0 %}
+        <a href='/acredPersonal/{{id}}' class="f" id="acreditar">ACREDITAR</a>
+        {% else %}
+        <!-- Contenido si hay mensajes de error -->
+        {% endif %}
+        {% endif %}
+      </div>
 
-      <h1>
-        <font style="color: white;">Evento:</font>
-        <font style="color: #081fee;">{{evento}}</font>
-        <br>
-        <font style="color: white;">Nombres:</font>
-        <font style="color: #081fee;">{{nombre}}</font>
-        <br>
-        <font style="color: white;">Apellidos:</font>
-        <font style="color: #081fee;"> {{apellido}} </font>
-        <br>
-        <font style="color: white;">N° Documento:</font>
-        <font style="color: #081fee;">{{documento}}</font>
-        <br>
-        <font style="color: white;">Empresa:</font>
-        <font style="color: #081fee;">{{empresa}}</font>
-        <br>
-        <font style="color: white;">Color Zona:</font>
-        <font style="color: #081fee;">{{color}}</font>
-        <br>
-      </h1>
-      {% if id > 0 %}
-      <h14 id="zona" class="{% if nombre %}parpadeo{% else %}fijo{% endif %}" style="text-align: center;">
-        <font style="color: #a51f1f;"> *** {{zona}} *** </font>
-      </h14>
-      {% endif %}
-      <br>
-      <br>
-
-      {% if messages %}
-      {% for message in messages %}
-      {% if 'error' in message.tags %}
-      <!-- Contenido si hay mensajes de error -->
-      {% endif %}
-      {% endfor %}
-      {% else %}
-      {% if id > 0 %}
-      <a href='/acredPersonal/{{id}}' class="f" id="acreditar">ACREDITAR</a>
-      {% else %}
-      <!-- Contenido si hay mensajes de error -->
-      {% endif %}
-      {% endif %}
     </div>
-    <div class="row" style="margin: 0%; margin-top: 3px; ">
+  </div>
+
+
+  <!-- <div class="row" style="margin: 0%; margin-top: 3px; ">
 
       <div style="text-align: center;border: 2px solid white; " class="col-sm-12 col-md-6 col-lg-2 col-xl-4">
         <h3>Total Registros: {{total_registros}}</h3>
@@ -368,7 +385,7 @@
       <div style="text-align: center;border: 2px solid white; " class="col-sm-12 col-md-6 col-lg-2 col-xl-4">
         <h3>Ratio: {{porcentaje}} %</h3>
       </div>
-    </div>
+    </div> -->
 
   </div>
 
