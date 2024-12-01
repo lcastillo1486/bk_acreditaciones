@@ -585,10 +585,10 @@ def buscarPersona(request):
                 return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
 
     #busca estadisticas
-    total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
-    total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
-    porcentaje = round((total_acreditado /total_registros)*100,4)
-    return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+    # total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
+    # total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
+    # porcentaje = round((total_acreditado /total_registros)*100,4)
+    return render(request, 'acredpersonal.html')
 @login_required
 def registraUsuario(request, cod_event):
 
