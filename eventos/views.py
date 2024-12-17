@@ -334,7 +334,7 @@ def acreditarPersonal(request, id_reg):
 @login_required
 def buscarPersona(request):
 
-    return render(request, 'acredpersonal.html')
+    
 
     user_agent_string = request.META['HTTP_USER_AGENT']
     user_agent = parse(user_agent_string)
