@@ -314,7 +314,7 @@
         {% endfor %}
       </select>
        -->
-       {% if id > 0 %}
+        {% if id > 0 %}
         <h1>
           <font style="color: black;">Evento:</font>
           <font style="color: #081fee;">{{evento}}</font>
@@ -335,7 +335,7 @@
           <font style="color: #081fee;">{{color}}</font>
           <br>
         </h1>
-        
+
         <div class="d-flex justify-content-center">
           <h14 id="zona" class="{% if nombre %}parpadeo{% else %}fijo{% endif %}">
             <font style="color: #081fee;"> *** {{zona}} *** </font>
@@ -344,7 +344,7 @@
         {% else %}
         <div class="d-flex justify-content-center" style="margin-top: 60px;">
           <img src="{% static 'ingreso_datos.png' %}" alt="Descripción de la imagen"
-                                style="width: 150px; height: 150px;"><br><br>
+            style="width: 150px; height: 150px;"><br><br>
 
         </div>
         <div class="d-flex justify-content-center" style="margin-top: 20px;">
@@ -353,8 +353,9 @@
         {% endif %}
         <br>
         <br>
+      </div>
+    </div>
   </div>
-  
 
   <script>
     function addNumber(number) {
