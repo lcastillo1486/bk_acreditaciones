@@ -353,6 +353,19 @@
         {% endif %}
         <br>
         <br>
+        {% if messages %}
+        {% for message in messages %}
+        {% if 'error' in message.tags %}
+        <!-- Contenido si hay mensajes de error -->
+        {% endif %}
+        {% endfor %}
+        {% else %}
+        {% if id > 0 %}
+        <a href='/acredPersonal/{{id}}' class="f" id="acreditar">ACREDITAR</a>
+        {% else %}
+        <!-- Contenido si hay mensajes de error -->
+        {% endif %}
+        {% endif %}
       </div>
     </div>
   </div>
