@@ -288,6 +288,71 @@
       </div>
       </form>
     </div>
+    <div style="text-align: left; color: white;" class="col-sm-12 col-md-12 col-lg-2 col-xl-5">
+      <div class="container" style="margin-left: 200px; margin-top: 80px;">
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == 'success' %}
+        <div class=" alert alert-success">
+          {{ message }}
+        </div>
+        {% else %}
+        <div class=" alert alert-error">
+          {{ message }}
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+        <font style="color: #a51f1f;">
+          {{mensaje}}
+        </font>
+        <br>
+        <!-- <select>
+        {% for valor in cod %}
+          <option value="{{ valor.0 }}">{{ valor.1 }}</option>
+        {% endfor %}
+      </select>
+       -->
+       {% if id > 0 %}
+        <h1>
+          <font style="color: black;">Evento:</font>
+          <font style="color: #081fee;">{{evento}}</font>
+          <br>
+          <font style="color: black;">Nombres:</font>
+          <font style="color: #081fee;">{{nombre}}</font>
+          <br>
+          <font style="color: black;">Apellidos:</font>
+          <font style="color: #081fee;"> {{apellido}} </font>
+          <br>
+          <font style="color: black;">N° Documento:</font>
+          <font style="color: #081fee;">{{documento}}</font>
+          <br>
+          <font style="color: black;">Empresa:</font>
+          <font style="color: #081fee;">{{empresa}}</font>
+          <br>
+          <font style="color: black;">Color Zona:</font>
+          <font style="color: #081fee;">{{color}}</font>
+          <br>
+        </h1>
+        
+        <div class="d-flex justify-content-center">
+          <h14 id="zona" class="{% if nombre %}parpadeo{% else %}fijo{% endif %}">
+            <font style="color: #081fee;"> *** {{zona}} *** </font>
+          </h14>
+        </div>
+        {% else %}
+        <div class="d-flex justify-content-center" style="margin-top: 60px;">
+          <img src="{% static 'ingreso_datos.png' %}" alt="Descripción de la imagen"
+                                style="width: 150px; height: 150px;"><br><br>
+
+        </div>
+        <div class="d-flex justify-content-center" style="margin-top: 20px;">
+          <h1>INGRESE DATOS PARA LA BUSQUEDA</h1>
+        </div>
+        {% endif %}
+        <br>
+        <br>
   </div>
   
 
