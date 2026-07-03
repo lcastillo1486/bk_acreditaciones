@@ -48,10 +48,10 @@ def logear(request):
                 if nombre_usuario == 'Sensei':
                     return redirect('vistaSensei/')
 
-                if is_mobile or is_tablet:
-                    return redirect('templateMobil/')
-                else:
+                if request.user.is_superuser:
                     return redirect('eventos/')
+                else:
+                    return redirect('buscarPersonal/')
             else:
                 for msg in form.error_messages:
                     messages.error(request,form.error_messages[msg])
