@@ -35,6 +35,7 @@
             top: 0;
             left: 0;
             border-bottom: 4px solid #ccc;
+            z-index: 10000;
         }
 
         .content {
@@ -170,6 +171,8 @@
             border-radius: 10px;
             box-shadow: inset 6px 6px 6px #cbced1, inset -6px -6px 6px white;
             width: 500px;
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
 
@@ -188,7 +191,6 @@
 
         .campo-label {
             color: #0047ab;
-            /* Cambia el color al que desees, por ejemplo, azul eléctrico */
             font-weight: bold;
             margin-left: 20px;
         }
@@ -256,7 +258,6 @@
 
         .centro {
             position: absolute;
-
             left: 50%;
             transform: translate(-50%, -50%);
         }
@@ -289,7 +290,6 @@
             padding: 1px;
             text-align: center;
             border: 3px solid #7ed957;
-            /* Agregar bordes a las celdas */
         }
 
         .centrar {
@@ -301,7 +301,6 @@
             padding: 1px;
             text-align: center;
             border: 3px solid #7ed957;
-            /* Agregar bordes a las celdas */
             background-color: rgb(216, 201, 201);
         }
 
@@ -316,9 +315,7 @@
 
         .file-input {
             width: 300px;
-            /* Ajusta el ancho según tus necesidades */
             height: 40px;
-            /* Ajusta la altura según tus necesidades */
         }
 
         a {
@@ -329,11 +326,8 @@
 
         .disabled {
             opacity: 0.6;
-            /* Reduce la opacidad para indicar que el elemento está desactivado */
             pointer-events: none;
-            /* Evita que se pueda interactuar con el elemento */
             cursor: not-allowed;
-            /* Cambia el cursor a "no permitido" al pasar sobre el elemento */
         }
 
         table.rounded {
@@ -344,14 +338,12 @@
         th:first-child,
         td:first-child {
             border-top-left-radius: 2px;
-            /* Ajusta el valor según el nivel de redondeo deseado */
             border-bottom-left-radius: 2px;
         }
 
         th:last-child,
         td:last-child {
             border-top-right-radius: 2px;
-            /* Ajusta el valor según el nivel de redondeo deseado */
             border-bottom-right-radius: 2px;
         }
 
@@ -366,8 +358,6 @@
         }
 
         @media only screen and (max-width: 1910px) and (max-height: 1070px) {
-
-
             .header {
                 background-color: #003399;
                 width: 100%;
@@ -398,62 +388,95 @@
                 background-color: #cccccc;
                 margin-top: 2px;
                 width: 100%;
-                
+            }
+        }
+
+        /* ===== RESPONSIVE MOBILE / TABLET ===== */
+        @media only screen and (max-width: 768px) {
+            .main {
+                margin: 70px 0 0 0;
+                padding: 1rem;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .container {
+                width: 100%;
+            }
+
+            input,
+            .input-smaller,
+            .input-medium,
+            .precio-smaller,
+            .cantidad-smaller,
+            .file-input {
+                width: 100% !important;
+                margin-left: 0 !important;
+                box-sizing: border-box;
+            }
+
+            label,
+            button,
+            textarea {
+                margin-left: 0 !important;
+            }
+
+            .form-row {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .navbar-nav {
+                width: 100%;
+            }
+
+            .navbar-nav .nav-link {
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+
+            .navbar-text {
+                margin-left: 0 !important;
+                margin-top: 10px;
+                color: white !important;
             }
         }
     </style>
 </head>
 
 <body>
-    <!-- <div class="header">
-        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #0000ff;">
-            <div class="navbar-nav">
-                <img src="{% static 'logo.png' %}" width="30" height="30">
-                <a class="nav-item nav-link text-white" href='/eventos'>Eventos Activos</a>
-                <a class="nav-item nav-link text-white" href='/listadoEventos/'>Listado Eventos</a>
-                <a class="nav-item nav-link text-white" href='/descargaFormato/'>Descargar Formato</a>
-                <a class="nav-item nav-link text-white" href='/registro/'>Nuevo Usuario</a>
-                <a class="nav-item nav-link text-white" href='/logout/'>Cerrar Sesión</a>
-            </div>
-        </nav>
-    </div> -->
 
     <div class="header">
         <nav class="navbar navbar-expand-lg navbar-light"
             style="background-color: rgb(113, 164, 230); z-index: 10000; position: relative; width: 100%;">
-            <div class="navbar-nav">
-                <img src="{% static 'logo.png' %}" width="80" height="40">
-                
-                <a class="nav-item nav-link text-white" href='/eventos'>Eventos Activos</a>
-                <a class="nav-item nav-link text-white" href='/listadoEventos/'>Listado Eventos</a>
-                <a class="nav-item nav-link text-white" href='/descargaFormato/'>Descargar Formato</a>
+            <img src="{% static 'logo.png' %}" width="80" height="40">
 
-                <a class="nav-item nav-link text-white" href='/registro/'>Nuevo Usuario</a>
-                <a class="nav-item nav-link text-white ml-auto" href='/logout/'>Cerrar Sesion</a>
-                
-                
-            </div>
-            <div class="navbar-text ml-auto">
-                Bienvenido, {{user.username}} 
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSiga"
+                aria-controls="navbarSiga" aria-expanded="false" aria-label="Toggle navigation"
+                style="border-color: white;">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSiga">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link text-white" href='/eventos'>Eventos Activos</a>
+                    <a class="nav-item nav-link text-white" href='/listadoEventos/'>Listado Eventos</a>
+                    <a class="nav-item nav-link text-white" href='/descargaFormato/'>Descargar Formato</a>
+                    <a class="nav-item nav-link text-white" href='/registro/'>Nuevo Usuario</a>
+                    <a class="nav-item nav-link text-white" href='/logout/'>Cerrar Sesion</a>
+                </div>
+                <div class="navbar-text ml-auto">
+                    Bienvenido, {{user.username}}
+                </div>
             </div>
         </nav>
     </div>
 
-    <!-- <div class="content">
-        <div class="sidebar-left">
-        </div>
+    <div class="main">
+        {% block content %}
+        {% endblock %}
+    </div>
 
-        <div class="sidebar-right">
-            {{user.username}}
-        </div> -->
-
-        <div class="main">
-            {% block content %}
-
-            {% endblock %}
-        </div>
-
- 
     <div class="footer">
         <b>Luis A. Castillo. RUC 15604384173. - Todos los derechos reservados. -</b>
     </div>
