@@ -73,9 +73,16 @@ def guardarEvento(request):
 @login_required
 def importarExcel(request, id_evento):
 
+     ####BUSCAR EL ID EVENTO ACTIVO #####
+
+    evento = bkt_eventos.objects.get(evento_activo = 1)
+    id_evento = evento.id
+
+    # VALIDA SI ES SUPERUSER
+
     if not request.user.is_superuser:
-        messages.error(request,'¡No tiene permisos para importar listados!')
-        return redirect('evento')
+         messages.error(request,'¡No tiene permisos para importar listados!')
+         return redirect('evento')
 
     if request.method == 'POST' and 'archivo_excel' in request.FILES:
         archivo = request.FILES['archivo_excel']
@@ -88,28 +95,9 @@ def importarExcel(request, id_evento):
             messages.error(request, '¡El archivo no es válido!')
             return redirect('evento')
 
-        # verifica que este iniciado el proceso de actualización
-
-        iniciado_act = bkt_eventos.objects.get(id = id_evento)
-        if iniciado_act.acreditacion_activa == 1:
-            messages.error(request, '¡Ya se ha iniciado el proceso de acreditación!')
-            return redirect('evento')
-
-
-        # Verificar que no se haya alcanzado el numero maximo de actualizaciones
-
-        num_maximo = bkt_eventos.objects.get(id=id_evento)
-        maximo = num_maximo.cargas_max
-        cargas_real = num_maximo.num_cargas
-
-        # if maximo == cargas_real:
-        #     messages.error(
-        #         request, '¡Ha alcanzado el número máximo de cargas permitido! \n Comuníquese con los encargados del sistema si requiere una nueva actualización.')
-        #     return redirect('evento')
-
         # Verificar las columnas requeridas
         columnas_requeridas = ['NOMBRES', 'APELLIDOS', 'TIPO_DOCUMENTO',
-                               'NUMERO_DOCUMENTO','EMPRESA', 'CARGO Y O FUNCIÓN', 'AREA_DE_TRABAJO', 'COLOR_ZONA_BRAZALETE']
+                               'NUMERO_DOCUMENTO','EMPRESA', 'CARGO Y O FUNCIÓN', 'AREA_DE_TRABAJO']
         columnas_excel = df.columns.tolist()
         if not set(columnas_requeridas).issubset(columnas_excel):
             # Manejar el error si alguna(s) columna(s) requerida(s) no está presente
@@ -118,7 +106,6 @@ def importarExcel(request, id_evento):
             return redirect('evento')
 
         # Validar campos vacíos
-        registros = []
         for _, row in df.iterrows():
             if any(pd.isnull(row[columna]) or str(row[columna]).strip() == '' for columna in columnas_requeridas):
                 # Manejar el error si hay campos vacíos en las columnas requeridas
@@ -126,35 +113,72 @@ def importarExcel(request, id_evento):
                     request, '¡El archivo contiene campos vacíos en las columnas requeridas! Por favor corrija e intente nuevamente.')
                 return redirect('evento')
 
+        ##### CONTAR TOTAL DE REGISTROS DEL ARCHIVO #####
+        total_registros_archivo = len(df)
+
+        ##### DETECTAR DUPLICADOS DENTRO DEL MISMO ARCHIVO #####
+        docs_normalizados = df['NUMERO_DOCUMENTO'].astype(str).str.strip().str.replace(" ", "")
+        duplicados_mask = docs_normalizados.duplicated(keep=False)
+        numeros_duplicados = sorted(set(docs_normalizados[duplicados_mask].tolist()))
+        cantidad_duplicados_archivo = duplicados_mask.sum()
+
+        # Nos quedamos solo con la primera ocurrencia de cada documento duplicado en el archivo
+        df = df[~docs_normalizados.duplicated(keep='first')]
+
         # Procesar los datos y guardar en la base de datos
         registros = []
+        omitidos_por_existentes = 0
 
-        for  _, row in df.iterrows():
-            registro = acreditados_tmp(
-                nombre_persona=row['NOMBRES'],
-                apellido_persona=row['APELLIDOS'],
-                tipo_doc=row['TIPO_DOCUMENTO'],
-                numero_doc=row['NUMERO_DOCUMENTO'].strip().replace(" ", ""),
-                cargo=row['CARGO Y O FUNCIÓN'],
-                zona_acceso=row['AREA_DE_TRABAJO'],
-                color_zona = row['COLOR_ZONA_BRAZALETE'].strip(),
-                empresa=row['EMPRESA'].strip(),
-                id_evento_id = id_evento
-            )
-            registros.append(registro)
+        if evento.acreditacion_activa == 0:
+            modelo = acreditados_tmp
+        else:
+            modelo = acreditados_def
 
-        ### Borrar la tabla si tiene registros ###
+        for _, row in df.iterrows():
+            numero_doc = row['NUMERO_DOCUMENTO'].strip().replace(" ", "")
+            if not modelo.objects.filter(numero_doc=numero_doc).exists():
+                registro = modelo(
+                    nombre_persona=row['NOMBRES'],
+                    apellido_persona=row['APELLIDOS'],
+                    tipo_doc=row['TIPO_DOCUMENTO'],
+                    numero_doc=numero_doc,
+                    cargo=row['CARGO Y O FUNCIÓN'],
+                    zona_acceso=row['AREA_DE_TRABAJO'],
+                    color_zona="",
+                    empresa=row['EMPRESA'].strip(),
+                    id_evento_id=id_evento
+                )
+                registros.append(registro)
+            else:
+                omitidos_por_existentes += 1
 
-        if acreditados_tmp.objects.filter(id_evento_id = id_evento).exists():
-            acreditados_tmp.objects.filter(id_evento_id = id_evento).delete()
-
-        acreditados_tmp.objects.bulk_create(registros)
+        modelo.objects.bulk_create(registros)
 
         actualiza_cargas = bkt_eventos.objects.get(id=id_evento)
         actualiza_cargas.num_cargas = actualiza_cargas.num_cargas + 1
         actualiza_cargas.save()
 
-        messages.success(request, '¡Los datos se han importado exitosamente!')
+        ##### INFORMAR AL USUARIO #####
+        registros_importados = len(registros)
+
+        messages.info(request, f'El archivo contiene {total_registros_archivo} registro(s) en total.')
+
+        if cantidad_duplicados_archivo > 0:
+            lista_duplicados = ', '.join(numeros_duplicados)
+            messages.warning(
+                request,
+                f'Se encontraron {cantidad_duplicados_archivo} registro(s) duplicado(s) dentro del archivo '
+                f'(documentos: {lista_duplicados}). Solo se consideró la primera ocurrencia de cada uno.'
+            )
+
+        if omitidos_por_existentes > 0:
+            messages.warning(
+                request,
+                f'{omitidos_por_existentes} registro(s) ya existían en la base de datos y no se importaron.'
+            )
+
+        messages.success(request, f'¡Se importaron exitosamente {registros_importados} registro(s) nuevo(s)!')
+
         return redirect('evento')
 
     return redirect('evento')
@@ -334,8 +358,6 @@ def acreditarPersonal(request, id_reg):
 @login_required
 def buscarPersona(request):
 
-    
-
     user_agent_string = request.META['HTTP_USER_AGENT']
     user_agent = parse(user_agent_string)
 
@@ -422,6 +444,8 @@ def buscarPersona(request):
                         id_even = persona.id_evento_id
                         hora = persona.hora
                         acreditador = persona.acreditado_por
+                        ya_acreditado = persona.acreditado
+
 
                         #busca nombre evento
                         nombre_event = bkt_eventos.objects.get(id = id_even)
@@ -433,7 +457,7 @@ def buscarPersona(request):
                         porcentaje = round((total_acreditado /total_registros)*100,4)
                         messages.error(request, f'¡Ya fue acreditado anteriormente a las: {hora} por {acreditador}!')
                         return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area,'color':color, 'id':id_reg, 'evento':event_name,
-                                                                    'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+                                                                    'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje, 'ya_acreditado':ya_acreditado})
                     else:
                         nombre = persona.nombre_persona
                         apellido = persona.apellido_persona
@@ -443,6 +467,8 @@ def buscarPersona(request):
                         color = persona.color_zona
                         id_reg = persona.id
                         id_even = persona.id_evento_id
+                        ya_acreditado = persona.acreditado
+
 
                         #busca nombre evento
                         nombre_event = bkt_eventos.objects.get(id = id_even)
@@ -454,7 +480,7 @@ def buscarPersona(request):
                         porcentaje = round((total_acreditado /total_registros)*100,4)
 
                         return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area,'color':color, 'id':id_reg, 'evento':event_name,
-                                                                    'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+                                                                    'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje, 'ya_acreditado':ya_acreditado})
 
                 except:
                     # messages.error(request,'¡Múltiples registros coinciden con los parámetros indicados, por favor realice una búsqueda número de documento o agregue un segundo apellido!')
@@ -538,6 +564,7 @@ def buscarPersona(request):
                 id_even = persona.id_evento_id
                 hora = persona.hora
                 acreditador = persona.acreditado_por
+                ya_acreditado = persona.acreditado
                 
                 #busca nombre evento
                 nombre_event = bkt_eventos.objects.get(id = id_even)
@@ -550,7 +577,7 @@ def buscarPersona(request):
 
                 messages.error(request, f'¡Ya fue acreditado anteriormente a las {hora} por {acreditador}!')
                 return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area,'color':color, 'id':id_reg, 'evento':event_name,
-                                                              'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+                                                              'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje, 'ya_acreditado':ya_acreditado})
                 
             
             if acreditados_def.objects.filter(numero_doc__endswith = doc, acreditado = 0, asistencia = 0, id_evento_id = cod_event).exists():
@@ -563,6 +590,7 @@ def buscarPersona(request):
                 color = persona.color_zona
                 id_reg = persona.id
                 id_even = persona.id_evento_id
+                ya_acreditado = persona.acreditado
 
 
                 #busca nombre evento
@@ -576,7 +604,7 @@ def buscarPersona(request):
 
 
                 return render(request, 'acredpersonal.html',{'nombre':nombre, 'apellido':apellido, 'documento':documento, 'empresa':empresa, 'zona':area,'color':color, 'id':id_reg, 'evento':event_name,
-                                                             'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
+                                                             'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje, 'ya_acreditado':ya_acreditado})
             else:
                 
                 #busca estadisticas
@@ -587,10 +615,10 @@ def buscarPersona(request):
                 return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
 
     #busca estadisticas
-    # total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
-    # total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
-    # porcentaje = round((total_acreditado /total_registros)*100,4)
-    return render(request, 'acredpersonal.html')
+    total_acreditado = acreditados_def.objects.filter(id_evento_id = cod_event, acreditado = 1).count()
+    total_registros = acreditados_def.objects.filter(id_evento_id = cod_event).count()
+    porcentaje = round((total_acreditado /total_registros)*100,4)
+    return render(request, 'acredpersonal.html',{'total_acreditado':total_acreditado, 'total_registros':total_registros, 'porcentaje':porcentaje})
 @login_required
 def registraUsuario(request, cod_event):
 
@@ -1170,8 +1198,8 @@ def verEstado(request, id_evento):
     
     evento_id = id_evento
 
-    if not bkt_eventos.objects.filter(id = evento_id, evento_activo=1, acreditacion_activa = 1).exists():
-        return redirect('evento')
+    # if not bkt_eventos.objects.filter(id = evento_id, evento_activo=1, acreditacion_activa = 1).exists():
+    #     return redirect('evento')
 
 
     eventos_proceso = bkt_eventos.objects.filter(id = evento_id, evento_activo=1, acreditacion_activa = 1).order_by('fecha_evento')
@@ -1183,8 +1211,15 @@ def verEstado(request, id_evento):
 
     #busca estadisticas
     total_acreditado = acreditados_def.objects.filter(id_evento_id = evento_id, acreditado = 1).count()
-    total_registros = acreditados_def.objects.filter(id_evento_id = evento_id).count()
-    porcentaje = round((total_acreditado /total_registros)*100,4)
+    if bkt_eventos.objects.filter(id = evento_id, evento_activo=1, acreditacion_activa = 1).exists():
+        total_registros = acreditados_def.objects.filter(id_evento_id = evento_id).count()
+    else:
+        total_registros = acreditados_tmp.objects.filter(id_evento_id = evento_id).count()
+
+    if bkt_eventos.objects.filter(id = evento_id, evento_activo=1, acreditacion_activa = 1).exists():
+        porcentaje = round((total_acreditado /total_registros)*100,4)
+    else:
+        porcentaje = 0
 
     #grafico de totales
     total_brazalete = inventarioBrazalete.objects.filter(id_evento = evento_id)
@@ -1385,7 +1420,7 @@ def importaAdicionales(request, id_evento):
 
         # Verificar las columnas requeridas
         columnas_requeridas = ['NOMBRES', 'APELLIDOS', 'TIPO_DOCUMENTO',
-                               'NUMERO_DOCUMENTO','EMPRESA', 'CARGO Y O FUNCIÓN', 'AREA_DE_TRABAJO', 'COLOR_ZONA_BRAZALETE']
+                               'NUMERO_DOCUMENTO', 'CARGO Y O FUNCIÓN','EMPRESA', 'AREA_DE_TRABAJO', 'COLOR_ZONA_BRAZALETE']
         columnas_excel = df.columns.tolist()
         if not set(columnas_requeridas).issubset(columnas_excel):
             # Manejar el error si alguna(s) columna(s) requerida(s) no está presente

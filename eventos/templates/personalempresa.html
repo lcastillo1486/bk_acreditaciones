@@ -4,113 +4,145 @@
     integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     {% load static %}
     <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIGA</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ACREDITADO2</title>
+        <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <style>
-    tr {
-            padding: 1px;
-            text-align: center;
-            border: 3px solid #7ed957;
-            /* Agregar bordes a las celdas */
-        }
+    #print-modal{
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: rgba(0,0,0,0.4);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+}
 
-        .centrar {
-            text-align: center;
-        }
+.print-box{
+    background:white;
+    padding:30px 40px;
+    border-radius:10px;
+    text-align:center;
+    box-shadow:0 5px 20px rgba(0,0,0,0.3);
+}
 
-        th {
-            color: #0047ab;
-            padding: 1px;
-            text-align: center;
-            border: 3px solid #7ed957;
-            /* Agregar bordes a las celdas */
-            background-color: rgb(216, 201, 201);
-        }
+.spinner{
+    width:40px;
+    height:40px;
+    border:4px solid #ddd;
+    border-top:4px solid #22c55e;
+    border-radius:50%;
+    margin:auto;
+    margin-bottom:15px;
+    animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+    0%{transform:rotate(0deg)}
+    100%{transform:rotate(360deg)}
+}
 </style>
+
 <body>
-    <div class="header">
-        <nav class="navbar navbar-expand-lg navbar-light" style="background-color:rgb(113, 164, 230);">
-            <div class="navbar-nav" style="margin-left: 20px;">
-                <img src="{% static 'logo.png' %}" width="80" height="40">
-                <a class="nav-item nav-link text-white" href='/buscarPersonal/' style="margin-left: 20px;">Buscar Personal</a>
-                <a class="nav-item nav-link text-white" href='/logout/' style="margin-left: 20px;">Cerrar Sesión</a>
+    <nav class="bg-blue-500 shadow-md w-full">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <img src="{% static 'logo.png' %}" alt="Logo" class="w-30 h-10">
+                </div>
+    
+                <!-- Links -->
+                <div class="hidden md:flex space-x-6">
+                    <!-- <a href="/#/" class="text-white hover:text-gray-200 font-medium">Validar Código</a> -->
+                    <a href="/logout/" class="text-white hover:text-gray-200 font-medium">Cerrar Sesión</a>
+                </div>
+    
+                <!-- Usuario -->
+                <div class="text-white font-medium hidden md:block">
+                    Bienvenido, {{ user.username }}
+                </div>
+    
+                <!-- Menú móvil -->
+                <div class="md:hidden">
+                    <button id="menu-btn" class="text-white focus:outline-none">
+                        ☰
+                    </button>
+                </div>
             </div>
-        </nav>
-    </div>
-    <div style="text-align: center; background: linear-gradient(to right, #0000ff, #00ff40);">
-        <h1><b>
-            <img src="{% static 'logo.png' %}" width="150" height="100" style="margin-top: 10px;">
-            <h2><font style="color: white;"><b>Sistema Integral de Gestión de Acreditaciones</b></h2></font>
-      </div>
+        </div>
+    
+        <!-- Menú desplegable en móviles -->
+        <div id="mobile-menu" class="hidden md:hidden bg-blue-600 p-4 space-y-2">
+            <a href="/#/" class="block text-white hover:text-gray-200">Validar Código</a>
+            <a href="/logout/" class="block text-white hover:text-gray-200">Cerrar Sesión</a>
+            <div class="block text-white mt-2">Bienvenido, {{ user.username }}</div>
+        </div>
+    </nav>
 
-      <div class="row">
-        <form method="post" action="/acreditacionMultiple/">
+    <div class="flex justify-center mt-6">
+        <form method="post" action="/acreditacionMultiple/" class="w-full max-w-screen-lg bg-white shadow-lg rounded-lg p-6">
             {% csrf_token %}
-        <div class="table-responsive">
-            <table class="table table-striped" style="margin: 0 auto; ">
-                <thead>
-                    <tr>
-                        <th>
-                            Nombres y apellidos:
-                        </th>
-                        <th>
-                            Tipo Documento:
-                        </th>
-                        <th>
-                            Número de Documento:
-                        </th>
-                        <th>
-                            Zona:
-                        </th>
-                        <th>
-                            Color Brazalete:
-                        </th>
-                        <th>
-                            Empresa:
-                        </th>
-                        <th>
-                            <button type="submit" id="boton-areditarmulti" style="margin-bottom: 10px;" class="btn btn-success">ACREDITAR</button><br>
-                            <input type="checkbox" id="checkTodo" onchange="toggleCheckboxes(this)">
-                            <label for="checkTodo">Seleccionar Todos</label>
-                        </th>
-                        
-                    </tr>
-                </thead>
-
-                <tbody>
+            <div class="overflow-x-auto">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4">Acreditación en Lote:</h2>
+                <div class="flex justify-end items-center space-x-2">
+                    <input type="text" id="filtroTabla" placeholder="Buscar..."
+                        class="w-1/3 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">                        
+                    <input type="checkbox" id="checkTodo" onchange="toggleCheckboxes(this)" class="mt-2">
+                    <label for="checkTodo" class="text-sm text-gray-800">Seleccionar Todos</label>
+                    <button type="submit" id="boton-acreditarmulti" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                        ACREDITAR
+                    </button>
+                    <a href='/buscarPersonal/' id="acredita" class="bg-orange-600 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg text-center transition w-1/8">
+                        Volver atras
+                        </a>
+                </div>
+                <table class="w-full shadow-md border border-blue-300 rounded-lg mt-4">
+                    <thead>
+                        <tr class="bg-blue-700 text-white">
+                            <th class="p-3">Nombres y apellidos</th>
+                            <th class="p-3">Tipo Documento</th>
+                            <th class="p-3">Número de Documento</th>
+                            <th class="p-3">Zona</th>
+                            <th class="p-3">Empresa</th>
+                            <th class="p-3">
+                                
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         {% for c in personal %}
-                        <tr>
-                        <td>
-                            {{c.apellido_persona}} {{c.nombre_persona}}
-                        </td>
-                        <td>
-                            {{c.tipo_doc}}
-                        </td>
-                        <td>
-                            {{c.numero_doc}}
-                        </td>
-                        <td>
-                            {{c.zona_acceso}}
-                        </td>
-                        <td>
-                            {{c.color_zona}}
-                        </td>
-                        <td>
-                            {{c.empresa}}
-                        <td>
-                            {% if c.acreditado %}
-                            <font style="color: green;">ACREDITADO</font>
-                            {% else %}
-                            <input type="checkbox" name="regitrosAcreditar" class="checkbox-item" value="{{c.id}}">
-                            {% endif %}
-                        </td>                            
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                            <tr class="border-b border-gray-300">
+                                <td class="p-3"> {{ c.nombre_persona }} {{ c.apellido_persona }}</td>
+                                <td class="p-3">{{ c.tipo_doc }}</td>
+                                <td class="p-3">{{ c.numero_doc }}</td>
+                                <td class="p-3">{{ c.zona_acceso }}</td>
+                                <td class="p-3">{{ c.empresa }}</td>
+                                <td class="p-3 text-center">
+                                    {% if c.acreditado %}
+                                        <span class="text-green-600 font-semibold">ACREDITADO</span>
+                                    {% else %}
+                                        <input type="checkbox" name="regitrosAcreditar" class="checkbox-item" value="{{ c.id }}">
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </form>
+        <div id="print-modal">
+            <div class="print-box">
+                    <div class="spinner"></div>
+                    <h2>🖨️ Imprimiendo brazalete...</h2>
+                    <p>Por favor espere</p>
+            </div>
         </div>
     </div>
 
@@ -121,7 +153,123 @@
                 checkboxes[i].checked = checkbox.checked;
             }
         }
-        </script>
+    </script>
+
+    <!-- Script de filtrado -->
+    <script>
+        (function() {
+        // 1) Localiza tu tabla actual (no cambiamos el HTML)
+        const tabla = document.querySelector('form[action="/acreditacionMultiple/"] table');
+        if (!tabla) return;
+        const tbody = tabla.tBodies[0];
+        if (!tbody) return;
+
+        // 2) Si ya tienes un input #filtroTabla, lo usamos; si no, lo creamos sin tocar tu template
+        let input = document.getElementById('filtroTabla');
+        if (!input) {
+            input = document.createElement('input');
+            input.id = 'filtroTabla';
+            input.placeholder = 'Buscar...';
+            input.className = 'w-1/3 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500';
+            // Inserta el input justo antes de la tabla (en memoria, sin tocar el template)
+            tabla.parentNode.insertBefore(input, tabla);
+        }
+
+        // 3) Cachea el texto de cada fila una sola vez
+        const filas = Array.from(tbody.rows);
+        const cache = filas.map(tr => (tr.textContent || '').toLowerCase());
+
+        // 4) Filtro con debounce + procesamiento por bloques
+        let q = '';
+        let rafId = null;
+        let debounceId = null;
+
+        function filtrar() {
+            cancelAnimationFrame(rafId);
+            const query = q.trim();
+            const n = filas.length;
+            const batch = 400; // tamaño de bloque (ajusta según tu equipo)
+            let i = 0;
+
+            function paso() {
+            const end = Math.min(i + batch, n);
+            for (; i < end; i++) {
+                const match = cache[i].includes(query);
+                const tr = filas[i];
+                // Solo toca el DOM si cambia
+                const isHidden = tr.style.display === 'none';
+                if (match && isHidden) tr.style.display = '';
+                else if (!match && !isHidden) tr.style.display = 'none';
+            }
+            if (i < n) rafId = requestAnimationFrame(paso);
+            }
+
+            rafId = requestAnimationFrame(paso);
+        }
+
+        function onInput() {
+            clearTimeout(debounceId);
+            debounceId = setTimeout(() => {
+            q = (input.value || '').toLowerCase();
+            filtrar();
+            }, 200); // debounce 200ms
+        }
+
+        // 5) Evento
+        input.addEventListener('input', onInput);
+
+        // 6) (Opcional) primer filtrado vacío para normalizar estados
+        q = '';
+        filtrar();
+        })();
+    </script>
+    <script>
+        document.getElementById("boton-acreditarmulti").addEventListener("click", function(){
+            document.getElementById("print-modal").style.display = "flex";
+        });
+    </script>
+
+        <!--Evitar mas de 10 registros-->
+
+    <script>
+        function toggleCheckboxes(checkbox) {
+            var checkboxes = document.querySelectorAll('.checkbox-item');
+            let contador = 0;
+            let max = 10;
+
+            checkboxes.forEach(cb => {
+                if (checkbox.checked) {
+                    if (contador < max) {
+                        cb.checked = true;
+                        contador++;
+                    } else {
+                        cb.checked = false;
+                    }
+                } else {
+                    cb.checked = false;
+                }
+            });
+
+            if (checkbox.checked) {
+                alert("Solo puedes seleccionar máximo 10 registros");
+            }
+        }
+    </script>
+
+    <script>
+        document.querySelectorAll('.checkbox-item').forEach(cb => {
+            cb.addEventListener('change', function () {
+
+                let seleccionados = document.querySelectorAll('.checkbox-item:checked');
+
+                if (seleccionados.length > 10) {
+                    this.checked = false;
+                    alert("Máximo 10 registros por acreditación");
+                }
+            });
+        });
+    </script>
+
     
 </body>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

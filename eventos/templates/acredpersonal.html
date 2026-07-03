@@ -5,370 +5,173 @@
 {% load static %}
 
 <head>
-  <title>SIGA</title>
-  <style>
-    #num-pad {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-gap: 10px;
-      justify-items: center;
-      align-items: center;
-    }
-
-    #num-pad button {
-      width: 80px;
-      height: 80px;
-      font-size: 24px;
-    }
-
-    #num-pad .empty {
-      visibility: hidden;
-    }
-
-    #title {
-      text-align: left;
-      margin-bottom: 20px;
-    }
-
-    #number-input {
-      margin-top: 10px;
-    }
-
-    input {
-      background: #00003d;
-      padding: 10px;
-      /* padding-left: 20px; */
-      height: 40px;
-      width: 300px;
-      font-size: 14px;
-      border-radius: 50px;
-      color: white;
-      box-shadow: inset 6px 6px 6px #cbced1, inset -6px -6px 6px white;
-    }
-
-    .teclado {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-start;
-      align-items: flex-start;
-      width: 200px;
-      border: 0px solid #ccc;
-      /* padding: 40px; */
-      margin-top: 10px;
-      padding-left: 20px;
-    }
-
-    .teclado button {
-
-      text-align: center;
-
-    }
-
-    .input-nombre {
-      background: #00003d;
-      padding: 10px;
-      padding-left: 20px;
-      margin-top: 0px;
-      height: 40px;
-      width: 600px;
-      font-size: 14px;
-      border-radius: 50px;
-      color: white;
-      box-shadow: inset 6px 6px 6px #cbced1, inset -6px -6px 6px white;
-    }
-
-    .alert-success {
-      background-color: #4bdb9d;
-      color: #080cee;
-      font-weight: bold;
-
-    }
-
-    .alert-error {
-      background-color: #a51f1f;
-      color: #f5ecec;
-      font-weight: bold;
-    }
-
-    h1 {
-      /* color: rgb(25, 10, 238); */
-      font-weight: bold;
-      font-style: italic;
-      text-align: left;
-      /* background: linear-gradient(to right, #0000ff, #00ff40); */
-      text-transform: uppercase;
-      border-radius: 10px;
-      font-size: 30px;
-    }
-
-    h2 {
-      /* color: rgb(25, 10, 238); */
-      font-weight: bold;
-      font-style: italic;
-      text-align: left;
-      /* background: linear-gradient(to right, #0000ff, #00ff40); */
-      text-transform: uppercase;
-      border-radius: 10px;
-      font-size: 30px;
-      color: black;
-    }
-
-    .f {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 50px;
-      text-decoration: none;
-      color: #0e0909;
-      background-color: #1fec0d;
-      border: none;
-      border-radius: 10px;
-      padding: 20px 40px;
-      font-size: 24px;
-      cursor: pointer;
-      max-width: 400px;
-      /* Ancho máximo deseado */
-      margin: 0 auto;
-      /* Centrar horizontalmente */
-      font-weight: bold;
-      margin-top: 15px;
-    }
-
-    .mi-div {
-      text-align: center;
-      padding: 20px;
-      background: linear-gradient(to right, #0000ff, #00ff40);
-      color: white;
-    }
-
-    h14 {
-      /* color: rgb(25, 10, 238); */
-      font-weight: bold;
-      font-style: italic;
-      text-align: left;
-      text-transform: uppercase;
-      border-radius: 10px;
-      font-size: 50px;
-      text-align: center;
-    }
-
-    h3 {
-      margin-left: 20px;
-      color: black;
-    }
-
-    .container {
-      position: absolute;
-      width: 100%;
-      max-width: 700px;
-      height: 50%;
-      border-radius: 20px;
-      padding: 20px;
-      box-sizing: border-box;
-      background: #ADD8E6;
-    }
-
-    .container1 {
-      position: relative;
-      width: 100%;
-      max-width: 700px;
-      height: 25%;
-      border-radius: 10px;
-      padding: 20px;
-      box-sizing: border-box;
-      background: #ADD8E6;
-    }
-
-    @keyframes blink {
-      0% {
-        opacity: 0;
-      }
-
-      50% {
-        opacity: 1;
-      }
-
-      100% {
-        opacity: 0;
-      }
-    }
-
-    .parpadeo {
-      animation: blink 1s infinite;
-      display: inline-block;
-    }
-
-    .fijo {
-      animation: none;
-      opacity: 1;
-      transition: opacity 1s;
-    }
-
-    body {
-      background: white;
-    }
-
-    @media only screen and (max-width: 1910px) and (max-height: 1070px) {
-
-      h1 {
-        /* color: rgb(25, 10, 238); */
-        font-weight: bold;
-        font-style: italic;
-        text-align: left;
-        /* background: linear-gradient(to right, #0000ff, #00ff40); */
-        text-transform: uppercase;
-        border-radius: 10px;
-        font-size: 40px;
-        margin-left: 60px;
-      }
-
-      h14 {
-        /* color: rgb(25, 10, 238); */
-        font-weight: bold;
-        font-style: italic;
-        text-align: left;
-        background: linear-gradient(to right, #e1e1eb, #00ff40);
-        text-transform: uppercase;
-        border-radius: 10px;
-        font-size: 60px;
-        text-align: center;
-        margin-left: 60px;
-      }
-
-    }
-  </style>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
+<style>
+  #print-modal{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.print-box{
+    background:white;
+    padding:30px 40px;
+    border-radius:12px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.25);
+    text-align:center;
+    max-width:320px;
+    width:90%;
+}
+
+.print-box h2{
+    font-size:22px;
+    margin-top:15px;
+}
+
+.print-box p{
+    font-size:16px;
+    color:#666;
+}
+
+.spinner{
+    width:45px;
+    height:45px;
+    border:5px solid #ddd;
+    border-top:5px solid #16a34a;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+    margin:auto;
+}
+
+@keyframes spin{
+    100%{transform:rotate(360deg);}
+}
+</style>
 
 <body>
 
-  <div class="header">
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(113, 164, 230);">
-      <div class="navbar-nav" style="margin-left: 20px;">
-        <img src="{% static 'logo.png' %}" width="80" height="40">
-        <a class="nav-item nav-link text-white" href='/eventos/' style="margin-left: 20px;">Eventos</a>
-        <a class="nav-item nav-link text-white" href='/logout/' style="margin-left: 20px;">Cerrar Sesión</a>
-      </div>
-    </nav>
-  </div>
+  <nav class="bg-blue-500 shadow-md w-full">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <img src="{% static 'logo.png' %}" alt="Logo" class="w-30 h-10">
+            </div>
 
+            <!-- Links -->
+            <div class="hidden md:flex space-x-6">
+                {% if user.is_superuser %}
+                <a href="/eventos" class="text-white hover:text-gray-200 font-medium">Evento Activo</a>
+                {% endif %}
+                <!-- <a href="/validarbrazalete/" class="text-white hover:text-gray-200 font-medium">Validar Código</a> -->
+                <a href="/logout/" class="text-white hover:text-gray-200 font-medium">Cerrar Sesión</a>
+            </div>
 
-  <div class="mi-div" style="text-align: center; height: 50px;">
-    <audio id="beepSound" preload="auto" style="display:none">
-      <source src="{% static 'beep.mp3' %}" type="audio/mpeg">
-    </audio>
-    <b>
-      <h4> BUSQUEDA Y ACREDITACIÓN
-    </b>
-    </h4>
-  </div>
+            <!-- Usuario -->
+            <div class="text-white font-medium hidden md:block">
+                Bienvenido, {{ user.username }}
+            </div>
 
-  <div class="row">
-    <div style="text-align: left; color: white;" class="col-sm-12 col-md-12 col-lg-2 col-xl-5">
-      <div class="container" style="margin-left: 200px; margin-top: 80px;">
-        <div style="margin-left: 10px;">
-          <h3><b>Ingrese N° de Documento:</b></h3>
+            <!-- Menú móvil -->
+            <div class="md:hidden">
+                <button id="menu-btn" class="text-white focus:outline-none">
+                    ☰
+                </button>
+            </div>
         </div>
-        <div class="teclado">
-          <form action='/buscarPersonal/' method="POST">
-            {% csrf_token %}
-            <input type="text" id="number-input" name="documento">
-            <br><br>
-            <h2>Empresa:</h2>
-            <input type="text" id="empresa-input" class="input-nombre" name="empresa">
-            <h2>Nombres:</h2>
-            <input type="text" id="nombre-input" class="input-nombre" name="nombre">
-            <h2>Apellidos:</h2>
-            <input type="text" id="apellido-input" class="input-nombre" name="apellido">
-        </div>
-        <div class="d-flex justify-content-center" style="margin-top: 20px;">
-          <button type="submit" id="boton-buscar" style="margin-bottom: 20px; width: 100px; height: 50px;"
-            class="btn btn-primary">BUSCAR</button>
-          <!-- <a href='##' class="btn btn-success" id="boton-buscar">ACEPTAR</a> -->
-        </div>
-      </div>
+    </div>
+
+    <!-- Menú desplegable en móviles -->
+    <div id="mobile-menu" class="hidden md:hidden bg-blue-600 p-4 space-y-2">
+        <!-- <a href="/validarbrazalete/" class="block text-white hover:text-gray-200">Validar Código</a> -->
+        <a href="/logout/" class="block text-white hover:text-gray-200">Cerrar Sesión</a>
+        <div class="block text-white mt-2">Bienvenido, {{ user.username }}</div>
+    </div>
+</nav>
+<div class="flex flex-col items-center justify-start min-h-screen bg-gray-100 p-4">
+
+  <div class="bg-white shadow-lg rounded-xl p-6 w-full max-w-md mt-6">
+      <h3 class="text-lg font-bold text-gray-800 mb-4 text-center">INGRESE DATOS PARA LA BUSQUEDA</h3>
+      <div class="bg-white shadow-lg rounded-xl p-6 w-full max-w-md mt-4 text-center">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="p-3 rounded-lg alert {% if message.tags == 'success' %}bg-green-200{% else %}bg-red-200{% endif %} text-gray-800">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        {% if id > 0 %}
+            <h2 class="text-lg font-bold text-gray-800">Evento: <span class="text-blue-600">{{evento}}</span></h2>
+            <p class="text-base text-gray-700">Nombres: <span class="font-semibold text-blue-600">{{nombre}}</span></p>
+            <p class="text-base text-gray-700">Apellidos: <span class="font-semibold text-blue-600">{{apellido}}</span></p>
+            <p class="text-base text-gray-700">N° Documento: <span class="font-semibold text-blue-600">{{documento}}</span></p>
+            <p class="text-base text-gray-700">Empresa: <span class="font-semibold text-blue-600">{{empresa}}</span></p>
+            <!-- <p class="text-base text-gray-700">Zona Asignada: <span class="font-semibold text-blue-600">{{color}}</span></p> -->
+            <div class="mt-4 text-xl font-bold text-blue-600">*** {{zona}} ***</div>
+            {% if ya_acreditado == 0 %}
+            <a href='/acredPersonal/{{id}}' id="btnAcreditar" class="block mt-4 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition">ACREDITAR</a>
+            <!-- <button onclick="acreditar('{{id}}')" id="btnAcreditar" class="block mt-4 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition">ACREDITAR</button> -->
+            {% endif %}
+        {% endif %}
+    </div>
+    
+      <form action='/buscarPersonal/' method="POST" class="space-y-4">
+          {% csrf_token %}
+          <input type="text" id="number-input" name="documento" class="w-full h-10 px-4 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-base" placeholder="Número de documento">
+          <input type="text" id="empresa-input" name="empresa" class="w-full h-10 px-4 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-base" placeholder="Empresa">
+          <input type="text" id="nombre-input" name="nombre" class="w-full h-10 px-4 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-base" placeholder="Nombres">
+          <input type="text" id="apellido-input" name="apellido" class="w-full h-10 px-4 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-base" placeholder="Apellidos">
+          <button type="submit" class="w-full h-10 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition">BUSCAR</button>
       </form>
-    </div>
-    <div style="text-align: left; color: white;" class="col-sm-12 col-md-12 col-lg-2 col-xl-5">
-      <div class="container" style="margin-left: 200px; margin-top: 80px;">
-        {% if messages %}
-        {% for message in messages %}
-        {% if message.tags == 'success' %}
-        <div class=" alert alert-success">
-          {{ message }}
-        </div>
-        {% else %}
-        <div class=" alert alert-error">
-          {{ message }}
-        </div>
-        {% endif %}
-        {% endfor %}
-        {% endif %}
-
-        <font style="color: #a51f1f;">
-          {{mensaje}}
-        </font>
-        <br>
-        <!-- <select>
-        {% for valor in cod %}
-          <option value="{{ valor.0 }}">{{ valor.1 }}</option>
-        {% endfor %}
-      </select>
-       -->
-        {% if id > 0 %}
-        <h1>
-          <font style="color: black;">Evento:</font>
-          <font style="color: #081fee;">{{evento}}</font>
-          <br>
-          <font style="color: black;">Nombres:</font>
-          <font style="color: #081fee;">{{nombre}}</font>
-          <br>
-          <font style="color: black;">Apellidos:</font>
-          <font style="color: #081fee;"> {{apellido}} </font>
-          <br>
-          <font style="color: black;">N° Documento:</font>
-          <font style="color: #081fee;">{{documento}}</font>
-          <br>
-          <font style="color: black;">Empresa:</font>
-          <font style="color: #081fee;">{{empresa}}</font>
-          <br>
-          <font style="color: black;">Color Zona:</font>
-          <font style="color: #081fee;">{{color}}</font>
-          <br>
-        </h1>
-
-        <div class="d-flex justify-content-center">
-          <h14 id="zona" class="{% if nombre %}parpadeo{% else %}fijo{% endif %}">
-            <font style="color: #081fee;"> *** {{zona}} *** </font>
-          </h14>
-        </div>
-        {% else %}
-        <div class="d-flex justify-content-center" style="margin-top: 60px;">
-          <img src="{% static 'ingreso_datos.png' %}" alt="Descripción de la imagen"
-            style="width: 150px; height: 150px;"><br><br>
-
-        </div>
-        <div class="d-flex justify-content-center" style="margin-top: 20px;">
-          <h1>INGRESE DATOS PARA LA BUSQUEDA</h1>
-        </div>
-        {% endif %}
-        <br>
-        <br>
-        {% if messages %}
-        {% for message in messages %}
-        {% if 'error' in message.tags %}
-        <!-- Contenido si hay mensajes de error -->
-        {% endif %}
-        {% endfor %}
-        {% else %}
-        {% if id > 0 %}
-        <a href='/acredPersonal/{{id}}' class="f" id="acreditar">ACREDITAR</a>
-        {% else %}
-        <!-- Contenido si hay mensajes de error -->
-        {% endif %}
-        {% endif %}
-      </div>
-    </div>
   </div>
+
+  <!-- <div class="bg-white shadow-lg rounded-xl p-6 w-full max-w-md mt-4 text-center">
+      {% if messages %}
+          {% for message in messages %}
+              <div class="p-3 rounded-lg alert {% if message.tags == 'success' %}bg-green-200{% else %}bg-red-200{% endif %} text-gray-800">
+                  {{ message }}
+              </div>
+          {% endfor %}
+      {% endif %}
+      
+      {% if id > 0 %}
+          <h2 class="text-lg font-bold text-gray-800">Evento: <span class="text-blue-600">{{evento}}</span></h2>
+          <p class="text-base text-gray-700">Nombres: <span class="font-semibold text-blue-600">{{nombre}}</span></p>
+          <p class="text-base text-gray-700">Apellidos: <span class="font-semibold text-blue-600">{{apellido}}</span></p>
+          <p class="text-base text-gray-700">N° Documento: <span class="font-semibold text-blue-600">{{documento}}</span></p>
+          <p class="text-base text-gray-700">Empresa: <span class="font-semibold text-blue-600">{{empresa}}</span></p>
+          <p class="text-base text-gray-700">Zona Asignada: <span class="font-semibold text-blue-600">{{color}}</span></p>
+          <div class="mt-4 text-xl font-bold text-blue-600">*** {{zona}} ***</div>
+          {% if ya_acreditado == 0 %}
+          <a href='/acredPersonal/{{id}}' class="block mt-4 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition">ACREDITAR</a>
+          {% endif %}
+      {% else %}
+          <img src="{% static 'ingreso_datos.png' %}" alt="Ingrese datos" class="w-24 h-24 mx-auto mt-2">
+          <p class="text-base font-semibold text-gray-800 mt-2">Ingrese datos para la búsqueda</p>
+      {% endif %}
+  </div> -->
+    <div id="print-modal">
+        <div class="print-box">
+            <div class="spinner"></div>
+            <h2>🖨️ Imprimiendo brazalete...</h2>
+            <p>Por favor espere</p>
+        </div>
+    </div>
+</div>
+
+
 
   <script>
     function addNumber(number) {
@@ -393,7 +196,7 @@
       for (var i = 0; i < messages.length; i++) {
         messages[i].style.display = 'none';
       }
-    }, 7000);  // 5000 milisegundos = 5 segundos
+    }, 3000);  // 5000 milisegundos = 5 segundos
 
     window.addEventListener('DOMContentLoaded', (event) => {
       const titulo = document.querySelector('#zona');
@@ -413,6 +216,91 @@
     });
 
   </script>
+  <script>
+    document.getElementById("menu-btn").addEventListener("click", function() {
+        var menu = document.getElementById("mobile-menu");
+        menu.classList.toggle("hidden");
+    });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      let keyCount = 0;
+      let timer;
+  
+      document.addEventListener("keydown", function (event) {
+          if (event.key === " ") {  // Detecta la barra espaciadora
+              event.preventDefault(); // Evita el desplazamiento de la página
+              keyCount++;
+  
+              if (keyCount === 2) {
+                  window.location.href = document.getElementById("btnAcreditar").href; // Redirige al enlace
+                  keyCount = 0; // Reinicia el contador
+              }
+  
+              // Reinicia el contador si no se presiona otra vez en 500ms
+              clearTimeout(timer);
+              timer = setTimeout(() => keyCount = 0, 500);
+          }
+      });
+  });
+  </script>
+
+  <script>
+function acreditar(id_registro) {
+    fetch(`/acredPersonal/${id_registro}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Enviar a servidor de impresión local (en esta misma PC)
+            fetch('https://blank-professionals-informative-tf.trycloudflare.com/imprimir', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    html: data.html,
+                    color: data.color
+                })
+            })
+            .then(r => {
+                if (r.ok) {
+                    alert("Brazalete enviado a impresión");
+                    window.location.href = "/buscar_personal/";
+                } else {
+                    alert("Error en la impresión local");
+                }
+            })
+        } else {
+            alert("Error en la acreditación");
+        }
+    });
+}
+
+// Función para obtener el token CSRF (si usas Django CSRF en POST)
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+<script>
+    document.getElementById("btnAcreditar")?.addEventListener("click", function(){
+        document.getElementById("print-modal").style.display = "flex";
+    });
+</script>
+
 </body>
 
 </html>
