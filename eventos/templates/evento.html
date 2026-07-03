@@ -11,264 +11,240 @@
 {% block content %}
 
 <body>
-    
-    <div class="centrar">
-        <h3> nuevo evento </h3>
+
+    <div class="text-center my-4">
+        <h3 class="text-xl font-semibold text-slate-100">Nuevo evento</h3>
     </div>
     {% load crispy_forms_tags %}
-    <!-- <h5>Nuevo Evento:</h5> -->
 
-   {% if messages %}
-<style>
-    .toast-container {
-        position: fixed;
-        top: 1rem;
-        right: 1rem;
-        z-index: 9999;
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        width: 100%;
-        max-width: 360px;
-    }
-    .toast-msg {
-        display: flex;
-        align-items: flex-start;
-        gap: 0.75rem;
-        border-radius: 0.5rem;
-        border: 1px solid;
-        padding: 0.9rem 1rem;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.35);
-        backdrop-filter: blur(4px);
-        font-family: inherit;
-        opacity: 0;
-        transform: translateX(16px);
-        transition: opacity 0.25s ease, transform 0.25s ease;
-    }
-    .toast-msg.show {
-        opacity: 1;
-        transform: translateX(0);
-    }
-    .toast-msg.success { background: rgba(2, 44, 34, 0.95); border-color: #065f46; color: #6ee7b7; }
-    .toast-msg.error   { background: rgba(69, 10, 10, 0.95);  border-color: #991b1b; color: #fca5a5; }
-    .toast-msg.warning { background: rgba(69, 39, 4, 0.95);   border-color: #92400e; color: #fcd34d; }
-    .toast-msg.info    { background: rgba(15, 23, 42, 0.95);  border-color: #334155; color: #cbd5e1; }
-    .toast-msg p {
-        margin: 0;
-        font-size: 0.875rem;
-        line-height: 1.4;
-        flex: 1;
-    }
-    .toast-msg svg { flex-shrink: 0; margin-top: 2px; width: 18px; height: 18px; }
-    .toast-close {
-        background: none;
-        border: none;
-        cursor: pointer;
-        color: inherit;
-        opacity: 0.6;
-        padding: 0;
-        line-height: 0;
-        flex-shrink: 0;
-    }
-    .toast-close:hover { opacity: 1; }
-</style>
+    {% if messages %}
+    <style>
+        .toast-container {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 360px;
+        }
+        @media (max-width: 480px) {
+            .toast-container {
+                top: 0.5rem;
+                right: 0.5rem;
+                left: 0.5rem;
+                max-width: none;
+            }
+        }
+        .toast-msg {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid;
+            padding: 0.9rem 1rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+            backdrop-filter: blur(4px);
+            font-family: inherit;
+            opacity: 0;
+            transform: translateX(16px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+        .toast-msg.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .toast-msg.success { background: rgba(2, 44, 34, 0.95); border-color: #065f46; color: #6ee7b7; }
+        .toast-msg.error   { background: rgba(69, 10, 10, 0.95);  border-color: #991b1b; color: #fca5a5; }
+        .toast-msg.warning { background: rgba(69, 39, 4, 0.95);   border-color: #92400e; color: #fcd34d; }
+        .toast-msg.info    { background: rgba(15, 23, 42, 0.95);  border-color: #334155; color: #cbd5e1; }
+        .toast-msg p {
+            margin: 0;
+            font-size: 0.875rem;
+            line-height: 1.4;
+            flex: 1;
+        }
+        .toast-msg svg { flex-shrink: 0; margin-top: 2px; width: 18px; height: 18px; }
+        .toast-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: inherit;
+            opacity: 0.6;
+            padding: 0;
+            line-height: 0;
+            flex-shrink: 0;
+        }
+        .toast-close:hover { opacity: 1; }
+    </style>
 
-<div class="toast-container" id="toast-container">
-    {% for message in messages %}
-    <div class="toast-msg {% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}">
-        {% if message.tags == 'success' %}
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
-        {% elif message.tags == 'error' %}
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" /></svg>
-        {% elif message.tags == 'warning' %}
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" /></svg>
-        {% else %}
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg>
-        {% endif %}
+    <div class="toast-container" id="toast-container">
+        {% for message in messages %}
+        <div class="toast-msg {% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}">
+            {% if message.tags == 'success' %}
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+            {% elif message.tags == 'error' %}
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" /></svg>
+            {% elif message.tags == 'warning' %}
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" /></svg>
+            {% else %}
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg>
+            {% endif %}
 
-        <p>{{ message }}</p>
+            <p>{{ message }}</p>
 
-        <button class="toast-close" onclick="this.parentElement.remove()">
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
-        </button>
+            <button class="toast-close" onclick="this.parentElement.remove()">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+            </button>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var toasts = document.querySelectorAll('#toast-container .toast-msg');
-        toasts.forEach(function (toast, i) {
-            // animación de entrada
-            setTimeout(function () { toast.classList.add('show'); }, 20);
-            // auto-cierre a los 8 segundos
-            setTimeout(function () {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(16px)';
-                setTimeout(function () { toast.remove(); }, 250);
-            }, 8000);
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var toasts = document.querySelectorAll('#toast-container .toast-msg');
+            toasts.forEach(function (toast, i) {
+                setTimeout(function () { toast.classList.add('show'); }, 20);
+                setTimeout(function () {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(16px)';
+                    setTimeout(function () { toast.remove(); }, 250);
+                }, 8000);
+            });
         });
-    });
-</script>
-{% endif %}
+    </script>
+    {% endif %}
 
-    <form action="/guardarEvento/" id="form_evento" method="POST">
+    <form action="/guardarEvento/" id="form_evento" method="POST" class="px-4 md:px-6">
         {% csrf_token %}
-        <div class="form-row">
-            <div class="form-group col-md-6 col-lg-6 col-xl-6">
-                <label class="campo-label">{{ form_evento.nombre_evento.label_tag }}</label>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-1">
+                <label class="text-sm font-medium text-slate-300">{{ form_evento.nombre_evento.label_tag }}</label>
                 {{ form_evento.nombre_evento }}
             </div>
-            <div class="form-group col-md-6 col-lg-6 col-xl-6">
-                <label class="campo-label">{{ form_evento.lugar_evento.label_tag }}</label>
+            <div class="flex flex-col gap-1">
+                <label class="text-sm font-medium text-slate-300">{{ form_evento.lugar_evento.label_tag }}</label>
                 {{ form_evento.lugar_evento }}
             </div>
         </div>
-            <div class="form-row">
-                <div class="form-group col-md-5 col-lg-5 col-xl-6">
-                    <label class="campo-label">{{ form_evento.fecha_evento.label_tag }}</label>
-                    {{ form_evento.fecha_evento }}
-                    <button type="submit" id="btn-importar" class="btn btn-primary">Guardar</button>
-                </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div class="flex flex-col gap-1">
+                <label class="text-sm font-medium text-slate-300">{{ form_evento.fecha_evento.label_tag }}</label>
+                {{ form_evento.fecha_evento }}
             </div>
-            
-
-            <!-- <div>
-                <button type="submit" id="btn-importar" class="btn btn-primary">Guardar</button>
-            </div> -->
+            <div class="flex items-end">
+                <button type="submit" id="btn-importar" class="btn btn-primary w-full md:w-auto">Guardar</button>
+            </div>
+        </div>
     </form>
+
     <br>
-    <h3>Eventos activos:</h3>
-    <div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>
-                    Evento:
-                </th>
-                <th>
-                    Lugar:
-                </th>
-                <th>
-                    Fecha:
-                </th>
-                <th>
-                    N° Actualizaciones:
-                </th>
-                <th>
-                    Estado Acreditación:
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for c in listado_eventos %}
-            <tr>
-                <td>
-                    <a href='/verEstado/{{c.id}}'>{{ c.nombre_evento }}</a>
-                </td>
-                <td>
-                    {{c.lugar_evento}}
-                </td>
-                <td>
-                    {{c.fecha_evento}}
-                </td>
-                <td>
-                    {{c.num_cargas}}
-                </td>
-                <td>
-                    {% if c.acreditacion_activa == 1 %}
 
-                    <font style="color: green;">
-                        <B>ACREDITANDO</B>
-                    </font>
-                    {% else %}
-                    <font style="color: red;">
-                        <b>NO INICIADO</b>
-                    </font>
-                    {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <td colspan="6">  
-                    {% if c.acreditacion_activa == 1 %}
+    <h3 class="text-lg font-semibold text-slate-100 px-4 md:px-6">Eventos activos:</h3>
 
-                    <form action='/importarExcel/{{c.id}}' method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <input type="file" name="archivo_excel" id="archivo_excel" class="file-input">
-                        <button type="submit" id="btn-importar" class="btn btn-primary"
-                            name="btn-importar">Importar Adicional</button>
-                    </form>
-
-                    {% else %}
-                    <form action='/importarExcel/{{c.id}}' method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <input type="file" name="archivo_excel" id="archivo_excel" class="file-input">
-                        <button type="submit" id="btn-importar" class="btn btn-primary"
-                            name="btn-importar">Importar Acreditables</button>
-                    </form>
-                    {% endif %}
-<br>
-                    
-                    <!-- <form action='/importarBrazaletes/{{c.id}}' method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <input type="file" name="archivo_excel_braza" id="archivo_excel_braza" class="file-input">
-                        <button type="submit" id="btn-importar_braza" class="btn btn-primary"
-                            name="btn-importar">Importar Brazaletes</button>
-                    </form> -->
-
-                    {% if c.num_cargas == 0 %}
-                    <a href='/iniciaAcreditacion/{{c.id}}' class="btn btn-info disabled">Iniciar Acreditación</a>
-                    <a href='/detieneAcreditacion/{{c.id}}' class="btn btn-danger disabled">Cerrar Acreditación</a>
-                    <a href='/buscarPersonal/{{c.id}}' class="btn btn-danger disabled">Acreditar</a>
-                    {% else %}
-                    <a href='/iniciaAcreditacion/{{c.id}}' id="inicial" data-toggle="tooltip"
-                        title="Iniciar el proceso de acreditación al personal" class="btn btn-info">Iniciar Acreditación</a>
-                    <a href='/detieneAcreditacion/{{c.id}}' id="detienee" data-toggle="tooltip" title="Finalizar el proceso de acreditación al personal"
-                        class="btn btn-danger">Cerrar Acreditación</a>
+    <div class="overflow-x-auto px-4 md:px-6 mt-2">
+        <table class="table table-striped w-full min-w-[700px] text-sm">
+            <thead>
+                <tr>
+                    <th class="whitespace-nowrap">Evento:</th>
+                    <th class="whitespace-nowrap">Lugar:</th>
+                    <th class="whitespace-nowrap">Fecha:</th>
+                    <th class="whitespace-nowrap">N° Actualizaciones:</th>
+                    <th class="whitespace-nowrap">Estado Acreditación:</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in listado_eventos %}
+                <tr>
+                    <td>
+                        <a href='/verEstado/{{c.id}}' class="text-blue-400 hover:text-blue-300 underline">{{ c.nombre_evento }}</a>
+                    </td>
+                    <td>{{c.lugar_evento}}</td>
+                    <td class="whitespace-nowrap">{{c.fecha_evento}}</td>
+                    <td class="text-center">{{c.num_cargas}}</td>
+                    <td>
                         {% if c.acreditacion_activa == 1 %}
-                        <a href='/registraUsuario/{{c.id}}' id="acredita" data-toggle="tooltip" title="Buscar personal y acreditar"
-                        class="btn btn-warning">Acreditar</a>
+                        <span class="font-bold text-green-500">ACREDITANDO</span>
+                        {% else %}
+                        <span class="font-bold text-red-500">NO INICIADO</span>
                         {% endif %}
-                    {% endif %}
-                    <!-- <a href='/#{{c.id}}' class="btn btn-danger">Cerrar Acreditación</a> -->
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6" class="py-3">
+                        <div class="flex flex-col gap-3">
 
-                    <!-- <a href='/#{{c.id}}' class="btn btn-success">Subir Listado</a> -->
+                            {% if c.acreditacion_activa == 1 %}
+                            <form action='/importarExcel/{{c.id}}' method="post" enctype="multipart/form-data"
+                                  class="flex flex-col sm:flex-row sm:items-center gap-2">
+                                {% csrf_token %}
+                                <input type="file" name="archivo_excel" id="archivo_excel" class="file-input w-full sm:w-auto">
+                                <button type="submit" id="btn-importar" class="btn btn-primary w-full sm:w-auto"
+                                    name="btn-importar">Importar Adicional</button>
+                            </form>
+                            {% else %}
+                            <form action='/importarExcel/{{c.id}}' method="post" enctype="multipart/form-data"
+                                  class="flex flex-col sm:flex-row sm:items-center gap-2">
+                                {% csrf_token %}
+                                <input type="file" name="archivo_excel" id="archivo_excel" class="file-input w-full sm:w-auto">
+                                <button type="submit" id="btn-importar" class="btn btn-primary w-full sm:w-auto"
+                                    name="btn-importar">Importar Acreditables</button>
+                            </form>
+                            {% endif %}
 
-                </td>
-            </tr>
+                            <div class="flex flex-wrap gap-2">
+                                {% if c.num_cargas == 0 %}
+                                <a href='/iniciaAcreditacion/{{c.id}}' class="btn btn-info disabled w-full sm:w-auto text-center">Iniciar Acreditación</a>
+                                <a href='/detieneAcreditacion/{{c.id}}' class="btn btn-danger disabled w-full sm:w-auto text-center">Cerrar Acreditación</a>
+                                <a href='/buscarPersonal/{{c.id}}' class="btn btn-danger disabled w-full sm:w-auto text-center">Acreditar</a>
+                                {% else %}
+                                <a href='/iniciaAcreditacion/{{c.id}}' id="inicial" data-toggle="tooltip"
+                                    title="Iniciar el proceso de acreditación al personal" class="btn btn-info w-full sm:w-auto text-center">Iniciar Acreditación</a>
+                                <a href='/detieneAcreditacion/{{c.id}}' id="detienee" data-toggle="tooltip" title="Finalizar el proceso de acreditación al personal"
+                                    class="btn btn-danger w-full sm:w-auto text-center">Cerrar Acreditación</a>
+                                    {% if c.acreditacion_activa == 1 %}
+                                    <a href='/registraUsuario/{{c.id}}' id="acredita" data-toggle="tooltip" title="Buscar personal y acreditar"
+                                    class="btn btn-warning w-full sm:w-auto text-center">Acreditar</a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
 
-            {% endfor %}
-        </tbody>
-    </table>
+                        </div>
+                    </td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+
     <script>
         setTimeout(function () {
             var messages = document.getElementsByClassName('alert');
             for (var i = 0; i < messages.length; i++) {
                 messages[i].style.display = 'none';
             }
-        }, 7000);  // 5000 milisegundos = 5 segundos
+        }, 7000);
 
         document.getElementById('inicial').addEventListener('click', function (event) {
-            event.preventDefault(); // Evita que se siga el enlace automáticamente
+            event.preventDefault();
             var confirmacion = confirm('!ATENCIóN¡ \n\ Si continúa, se dará inicio al proceso de acreditación. \n\ ¿Está seguro de ejecutar esta acción?');
             if (confirmacion) {
-                // Si el usuario confirma, redirige a la URL o ejecuta la acción deseada
-                window.location.href = event.target.href; // Redirige a la URL del enlace
+                window.location.href = event.target.href;
             } else {
-                // Si el usuario cancela, no se realiza ninguna acción
                 return;
             }
         });
 
         document.getElementById('detienee').addEventListener('click', function (event) {
-            event.preventDefault(); // Evita que se siga el enlace automáticamente
+            event.preventDefault();
             var confirmacion = confirm('!ATENCIóN¡ \n\ Si continúa, se dará por finalizado el proceso de acreditación. \n\ ¿Está seguro de ejecutar esta acción?');
             if (confirmacion) {
-                // Si el usuario confirma, redirige a la URL o ejecuta la acción deseada
-                window.location.href = event.target.href; // Redirige a la URL del enlace
+                window.location.href = event.target.href;
             } else {
-                // Si el usuario cancela, no se realiza ninguna acción
                 return;
             }
         });
