@@ -10,11 +10,8 @@
 {% extends 'config.html' %}
 {% block content %}
 
-<body>
+<body class="bg-slate-50">
 
-    <div class="text-center my-4">
-        <h3 class="text-xl font-semibold text-slate-100">Nuevo evento</h3>
-    </div>
     {% load crispy_forms_tags %}
 
     {% if messages %}
@@ -31,12 +28,7 @@
             max-width: 360px;
         }
         @media (max-width: 480px) {
-            .toast-container {
-                top: 0.5rem;
-                right: 0.5rem;
-                left: 0.5rem;
-                max-width: none;
-            }
+            .toast-container { top: 0.5rem; right: 0.5rem; left: 0.5rem; max-width: none; }
         }
         .toast-msg {
             display: flex;
@@ -52,31 +44,14 @@
             transform: translateX(16px);
             transition: opacity 0.25s ease, transform 0.25s ease;
         }
-        .toast-msg.show {
-            opacity: 1;
-            transform: translateX(0);
-        }
+        .toast-msg.show { opacity: 1; transform: translateX(0); }
         .toast-msg.success { background: rgba(2, 44, 34, 0.95); border-color: #065f46; color: #6ee7b7; }
         .toast-msg.error   { background: rgba(69, 10, 10, 0.95);  border-color: #991b1b; color: #fca5a5; }
         .toast-msg.warning { background: rgba(69, 39, 4, 0.95);   border-color: #92400e; color: #fcd34d; }
         .toast-msg.info    { background: rgba(15, 23, 42, 0.95);  border-color: #334155; color: #cbd5e1; }
-        .toast-msg p {
-            margin: 0;
-            font-size: 0.875rem;
-            line-height: 1.4;
-            flex: 1;
-        }
+        .toast-msg p { margin: 0; font-size: 0.875rem; line-height: 1.4; flex: 1; }
         .toast-msg svg { flex-shrink: 0; margin-top: 2px; width: 18px; height: 18px; }
-        .toast-close {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: inherit;
-            opacity: 0.6;
-            padding: 0;
-            line-height: 0;
-            flex-shrink: 0;
-        }
+        .toast-close { background: none; border: none; cursor: pointer; color: inherit; opacity: 0.6; padding: 0; line-height: 0; flex-shrink: 0; }
         .toast-close:hover { opacity: 1; }
     </style>
 
@@ -92,9 +67,7 @@
             {% else %}
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg>
             {% endif %}
-
             <p>{{ message }}</p>
-
             <button class="toast-close" onclick="this.parentElement.remove()">
                 <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
             </button>
@@ -105,7 +78,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var toasts = document.querySelectorAll('#toast-container .toast-msg');
-            toasts.forEach(function (toast, i) {
+            toasts.forEach(function (toast) {
                 setTimeout(function () { toast.classList.add('show'); }, 20);
                 setTimeout(function () {
                     toast.style.opacity = '0';
@@ -117,108 +90,143 @@
     </script>
     {% endif %}
 
-    <form action="/guardarEvento/" id="form_evento" method="POST" class="px-4 md:px-6">
-        {% csrf_token %}
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="flex flex-col gap-1">
-                <label class="text-sm font-medium text-slate-300">{{ form_evento.nombre_evento.label_tag }}</label>
-                {{ form_evento.nombre_evento }}
+    <div class="max-w-5xl mx-auto px-4 md:px-6 py-6">
+
+        <!-- BLOQUE: NUEVO EVENTO -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-8">
+            <div class="bg-gradient-to-r from-blue-800 via-teal-500 to-green-400 px-5 py-3">
+                <h3 class="text-white font-bold italic uppercase tracking-wide text-sm">Nuevo evento</h3>
             </div>
-            <div class="flex flex-col gap-1">
-                <label class="text-sm font-medium text-slate-300">{{ form_evento.lugar_evento.label_tag }}</label>
-                {{ form_evento.lugar_evento }}
-            </div>
+
+            <form action="/guardarEvento/" id="form_evento" method="POST" class="p-5">
+                {% csrf_token %}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-medium text-slate-500 uppercase tracking-wide">{{ form_evento.nombre_evento.label_tag }}</label>
+                        {{ form_evento.nombre_evento }}
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-medium text-slate-500 uppercase tracking-wide">{{ form_evento.lugar_evento.label_tag }}</label>
+                        {{ form_evento.lugar_evento }}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-5 items-end mt-5">
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-medium text-slate-500 uppercase tracking-wide">{{ form_evento.fecha_evento.label_tag }}</label>
+                        {{ form_evento.fecha_evento }}
+                    </div>
+                    <button type="submit" id="btn-importar"
+                        class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-6 py-2.5 rounded-lg transition-colors shadow-sm">
+                        Guardar
+                    </button>
+                </div>
+            </form>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-            <div class="flex flex-col gap-1">
-                <label class="text-sm font-medium text-slate-300">{{ form_evento.fecha_evento.label_tag }}</label>
-                {{ form_evento.fecha_evento }}
-            </div>
-            <div class="flex items-end">
-                <button type="submit" id="btn-importar" class="btn btn-primary w-full md:w-auto">Guardar</button>
-            </div>
+        <!-- BLOQUE: EVENTOS ACTIVOS -->
+        <div class="bg-gradient-to-r from-blue-800 via-teal-500 to-green-400 rounded-xl px-5 py-3 mb-4">
+            <h3 class="text-white font-bold italic uppercase tracking-wide text-sm">Eventos activos</h3>
         </div>
-    </form>
 
-    <br>
+        <div class="flex flex-col gap-4">
+            {% for c in listado_eventos %}
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
 
-    <h3 class="text-lg font-semibold text-slate-100 px-4 md:px-6">Eventos activos:</h3>
-
-    <div class="overflow-x-auto px-4 md:px-6 mt-2">
-        <table class="table table-striped w-full min-w-[700px] text-sm">
-            <thead>
-                <tr>
-                    <th class="whitespace-nowrap">Evento:</th>
-                    <th class="whitespace-nowrap">Lugar:</th>
-                    <th class="whitespace-nowrap">Fecha:</th>
-                    <th class="whitespace-nowrap">N° Actualizaciones:</th>
-                    <th class="whitespace-nowrap">Estado Acreditación:</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for c in listado_eventos %}
-                <tr>
-                    <td>
-                        <a href='/verEstado/{{c.id}}' class="text-blue-400 hover:text-blue-300 underline">{{ c.nombre_evento }}</a>
-                    </td>
-                    <td>{{c.lugar_evento}}</td>
-                    <td class="whitespace-nowrap">{{c.fecha_evento}}</td>
-                    <td class="text-center">{{c.num_cargas}}</td>
-                    <td>
-                        {% if c.acreditacion_activa == 1 %}
-                        <span class="font-bold text-green-500">ACREDITANDO</span>
-                        {% else %}
-                        <span class="font-bold text-red-500">NO INICIADO</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="6" class="py-3">
-                        <div class="flex flex-col gap-3">
-
-                            {% if c.acreditacion_activa == 1 %}
-                            <form action='/importarExcel/{{c.id}}' method="post" enctype="multipart/form-data"
-                                  class="flex flex-col sm:flex-row sm:items-center gap-2">
-                                {% csrf_token %}
-                                <input type="file" name="archivo_excel" id="archivo_excel" class="file-input w-full sm:w-auto">
-                                <button type="submit" id="btn-importar" class="btn btn-primary w-full sm:w-auto"
-                                    name="btn-importar">Importar Adicional</button>
-                            </form>
-                            {% else %}
-                            <form action='/importarExcel/{{c.id}}' method="post" enctype="multipart/form-data"
-                                  class="flex flex-col sm:flex-row sm:items-center gap-2">
-                                {% csrf_token %}
-                                <input type="file" name="archivo_excel" id="archivo_excel" class="file-input w-full sm:w-auto">
-                                <button type="submit" id="btn-importar" class="btn btn-primary w-full sm:w-auto"
-                                    name="btn-importar">Importar Acreditables</button>
-                            </form>
-                            {% endif %}
-
-                            <div class="flex flex-wrap gap-2">
-                                {% if c.num_cargas == 0 %}
-                                <a href='/iniciaAcreditacion/{{c.id}}' class="btn btn-info disabled w-full sm:w-auto text-center">Iniciar Acreditación</a>
-                                <a href='/detieneAcreditacion/{{c.id}}' class="btn btn-danger disabled w-full sm:w-auto text-center">Cerrar Acreditación</a>
-                                <a href='/buscarPersonal/{{c.id}}' class="btn btn-danger disabled w-full sm:w-auto text-center">Acreditar</a>
-                                {% else %}
-                                <a href='/iniciaAcreditacion/{{c.id}}' id="inicial" data-toggle="tooltip"
-                                    title="Iniciar el proceso de acreditación al personal" class="btn btn-info w-full sm:w-auto text-center">Iniciar Acreditación</a>
-                                <a href='/detieneAcreditacion/{{c.id}}' id="detienee" data-toggle="tooltip" title="Finalizar el proceso de acreditación al personal"
-                                    class="btn btn-danger w-full sm:w-auto text-center">Cerrar Acreditación</a>
-                                    {% if c.acreditacion_activa == 1 %}
-                                    <a href='/registraUsuario/{{c.id}}' id="acredita" data-toggle="tooltip" title="Buscar personal y acreditar"
-                                    class="btn btn-warning w-full sm:w-auto text-center">Acreditar</a>
-                                    {% endif %}
-                                {% endif %}
-                            </div>
-
+                <!-- Cabecera del evento -->
+                <div class="px-5 py-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div>
+                        <a href='/verEstado/{{c.id}}' class="text-base font-semibold text-blue-700 hover:text-blue-800 hover:underline">
+                            {{ c.nombre_evento }}
+                        </a>
+                        <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 text-sm text-slate-500">
+                            <span>{{ c.lugar_evento }}</span>
+                            <span class="text-slate-300">•</span>
+                            <span>{{ c.fecha_evento }}</span>
+                            <span class="text-slate-300">•</span>
+                            <span>{{ c.num_cargas }} actualización{{ c.num_cargas|pluralize }}</span>
                         </div>
-                    </td>
-                </tr>
+                    </div>
 
-                {% endfor %}
-            </tbody>
-        </table>
+                    {% if c.acreditacion_activa == 1 %}
+                    <span class="inline-flex items-center gap-1.5 self-start sm:self-auto bg-green-50 text-green-700 text-xs font-bold uppercase tracking-wide px-3 py-1.5 rounded-full border border-green-200">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                        Acreditando
+                    </span>
+                    {% else %}
+                    <span class="inline-flex items-center gap-1.5 self-start sm:self-auto bg-red-50 text-red-700 text-xs font-bold uppercase tracking-wide px-3 py-1.5 rounded-full border border-red-200">
+                        <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                        No iniciado
+                    </span>
+                    {% endif %}
+                </div>
+
+                <!-- Acciones del evento -->
+                <div class="px-5 py-4 flex flex-col gap-3">
+
+                    {% if c.acreditacion_activa == 1 %}
+                    <form action='/importarExcel/{{c.id}}' method="post" enctype="multipart/form-data"
+                          class="flex flex-col sm:flex-row sm:items-center gap-2">
+                        {% csrf_token %}
+                        <input type="file" name="archivo_excel" id="archivo_excel"
+                            class="text-sm text-slate-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 file:cursor-pointer cursor-pointer w-full sm:w-auto">
+                        <button type="submit" id="btn-importar" name="btn-importar"
+                            class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors whitespace-nowrap">
+                            Importar adicional
+                        </button>
+                    </form>
+                    {% else %}
+                    <form action='/importarExcel/{{c.id}}' method="post" enctype="multipart/form-data"
+                          class="flex flex-col sm:flex-row sm:items-center gap-2">
+                        {% csrf_token %}
+                        <input type="file" name="archivo_excel" id="archivo_excel"
+                            class="text-sm text-slate-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 file:cursor-pointer cursor-pointer w-full sm:w-auto">
+                        <button type="submit" id="btn-importar" name="btn-importar"
+                            class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors whitespace-nowrap">
+                            Importar acreditables
+                        </button>
+                    </form>
+                    {% endif %}
+
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        {% if c.num_cargas == 0 %}
+                        <a href='/iniciaAcreditacion/{{c.id}}'
+                            class="pointer-events-none opacity-40 bg-teal-600 text-white text-sm font-medium px-4 py-2 rounded-lg text-center w-full sm:w-auto">
+                            Iniciar acreditación
+                        </a>
+                        <a href='/detieneAcreditacion/{{c.id}}'
+                            class="pointer-events-none opacity-40 bg-red-600 text-white text-sm font-medium px-4 py-2 rounded-lg text-center w-full sm:w-auto">
+                            Cerrar acreditación
+                        </a>
+                        <a href='/buscarPersonal/{{c.id}}'
+                            class="pointer-events-none opacity-40 bg-red-600 text-white text-sm font-medium px-4 py-2 rounded-lg text-center w-full sm:w-auto">
+                            Acreditar
+                        </a>
+                        {% else %}
+                        <a href='/iniciaAcreditacion/{{c.id}}' class="btn-inicia" data-toggle="tooltip"
+                            data-id="{{ c.id }}" title="Iniciar el proceso de acreditación al personal"
+                            class="btn-inicia bg-teal-600 hover:bg-teal-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors text-center w-full sm:w-auto">
+                            Iniciar acreditación
+                        </a>
+                        <a href='/detieneAcreditacion/{{c.id}}' class="btn-detiene" data-toggle="tooltip"
+                            data-id="{{ c.id }}" title="Finalizar el proceso de acreditación al personal"
+                            class="btn-detiene bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors text-center w-full sm:w-auto">
+                            Cerrar acreditación
+                        </a>
+                        {% if c.acreditacion_activa == 1 %}
+                        <a href='/registraUsuario/{{c.id}}' data-toggle="tooltip" title="Buscar personal y acreditar"
+                            class="bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors text-center w-full sm:w-auto">
+                            Acreditar
+                        </a>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
     </div>
 
     <script>
@@ -229,26 +237,25 @@
             }
         }, 7000);
 
-        document.getElementById('inicial').addEventListener('click', function (event) {
-            event.preventDefault();
-            var confirmacion = confirm('!ATENCIóN¡ \n\ Si continúa, se dará inicio al proceso de acreditación. \n\ ¿Está seguro de ejecutar esta acción?');
-            if (confirmacion) {
-                window.location.href = event.target.href;
-            } else {
-                return;
-            }
+        document.querySelectorAll('.btn-inicia').forEach(function (btn) {
+            btn.addEventListener('click', function (event) {
+                event.preventDefault();
+                var confirmacion = confirm('!ATENCIóN¡ \n\ Si continúa, se dará inicio al proceso de acreditación. \n\ ¿Está seguro de ejecutar esta acción?');
+                if (confirmacion) {
+                    window.location.href = event.currentTarget.href;
+                }
+            });
         });
 
-        document.getElementById('detienee').addEventListener('click', function (event) {
-            event.preventDefault();
-            var confirmacion = confirm('!ATENCIóN¡ \n\ Si continúa, se dará por finalizado el proceso de acreditación. \n\ ¿Está seguro de ejecutar esta acción?');
-            if (confirmacion) {
-                window.location.href = event.target.href;
-            } else {
-                return;
-            }
+        document.querySelectorAll('.btn-detiene').forEach(function (btn) {
+            btn.addEventListener('click', function (event) {
+                event.preventDefault();
+                var confirmacion = confirm('!ATENCIóN¡ \n\ Si continúa, se dará por finalizado el proceso de acreditación. \n\ ¿Está seguro de ejecutar esta acción?');
+                if (confirmacion) {
+                    window.location.href = event.currentTarget.href;
+                }
+            });
         });
-
     </script>
 </body>
 
