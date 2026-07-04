@@ -37,7 +37,7 @@
             top: 0;
             left: 0;
             border-bottom: 4px solid #ccc;
-            z-index: 10000;
+            z-index: 500;
         }
 
         .content {
@@ -432,21 +432,23 @@
 <body>
 
     <div class="header">
-        <div class="flex items-center justify-between h-14 px-4" style="background-color: rgb(113, 164, 230); position: relative;">
-            <img src="{% static 'logo.png' %}" width="80" height="40" alt="Logo SIGA">
+        <div class="grid grid-cols-[auto_1fr_auto] items-center h-14 px-4 gap-4" style="background-color: rgb(113, 164, 230); position: relative;">
+            <img src="{% static 'logo.png' %}" width="80" height="40" alt="Logo SIGA" class="justify-self-start">
 
-            <!-- Links de escritorio -->
-            <div class="hidden lg:flex items-center gap-6">
-                <a class="text-white hover:text-gray-200 font-medium" href='/eventos'>Eventos Activos</a>
-                <a class="text-white hover:text-gray-200 font-medium" href='/listadoEventos/'>Listado Eventos</a>
-                <a class="text-white hover:text-gray-200 font-medium" href='/descargaFormato/'>Descargar Formato</a>
-                <a class="text-white hover:text-gray-200 font-medium" href='/registro/'>Nuevo Usuario</a>
-                <a class="text-white hover:text-gray-200 font-medium" href='/logout/'>Cerrar Sesion</a>
-                <span class="text-white font-medium whitespace-nowrap">Bienvenido, {{ user.username }}</span>
+            <!-- Links de escritorio, centrados -->
+            <div class="hidden lg:flex items-center justify-center gap-6">
+                <a class="text-white hover:text-gray-200 font-medium whitespace-nowrap" href='/eventos'>Eventos Activos</a>
+                <a class="text-white hover:text-gray-200 font-medium whitespace-nowrap" href='/listadoEventos/'>Listado Eventos</a>
+                <a class="text-white hover:text-gray-200 font-medium whitespace-nowrap" href='/descargaFormato/'>Descargar Formato</a>
+                <a class="text-white hover:text-gray-200 font-medium whitespace-nowrap" href='/registro/'>Nuevo Usuario</a>
+                <a class="text-white hover:text-gray-200 font-medium whitespace-nowrap" href='/logout/'>Cerrar Sesion</a>
             </div>
 
+            <!-- Bienvenida (escritorio) -->
+            <span class="hidden lg:block text-white font-medium whitespace-nowrap justify-self-end">Bienvenido, {{ user.username }}</span>
+
             <!-- Botón hamburguesa (solo móvil/tablet) -->
-            <button id="menu-btn-siga" type="button" class="lg:hidden text-white focus:outline-none" aria-label="Abrir menú" aria-expanded="false">
+            <button id="menu-btn-siga" type="button" class="lg:hidden text-white focus:outline-none justify-self-end col-start-3" aria-label="Abrir menú" aria-expanded="false">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>

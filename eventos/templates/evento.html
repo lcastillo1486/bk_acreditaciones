@@ -18,18 +18,18 @@
     <style>
         .toast-container {
             position: fixed;
-            top: 1rem;
+            top: 5rem;        /* antes: 1rem — así no queda debajo del header */
             right: 1rem;
-            z-index: 9999;
+            z-index: 20000;   /* antes: 9999 — ahora por encima de todo */
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
             width: 100%;
             max-width: 360px;
         }
-        @media (max-width: 480px) {
-            .toast-container { top: 0.5rem; right: 0.5rem; left: 0.5rem; max-width: none; }
-        }
+@media (max-width: 480px) {
+    .toast-container { top: 4.5rem; right: 0.5rem; left: 0.5rem; max-width: none; }
+}
         .toast-msg {
             display: flex;
             align-items: flex-start;
