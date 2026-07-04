@@ -1,54 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-{% load static %}
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+
+
 {% extends 'config.html' %}
 {% block content %}
 
 <body class="bg-slate-50">
-
-    <nav class="bg-blue-500 shadow-md w-full">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
-            <!-- Logo -->
-            <div class="flex items-center">
-                <img src="{% static 'logo.png' %}" alt="Logo" class="w-30 h-10">
-            </div>
-
-            <!-- Links -->
-            <div class="hidden md:flex space-x-6">
-                {% if user.is_superuser %}
-                <a href="/eventos" class="text-white hover:text-gray-200 font-medium">Evento Activo</a>
-                {% endif %}
-                <!-- <a href="/validarbrazalete/" class="text-white hover:text-gray-200 font-medium">Validar Código</a> -->
-                <a href="/logout/" class="text-white hover:text-gray-200 font-medium">Cerrar Sesión</a>
-            </div>
-
-            <!-- Usuario -->
-            <div class="text-white font-medium hidden md:block">
-                Bienvenido, {{ user.username }}
-            </div>
-
-            <!-- Menú móvil -->
-            <div class="md:hidden">
-                <button id="menu-btn" class="text-white focus:outline-none">
-                    ☰
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Menú desplegable en móviles -->
-    <div id="mobile-menu" class="hidden md:hidden bg-blue-600 p-4 space-y-2">
-        <!-- <a href="/validarbrazalete/" class="block text-white hover:text-gray-200">Validar Código</a> -->
-        <a href="/logout/" class="block text-white hover:text-gray-200">Cerrar Sesión</a>
-        <div class="block text-white mt-2">Bienvenido, {{ user.username }}</div>
-    </div>
-</nav>
 
     {% load crispy_forms_tags %}
 
