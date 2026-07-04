@@ -375,8 +375,6 @@ def buscarPersona(request):
         # messages.error(request, '¡No se ha iniciado el proceso de acreditación!')
         if request.user.is_superuser:
             return redirect('evento')
-        else:
-            return redirect('buscar_personal')
     else:
         evento_buscar = acreditadorEvento.objects.get(usuario = usuario, cerrado = 0)
         cod_event = evento_buscar.evento
