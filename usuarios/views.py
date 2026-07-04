@@ -45,13 +45,10 @@ def logear(request):
             if usuario is not None:
                 login(request, usuario)
 
-                if nombre_usuario == 'Sensei':
-                    return redirect('vistaSensei/')
-
-                if request.user.is_superuser:
-                    return redirect('eventos/')
+                if usuario.is_superuser:
+                    return redirect('evento')
                 else:
-                    return redirect('buscarPersonal/')
+                    return redirect('buscar_personal')
             else:
                 for msg in form.error_messages:
                     messages.error(request,form.error_messages[msg])
