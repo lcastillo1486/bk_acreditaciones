@@ -44,7 +44,10 @@ def logear(request):
 
             if usuario is not None:
                 login(request, usuario)
-                return redirect('evento')
+                if not request.user.is_superuser:
+                    return redirect('buscar_personal')
+                else:
+                    return redirect('evento')
             else:
                 for msg in form.error_messages:
                     messages.error(request,form.error_messages[msg])
