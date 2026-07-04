@@ -38,6 +38,9 @@ from xhtml2pdf import pisa
 
 @login_required
 def eventos(request):
+    if not request.user.is_superuser:
+        return redirect('buscar_personal')
+    
     form_evento = formEvento()
     eventos_activos = bkt_eventos.objects.filter(evento_activo=1)
     return render(request, 'evento.html', {'form_evento': form_evento, 'listado_eventos': eventos_activos})
