@@ -34,6 +34,8 @@ from django.db.models import Count, Case, When, IntegerField
 from django.template.loader import render_to_string
 from django.template.loader import get_template
 from xhtml2pdf import pisa
+from django.contrib.sessions.models import Session
+from django.db import transaction
 # Create your views here.
 
 @login_required
@@ -229,7 +231,9 @@ def iniciaAcreditacion(request, id_evento):
 
         acreditados_tmp.objects.filter(id_evento_id=id_evento).delete()
         return redirect('evento')
+
 @login_required
+@transaction.atomic
 def detieneAcreditacion(request, id_evento):
 
     if not request.user.is_superuser:
@@ -250,8 +254,10 @@ def detieneAcreditacion(request, id_evento):
         acreditadorEvento.objects.filter(evento = id_evento).update(cerrado = 1)
         inventarioBrazalete.objects.filter(id_evento = id_evento).update(evento_cerrado = 1)
         inventarioBrazaleteAcreditardor.objects.filter(id_evento = id_evento).update(evento_cerrado = 1)
+        if not request.session.session_key:
+            request.session.save()
 
-
+        Session.objects.exclude(session_key=request.session.session_key).delete()
         return redirect('evento')
 @login_required
 def descargaFormato(request):
