@@ -62,6 +62,7 @@ class inventarioBrazaleteAcreditardor(models.Model):
     evento_cerrado = models.BooleanField(default=False)
 
 class servicioActivo(models.Model):
+    id = models.AutoField(primary_key=True)
     activo = models.BooleanField(default=False)
 
     class Meta:
