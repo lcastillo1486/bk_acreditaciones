@@ -60,3 +60,11 @@ class inventarioBrazaleteAcreditardor(models.Model):
     cantidad_entregada = models.IntegerField(default=0)
     cantidad_resta = models.IntegerField(default=0)
     evento_cerrado = models.BooleanField(default=False)
+
+class servicioActivo(models.Model):
+    activo = models.BooleanField(default=False)
+
+    class Meta:
+        managed = False
+        db_table = 'servicio_activo'
+        auto_created = True

@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from user_agents import parse
+from eventos.models import servicioActivo
 
 def registro(request):
 
@@ -44,10 +45,15 @@ def logear(request):
 
             if usuario is not None:
                 login(request, usuario)
-                if not request.user.is_superuser:
-                    return redirect('buscar_personal')
+                estado = servicioActivo.objects.first()
+
+                if estado.activo:
+                    if not request.user.is_superuser:
+                        return redirect('buscar_personal')
+                    else:
+                        return redirect('evento')
                 else:
-                    return redirect('evento')
+                    return render(request, 'servicio.html')
             else:
                 for msg in form.error_messages:
                     messages.error(request,form.error_messages[msg])

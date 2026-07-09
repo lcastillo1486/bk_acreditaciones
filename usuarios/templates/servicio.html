@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Servicio suspendido</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #EEF1F5;
+    --bg-grid: #E4E8EE;
+    --card-bg: #FFFFFF;
+    --ink: #1B2430;
+    --ink-soft: #5B6472;
+    --ink-faint: #8A93A1;
+    --border: #E2E5EA;
+    --accent-alert: #C0392B;
+    --accent-warn: #E3A008;
+    --focus: #2A6EF3;
+    --radius: 14px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html, body{
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+  }
+
+  body{
+    font-family: 'Inter', -apple-system, Segoe UI, Roboto, sans-serif;
+    color: var(--ink);
+    background-color: var(--bg);
+    background-image:
+      linear-gradient(var(--bg-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
+    background-size: 28px 28px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .wrap{
+    width: 100%;
+    max-width: 560px;
+  }
+
+  /* -------- Brand row (editable) -------- */
+  .brand{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding: 0 4px;
+  }
+  .brand__mark{
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    flex: none;
+  }
+  .brand__name{
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink);
+  }
+
+  /* -------- Card -------- */
+  .card{
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 1px 2px rgba(27,36,48,0.04), 0 12px 32px -12px rgba(27,36,48,0.14);
+    overflow: hidden;
+  }
+
+  .card__bar{
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-alert), var(--accent-warn));
+  }
+
+  .card__body{
+    padding: 36px 36px 30px;
+  }
+
+  @media (max-width: 480px){
+    .card__body{ padding: 28px 22px 24px; }
+  }
+
+  .eyebrow{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent-alert);
+    margin-bottom: 18px;
+  }
+
+  .status-dot{
+    position: relative;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-alert);
+    flex: none;
+  }
+  .status-dot::after{
+    content: "";
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 1.5px solid var(--accent-alert);
+    opacity: 0.55;
+    animation: pulse 2.2s ease-out infinite;
+  }
+  @keyframes pulse{
+    0%   { transform: scale(0.6); opacity: 0.6; }
+    75%  { transform: scale(1.9); opacity: 0; }
+    100% { transform: scale(1.9); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .status-dot::after{ animation: none; opacity: 0.3; }
+  }
+
+  h1{
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin: 0 0 14px;
+  }
+
+  @media (max-width: 480px){
+    h1{ font-size: 22px; }
+  }
+
+  p{
+    margin: 0 0 14px;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+
+  p strong{
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .divider{
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+
+  /* -------- Details panel -------- */
+  .details{
+    background: #F7F8FA;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 4px 18px;
+  }
+
+  .details__row{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 14px 0;
+  }
+  .details__row + .details__row{
+    border-top: 1px solid var(--border);
+  }
+
+  .details__label{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    flex: none;
+  }
+
+  .details__value{
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    text-align: right;
+  }
+
+  .details__value.is-alert{
+    color: var(--accent-alert);
+  }
+
+  @media (max-width: 480px){
+    .details__row{
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      padding: 12px 0;
+    }
+    .details__value{ text-align: left; }
+  }
+
+  /* -------- Actions -------- */
+  .actions{
+    display: flex;
+    gap: 10px;
+    margin-top: 26px;
+  }
+  @media (max-width: 480px){
+    .actions{ flex-direction: column; }
+  }
+
+  .btn{
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 18px;
+    border-radius: 9px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: transform 0.12s ease, filter 0.12s ease;
+  }
+  .btn:active{ transform: translateY(1px); }
+  .btn:focus-visible{
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .btn--primary{
+    background: var(--ink);
+    color: #fff;
+  }
+  .btn--primary:hover{ filter: brightness(1.15); }
+
+  .btn--ghost{
+    background: transparent;
+    border-color: var(--border);
+    color: var(--ink);
+  }
+  .btn--ghost:hover{ background: #F3F4F6; }
+
+  /* -------- Footer note -------- */
+  .footnote{
+    margin-top: 22px;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--ink-faint);
+  }
+  .footnote a{
+    color: var(--ink-soft);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .footnote a:hover{ border-color: var(--ink-soft); }
+
+  .below-card{
+    text-align: center;
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+</style>
+</head>
+<body>
+
+  <div class="wrap">
+
+    <!-- <div class="brand">
+      <div class="brand__mark" id="brandMark">GV</div>
+      <div class="brand__name" id="brandName">Grupo Viatek</div>
+    </div> -->
+
+    <div class="card">
+      <div class="card__bar"></div>
+      <div class="card__body">
+
+        <div class="eyebrow">
+          <span class="status-dot"></span>
+          <span>Estado del servicio</span>
+        </div>
+
+        <h1>Tu servicio se encuentra suspendido temporalmente</h1>
+
+        <p>
+          Te escribimos para informarte que el acceso a tu servicio ha sido
+          <strong>suspendido de forma temporal debido a que registramos un pago pendiente</strong>
+          en tu cuenta.
+        </p>
+        <p>
+          En cuanto regularicemos el pago, restableceremos el servicio a la brevedad posible.
+        </p>
+
+        <div class="divider"></div>
+
+        <div class="details">
+          <div class="details__row">
+            <span class="details__label">Motivo</span>
+            <span class="details__value is-alert" id="detMotivo">Pago pendiente</span>
+          </div>
+          <div class="details__row">
+            <span class="details__label">Servicio afectado</span>
+            <span class="details__value" id="detServicio">—</span>
+          </div>
+          <div class="details__row">
+            <span class="details__label">Fecha de suspensión</span>
+            <span class="details__value" id="detFecha">—</span>
+          </div>
+          <div class="details__row">
+            <span class="details__label">Acción requerida</span>
+            <span class="details__value" id="detAccion">Regularizar el pago pendiente</span>
+          </div>
+        </div>
+
+        <!-- <div class="actions">
+          <a href="#" class="btn btn--primary" id="btnPagar">Regularizar pago</a>
+          <a href="#" class="btn btn--ghost" id="btnContacto">Hablar con soporte</a>
+        </div> -->
+
+        <!-- <p class="footnote">
+          Si ya realizaste el pago, por favor ignora este aviso: el sistema actualizará
+          el estado de tu cuenta en las próximas horas. Ante cualquier duda o para enviarnos
+          tu comprobante, escríbenos a <a href="#" id="footEmail">correo@empresa.com</a>.
+        </p> -->
+
+      </div>
+    </div>
+
+    <div class="below-card" id="footCopy">Luis A. Castillo. RUC 15604384173. - Todos los derechos reservados. -</div>
+
+  </div>
+
+  <script>
+    /* =========================================================
+       CONFIGURACIÓN — edita solo estos valores por cada cliente
+       ========================================================= */
+    const CONFIG = {
+      empresaNombre: "Grupo Viatek",
+      empresaSigla: "GV",                         // iniciales para el logo placeholder
+      servicioAfectado: "Hosting y sistema web",    // nombre del servicio suspendido
+      fechaSuspension: "09/07/2026",
+      correoContacto: "soporte@grupoviatek.com",
+      whatsappNumero: "51999999999",                // sin '+', formato: código país + número
+      linkPago: "https://wa.me/51999999999?text=Hola,%20quiero%20regularizar%20el%20pago%20de%20mi%20servicio",
+      anio: new Date().getFullYear()
+    };
+
+    document.getElementById('brandMark').textContent = CONFIG.empresaSigla;
+    document.getElementById('brandName').textContent = CONFIG.empresaNombre;
+    document.getElementById('detServicio').textContent = CONFIG.servicioAfectado;
+    document.getElementById('detFecha').textContent = CONFIG.fechaSuspension;
+    document.getElementById('footEmail').textContent = CONFIG.correoContacto;
+    document.getElementById('footEmail').href = "mailto:" + CONFIG.correoContacto;
+    document.getElementById('footCopy').textContent = "© " + CONFIG.anio + " " + CONFIG.empresaNombre + " — Todos los derechos reservados";
+
+    document.getElementById('btnPagar').href = CONFIG.linkPago;
+    document.getElementById('btnContacto').href = "https://wa.me/" + CONFIG.whatsappNumero;
+  </script>
+
+</body>
+</html>
