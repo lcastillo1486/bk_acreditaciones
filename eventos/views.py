@@ -139,7 +139,7 @@ def importarExcel(request, id_evento):
 
         for _, row in df.iterrows():
             numero_doc = row['NUMERO_DOCUMENTO'].strip().replace(" ", "")
-            if not modelo.objects.filter(numero_doc=numero_doc).exists():
+            if not modelo.objects.filter(numero_doc=numero_doc, id_evento_id = id_evento).exists():
                 registro = modelo(
                     nombre_persona=row['NOMBRES'],
                     apellido_persona=row['APELLIDOS'],
